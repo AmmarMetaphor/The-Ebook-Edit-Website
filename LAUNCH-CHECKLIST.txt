@@ -1,0 +1,35 @@
+THE EBOOK EDIT — PRE-LAUNCH CHECKLIST
+
+BRAND AND CONTENT
+[ ] Logo is sharp on desktop and mobile
+[ ] Business email and service area are visible
+[ ] No invented testimonials, clients, or results
+[ ] Portfolio examples are accurately labeled
+[ ] Service scope and contact form options are correct
+[ ] All placeholder notes have been removed or intentionally retained
+
+LEGAL AND TRUST
+[ ] Privacy policy reviewed for actual tools and jurisdiction
+[ ] Terms reviewed for actual business
+[ ] Client services agreement prepared separately
+[ ] Copyright and permissions for all content confirmed
+
+TECHNICAL
+[ ] Every navigation and footer link works
+[ ] Contact form appears in Netlify Forms after deploy
+[ ] Test form submission reaches Netlify
+[ ] Mobile menu works
+[ ] Website checked at phone, tablet, and desktop sizes
+[ ] Final domain replaces the placeholder in sitemap.xml
+[ ] Final sitemap URL added to robots.txt
+[ ] Custom domain points to Netlify
+[ ] HTTPS is active
+[ ] Production deploy opens without errors
+
+SEO AND LAUNCH
+[ ] Unique title and description on every page
+[ ] Google Search Console property created
+[ ] Sitemap submitted
+[ ] Social profiles link to the website
+[ ] Analytics added only after privacy and consent requirements are understood
+[ ] Backup ZIP and GitHub repository retained

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# After connecting your final domain, add an absolute Sitemap line here.
+# Example: Sitemap: https://www.theebookedit.com/sitemap.xml
