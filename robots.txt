@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
 
-# After connecting your final domain, add an absolute Sitemap line here.
-# Example: Sitemap: https://www.theebookedit.com/sitemap.xml
+Sitemap: https://the-ebook-edit.netlify.app/sitemap.xml
