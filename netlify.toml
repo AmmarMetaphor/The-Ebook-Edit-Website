@@ -32,6 +32,14 @@
   status = 404
   force = true
 
+# The WordPress theme source is versioned here but is not part of the static
+# site, and Netlify would otherwise serve its PHP files as plain text.
+[[redirects]]
+  from = "/wordpress-theme/*"
+  to = "/404.html"
+  status = 404
+  force = true
+
 # Preferred-URL redirects: send the old .html paths to the extensionless
 # canonical URLs so there is exactly one indexable address per page.
 [[redirects]]
