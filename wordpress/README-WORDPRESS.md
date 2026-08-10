@@ -2,15 +2,65 @@
 
 This folder holds the WordPress version of the site.
 
+**You do not need to re-enter the existing website copy into WordPress Pages.**
+Every page's design and copy — Services, Writing, Editing, Publishing, Process,
+Portfolio, About, Insights and its four articles, Contact, Privacy, Terms, Thank
+You — already lives in the theme's PHP templates, carried over from the
+`the-ebook-edit.netlify.app` GitHub site. The one-click setup below only creates
+the WordPress page *records* (the routing, not the content) so those templates
+answer at the right URLs.
+
 | What | Where |
 |---|---|
 | Theme source | `wordpress/the-ebook-edit/` |
 | Installable theme file | `wordpress/the-ebook-edit-wordpress-theme.zip` |
-| Full install steps (pages, permalinks, Contact Form 7, headers) | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
+| Background on the manual steps the setup screen now automates | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
 
-Install the theme with **Appearance → Themes → Add New → Upload Theme**, choose the
-ZIP, then **Install Now → Activate**. Work through `DEPLOYMENT.md` once, in order,
-then come back here for the two menus.
+## Quick start (recommended)
+
+1. **Install the theme.** Appearance → Themes → Add New → Upload Theme → choose
+   `the-ebook-edit-wordpress-theme.zip` → Install Now → Activate.
+2. **Set permalinks.** Settings → Permalinks → Post name → Save Changes. Do this
+   before running setup, or the URLs below won't work.
+3. **Install and activate Contact Form 7.** Plugins → Add New → search "Contact
+   Form 7" → Install → Activate.
+4. **Create the contact form.** Contact → Add New, title it exactly
+   `Project Inquiry`, build the fields you want (a starting form is in
+   `DEPLOYMENT.md` §6b), and Save. The title must match exactly — that's how
+   setup finds it.
+5. **Run the setup.** Go to **Appearance → The Ebook Edit Setup** and click
+   **Set up The Ebook Edit website**. This one click:
+   - Creates the WordPress page record for every real page — Home, Services,
+     Writing, Editing, Publishing, Process, Portfolio, About, Insights (plus its
+     four articles as child pages), Contact, Privacy, Terms, and Thank You —
+     each with empty content, because the design comes from the matching
+     `page-*.php` template.
+   - Leaves Privacy and Terms as **drafts** if their template still contains
+     unreviewed placeholder legal text (it does, out of the box), and says so
+     on the results screen.
+   - Finds your "Project Inquiry" Contact Form 7 form and drops its shortcode
+     into the Contact page — nothing else on that page is touched.
+   - Sets Home as the static front page (no trip to Settings → Reading needed).
+   - Creates the "Primary Navigation" menu (Services, Process, Portfolio,
+     About, Insights, Start a project → Contact) and assigns it.
+   - Moves WordPress's default "Sample Page" to Trash, but only if it's still
+     the untouched default.
+6. **Read the results report** on the same screen — it lists what was created,
+   what already existed, and anything that needs attention (for example, if
+   Contact Form 7 wasn't found yet).
+7. Run setup again any time — it never creates duplicates, and it never
+   overwrites a page or menu item you've since edited by hand.
+8. **Add real Social Links, if you have them** (see §2 below). Until then the
+   footer simply shows no social section.
+9. **Test every page** at the URLs listed in "What the setup creates" further
+   down, on both mobile and desktop widths.
+10. **Connect `theebookedit.com`** only after the site passes on the staging
+    address.
+
+The rest of this guide covers the two navigation menus in more depth, plus
+optional publishing-platform logos. `DEPLOYMENT.md` is kept as background on
+what the setup screen automates — for example, the exact Contact Form 7 field
+markup if you want to rebuild the form from scratch.
 
 ---
 
@@ -19,8 +69,11 @@ then come back here for the two menus.
 The header logo is the link back to the homepage, so the menu deliberately has
 **no Home item**.
 
-The navigation works the moment the theme is activated — the theme has a built-in
-fallback list. Create a real menu when you want to be able to edit it yourself:
+**Appearance → The Ebook Edit Setup** creates and assigns this menu for you (see
+"Quick start" above), so you shouldn't need the steps below on a normal install.
+They're here in case you ever want to build or edit the menu by hand — the
+navigation also works with no menu at all, since the theme has a built-in
+fallback list:
 
 1. Go to **Appearance → Menus**.
 2. Next to **Menu Name**, type: `Primary Navigation`

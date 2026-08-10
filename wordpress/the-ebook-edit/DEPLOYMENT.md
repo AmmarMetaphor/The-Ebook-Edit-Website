@@ -1,5 +1,13 @@
 # The Ebook Edit — WordPress setup guide
 
+> **Steps 3, 4, and 7 below (creating the pages, setting the homepage, and the
+> Primary Navigation menu) are now automated.** Install the theme, set
+> permalinks, then go to **Appearance → The Ebook Edit Setup** and click
+> **Set up The Ebook Edit website**. See `../README-WORDPRESS.md` for the full
+> quick-start. This file remains as background on what that automation does,
+> and for the Contact Form 7 field markup if you want to build the form by
+> hand.
+
 Follow these steps once, in order, on the Namecheap EasyWP site.
 
 ---
