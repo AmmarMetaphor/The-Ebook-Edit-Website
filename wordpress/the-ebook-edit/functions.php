@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once get_theme_file_path( 'inc/nav-walker.php' );
 require_once get_theme_file_path( 'inc/seo-meta.php' );
+require_once get_theme_file_path( 'inc/setup.php' );
 
 /**
  * Theme supports and menu locations.
