@@ -16,7 +16,7 @@ if ( have_posts() ) {
 }
 ?>
 
-<section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a> / Contact</div><p class="eyebrow">Start a project</p><h1>Tell us about the ebook you want to create or improve.</h1><p class="lead">The more context you provide, the easier it is to recommend the right scope, sequence, and next step.</p></div></section>
+<section class="page-hero"><div class="container"><p class="eyebrow">Start a project</p><h1>Tell us about the ebook you want to create or improve.</h1><p class="lead">The more context you provide, the easier it is to recommend the right scope, sequence, and next step.</p></div></section>
 <section class="section"><div class="container split"><div><p class="eyebrow">Helpful information</p><h2>What to include in your inquiry</h2><ul class="service-list"><li>Your ebook topic, genre, and intended reader</li><li>Current manuscript stage and approximate word count</li><li>Services you think you need</li><li>Your desired completion or launch date</li><li>Any source material, brand requirements, or publishing platform (for example, Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, or Draft2Digital)</li></ul><div class="notice"><strong>Contact details:</strong> Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a>. We work with authors and organizations across the UK and US, and we aim to reply within 24 hours.</div></div><div class="form-shell">
 <?php
 if ( '' !== $teebe_form_markup ) {

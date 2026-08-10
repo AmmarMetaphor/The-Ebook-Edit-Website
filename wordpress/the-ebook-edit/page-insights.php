@@ -8,7 +8,7 @@
 get_header();
 ?>
 
-<section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a> / Insights</div><p class="eyebrow">Insights</p><h1>Practical guidance for writing, editing, and publishing an ebook.</h1><p class="lead">Clear explanations and useful checklists for authors who want to make stronger editorial decisions.</p></div></section>
+<section class="page-hero"><div class="container"><p class="eyebrow">Insights</p><h1>Practical guidance for writing, editing, and publishing an ebook.</h1><p class="lead">Clear explanations and useful checklists for authors who want to make stronger editorial decisions.</p></div></section>
 <section class="section"><div class="container grid-3">
 <article class="card reveal"><p class="eyebrow">Writing · 8 min read</p><h2 class="article-card-title">How to turn your expertise into an ebook</h2><p>Move from a broad topic to a focused reader promise, useful chapter structure, and realistic writing plan.</p><a class="card-link" href="<?php echo esc_url( home_url( '/insights/turn-expertise-into-an-ebook/' ) ); ?>">Read article →</a></article>
 <article class="card reveal"><p class="eyebrow">Editing · 7 min read</p><h2 class="article-card-title">Developmental editing, copy editing, and proofreading</h2><p>Understand what each editing stage does, when it happens, and why the order matters.</p><a class="card-link" href="<?php echo esc_url( home_url( '/insights/editing-levels-explained/' ) ); ?>">Read article →</a></article>

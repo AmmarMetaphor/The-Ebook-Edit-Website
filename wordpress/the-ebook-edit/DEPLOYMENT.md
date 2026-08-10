@@ -107,11 +107,17 @@ After a successful send, visitors are sent to the **Thank you** page automatical
 
 Submit a real inquiry from the live site and confirm the email arrives at `info@theebookedit.com` and the browser lands on `/thank-you/`. If no email arrives, the host is likely blocking PHP mail — install an SMTP plugin (for example WP Mail SMTP) and configure it with the mailbox credentials.
 
-## 7. Navigation menu (optional)
+## 7. Menus
 
-The header navigation works immediately with no setup. To make it editable instead, go to **Appearance → Menus**, create a menu, add Home / Services / Process / Portfolio / About / Insights and then Contact, and assign it to the **Primary navigation** location.
+The header navigation works immediately with no setup. To make it editable instead, go to **Appearance → Menus**, create a menu named `Primary Navigation`, add Services / Process / Portfolio / About / Insights and then Contact (labelled "Start a project"), and tick the **Primary Navigation** display location.
 
-To style the Contact item as the gold button: in **Menus**, open **Screen Options** at the top right, tick **CSS Classes**, then type `nav-cta` into that item's CSS Classes box.
+Do **not** add a Home item — the header logo is the link to the homepage.
+
+To style the "Start a project" item as the gold button: in **Menus**, open **Screen Options** at the top right, tick **CSS Classes**, then type `nav-cta` into that item's CSS Classes box.
+
+Footer social links come from a second menu named `Social Links`, assigned to the **Social Links** location. Add Custom Links only for accounts that really exist. Until that menu is assigned, the footer shows no social heading and no empty space.
+
+Step-by-step instructions for both menus, and for adding approved publishing-platform logos, are in `README-WORDPRESS.md` alongside this theme folder in the project repository.
 
 ## 8. Security headers
 
