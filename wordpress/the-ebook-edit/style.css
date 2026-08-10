@@ -127,6 +127,9 @@ p { margin: 0 0 1.15em; }
 .hero-logo { width: min(100%, 570px); margin: 0 auto 25px; }
 .mini-list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .mini-list li { display: flex; align-items: flex-start; gap: 12px; }
+/* Services assessment column: the checklist and its button are siblings, so the
+   button needs its own top margin to sit clear of the last checklist item. */
+.assessment-panel .button { margin-top: 28px; }
 .tick { flex: 0 0 26px; width: 26px; height: 26px; display: inline-grid; place-items: center; border-radius: 50%; background: var(--gold-500); color: var(--blue-700); font-size: .82rem; font-weight: 900; }
 
 .trust-strip { border-block: 1px solid var(--line); background: white; }
