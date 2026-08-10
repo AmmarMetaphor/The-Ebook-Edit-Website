@@ -53,7 +53,7 @@ function teebe_seo_map() {
 		),
 		'portfolio'                       => array(
 			'title'       => 'Ebook Portfolio | The Ebook Edit',
-			'description' => 'Explore representative ebook project types and learn how verified writing, editing, and publishing case studies are presented.',
+			'description' => 'Representative ebook project types showing how writing, editing, formatting, and publishing support can be shaped around different books.',
 			'path'        => '/portfolio/',
 		),
 		'about'                           => array(

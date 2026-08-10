@@ -10,7 +10,7 @@
 get_header();
 ?>
 
-<section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a> / <a href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a> / Publishing</div><p class="eyebrow">Publishing</p><h1>Publishing an ebook on Kindle and other platforms</h1><p class="lead">A practical look at what Amazon Kindle Direct Publishing (KDP), Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare before you submit.</p><div class="article-meta"><span>10 minute read</span><span>Platforms and distribution</span></div></div></section>
+<section class="page-hero"><div class="container"><p class="eyebrow">Publishing</p><h1>Publishing an ebook on Kindle and other platforms</h1><p class="lead">A practical look at what Amazon Kindle Direct Publishing (KDP), Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare before you submit.</p><div class="article-meta"><span>10 minute read</span><span>Platforms and distribution</span></div></div></section>
 <section class="section"><div class="container article-grid"><article class="prose">
 
 <p>Every ebook platform wants roughly the same things: a clean, correctly formatted file, accurate metadata, a compliant cover, and a completed account with your rights, tax, and payment details in order. The differences are mostly in file format, submission steps, and store-specific settings. Knowing what to expect before you start makes the upload stage far less stressful.</p>

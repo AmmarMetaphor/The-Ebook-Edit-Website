@@ -10,7 +10,7 @@ get_header();
 while ( have_posts() ) :
 	the_post();
 	?>
-<section class="page-hero"><div class="container"><div class="breadcrumbs"><a href="<?php echo esc_url( home_url( '/' ) ); ?>">Home</a> / <?php the_title(); ?></div><h1><?php the_title(); ?></h1></div></section>
+<section class="page-hero"><div class="container"><h1><?php the_title(); ?></h1></div></section>
 <section class="section"><div class="container prose"><?php the_content(); ?></div></section>
 	<?php
 endwhile;

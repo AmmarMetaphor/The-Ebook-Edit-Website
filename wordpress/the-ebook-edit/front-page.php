@@ -40,14 +40,36 @@ get_header();
     <h2>One editorial partner. Every essential stage.</h2>
     <p class="lead">Choose a focused service for an existing manuscript or combine stages into an end-to-end publishing journey.</p>
     <div class="grid-4 cards">
-      <article class="card card-accent reveal"><div class="icon-tile">01</div><h3>Ebook writing</h3><p>Shape a strong concept, outline the reader journey, and develop original chapters in a voice that sounds like you.</p><a class="card-link" href="<?php echo esc_url( home_url( '/writing/' ) ); ?>">Explore writing →</a></article>
-      <article class="card card-accent reveal"><div class="icon-tile">02</div><h3>Editing</h3><p>Strengthen structure, clarity, tone, flow, grammar, and consistency without flattening the personality of the work.</p><a class="card-link" href="<?php echo esc_url( home_url( '/editing/' ) ); ?>">Explore editing →</a></article>
-      <article class="card card-accent reveal"><div class="icon-tile">03</div><h3>Formatting</h3><p>Prepare clean, readable interiors for EPUB and PDF, including headings, navigation, front matter, and final checks.</p><a class="card-link" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>#formatting">Explore formatting →</a></article>
-      <article class="card card-accent reveal"><div class="icon-tile">04</div><h3>Publishing support</h3><p>Plan metadata, platform files, upload steps, and launch assets for Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, and wider distribution.</p><a class="card-link" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>">Explore Kindle &amp; ebook publishing support →</a></article>
+      <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/writing/' ) ); ?>"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">01</div><h3>Ebook writing</h3><p>Shape a strong concept, outline the reader journey, and develop original chapters in a voice that sounds like you.</p><span class="card-cta" aria-hidden="true">Explore writing services →</span></article></a>
+      <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/editing/' ) ); ?>"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">02</div><h3>Editing</h3><p>Strengthen structure, clarity, tone, flow, grammar, and consistency without flattening the personality of the work.</p><span class="card-cta" aria-hidden="true">Explore editing services →</span></article></a>
+      <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>#formatting"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">03</div><h3>Formatting</h3><p>Prepare clean, readable interiors for EPUB and PDF, including headings, navigation, front matter, and final checks.</p><span class="card-cta" aria-hidden="true">Explore formatting support →</span></article></a>
+      <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">04</div><h3>Publishing support</h3><p>Plan metadata, platform files, upload steps, and launch assets for Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, and wider distribution.</p><span class="card-cta" aria-hidden="true">Explore publishing support →</span></article></a>
     </div>
   </div>
 </section>
 <section class="section">
+  <div class="container">
+    <p class="eyebrow">Publishing platforms</p>
+    <h2>Prepare your ebook for the platforms that matter.</h2>
+    <p class="lead">We help organise platform-ready files, metadata and publishing materials for leading ebook stores and wider distribution routes.</p>
+    <ul class="platform-grid">
+	<?php
+	foreach ( teebe_platforms() as $teebe_slug => $teebe_name ) :
+		$teebe_logo = teebe_platform_logo( $teebe_slug );
+		?>
+      <li class="platform-tile">
+		<?php if ( '' !== $teebe_logo ) : ?>
+        <img class="platform-logo" src="<?php echo esc_url( $teebe_logo ); ?>" alt="<?php echo esc_attr( $teebe_name ); ?>" loading="lazy" decoding="async">
+		<?php else : ?>
+        <span class="platform-name"><?php echo esc_html( $teebe_name ); ?></span>
+		<?php endif; ?>
+      </li>
+	<?php endforeach; ?>
+    </ul>
+    <p class="platform-note">Platform names are shown to describe compatible publishing-support services. The Ebook Edit is an independent editorial service.</p>
+  </div>
+</section>
+<section class="section section-soft">
   <div class="container split">
     <div>
       <p class="eyebrow">Built for thoughtful creators</p>
@@ -71,14 +93,14 @@ get_header();
 </section>
 <section class="section section-gold">
   <div class="container">
-    <div class="text-center"><p class="eyebrow">A calm, clear workflow</p><h2>How your ebook moves forward</h2><p class="lead">A five-stage process keeps the work focused while leaving room for insight, revision, and creative decisions.</p></div>
+    <div class="text-center"><p class="eyebrow">A calm, clear workflow</p><h2>How your ebook moves forward</h2><p class="lead">A six-stage process keeps the work focused while leaving room for insight, revision and creative decisions.</p></div>
     <div class="grid-3 cards">
       <article class="card reveal"><div class="icon-tile">1</div><h3>Discover</h3><p>Define the reader, purpose, scope, voice, timeline, and success criteria.</p></article>
       <article class="card reveal"><div class="icon-tile">2</div><h3>Plan</h3><p>Build the outline, chapter logic, research plan, and production schedule.</p></article>
       <article class="card reveal"><div class="icon-tile">3</div><h3>Create</h3><p>Write, edit, review, and revise through structured milestones.</p></article>
       <article class="card reveal"><div class="icon-tile">4</div><h3>Polish</h3><p>Complete copyediting, proofreading, formatting, and quality checks.</p></article>
       <article class="card reveal"><div class="icon-tile">5</div><h3>Publish</h3><p>Prepare files, metadata, and upload steps for Kindle Direct Publishing (KDP), Apple Books, Kobo, Google Play Books, and other platforms.</p></article>
-      <article class="card reveal"><div class="icon-tile">→</div><h3>Keep evolving</h3><p>Retain organized source files so updates and new editions stay manageable.</p></article>
+      <article class="card reveal"><div class="icon-tile">6</div><h3>Keep evolving</h3><p>Retain organized source files so updates and new editions stay manageable.</p></article>
     </div>
   </div>
 </section>

@@ -25,7 +25,8 @@ function teebe_setup() {
 
 	register_nav_menus(
 		array(
-			'primary' => __( 'Primary navigation', 'the-ebook-edit' ),
+			'primary' => __( 'Primary Navigation', 'the-ebook-edit' ),
+			'social'  => __( 'Social Links', 'the-ebook-edit' ),
 		)
 	);
 }
@@ -65,11 +66,12 @@ add_action( 'wp_enqueue_scripts', 'teebe_assets' );
 /**
  * Primary navigation items, in order, as path => label.
  *
+ * There is deliberately no Home item: the header logo is the link home.
+ *
  * @return array<string, string>
  */
 function teebe_nav_items() {
 	return array(
-		'/'           => 'Home',
 		'/services/'  => 'Services',
 		'/process/'   => 'Process',
 		'/portfolio/' => 'Portfolio',
@@ -173,6 +175,85 @@ function teebe_default_nav() {
 	printf(
 		'<a class="nav-cta" href="%s">Start a project</a>',
 		esc_url( home_url( '/contact/' ) )
+	);
+}
+
+/**
+ * Publishing platforms named in the homepage section, as logo slug => name.
+ *
+ * These are platform names used to describe what the publishing-support service
+ * prepares files for. They are not partners, and no affiliation is implied.
+ *
+ * @return array<string, string>
+ */
+function teebe_platforms() {
+	return array(
+		'amazon-kdp'         => 'Amazon Kindle Direct Publishing',
+		'apple-books'        => 'Apple Books',
+		'kobo-writing-life'  => 'Kobo Writing Life',
+		'google-play-books'  => 'Google Play Books',
+		'barnes-noble-press' => 'Barnes & Noble Press / NOOK',
+		'draft2digital'      => 'Draft2Digital',
+	);
+}
+
+/**
+ * URL of an approved platform logo bundled with the theme, or '' when there is
+ * none, in which case the template falls back to a text tile.
+ *
+ * Approved artwork goes in the theme's assets/images/platforms/ folder, named
+ * after the slug in teebe_platforms() — for example amazon-kdp.svg.
+ *
+ * @param string $slug Platform slug.
+ * @return string
+ */
+function teebe_platform_logo( $slug ) {
+	foreach ( array( 'svg', 'png', 'webp' ) as $extension ) {
+		$relative = 'assets/images/platforms/' . $slug . '.' . $extension;
+
+		if ( file_exists( get_theme_file_path( $relative ) ) ) {
+			return get_theme_file_uri( $relative );
+		}
+	}
+
+	return '';
+}
+
+/**
+ * Whether a Social Links menu has been created and assigned.
+ *
+ * The footer heading and list are only printed when this is true, so an
+ * unconfigured site shows no empty block.
+ *
+ * @return bool
+ */
+function teebe_has_social_nav() {
+	return has_nav_menu( 'social' );
+}
+
+/**
+ * Renders the footer social links from the Social Links menu.
+ *
+ * Link labels come from the menu items, so accounts are added in
+ * Appearance → Menus without editing the theme. Nothing is hard-coded and no
+ * external icon font or script is loaded.
+ */
+function teebe_social_nav() {
+	if ( ! teebe_has_social_nav() ) {
+		return;
+	}
+
+	wp_nav_menu(
+		array(
+			'theme_location'  => 'social',
+			'container'       => 'div',
+			'container_class' => 'social-links',
+			'menu_class'      => 'social-list',
+			'depth'           => 1,
+			'link_before'     => '<span class="social-label">',
+			'link_after'      => '</span>',
+			'fallback_cb'     => false,
+		)
 	);
 }
 

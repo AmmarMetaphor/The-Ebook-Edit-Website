@@ -17,7 +17,7 @@
   <meta name="twitter:description" content="Professional ebook writing, editing, formatting, and publishing support for authors, experts, founders, and organizations.">
   <meta name="twitter:image" content="https://the-ebook-edit.netlify.app/assets/images/the-ebook-edit-logo.png">
   <link rel="icon" href="/favicon.ico">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260805-2">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260810-1">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Ebook Edit","url":"https://the-ebook-edit.netlify.app/","description":"Professional ebook writing, editing, formatting, and publishing support.","areaServed":"Worldwide","serviceType":["Ebook writing","Ebook editing","Ebook formatting","Publishing support"]}</script>
 </head>
 <body>
@@ -29,7 +29,7 @@
     </a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
     <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
-      <a href="/" aria-current="page">Home</a><a href="/services">Services</a><a href="/process">Process</a><a href="/portfolio">Portfolio</a><a href="/about">About</a><a href="/insights">Insights</a>
+      <a href="/services">Services</a><a href="/process">Process</a><a href="/portfolio">Portfolio</a><a href="/about">About</a><a href="/insights">Insights</a>
       <a class="nav-cta" href="/contact">Start a project</a>
     </nav>
   </div>
@@ -68,14 +68,38 @@
     <h2>One editorial partner. Every essential stage.</h2>
     <p class="lead">Choose a focused service for an existing manuscript or combine stages into an end-to-end publishing journey.</p>
     <div class="grid-4 cards">
-      <article class="card card-accent reveal"><div class="icon-tile">01</div><h3>Ebook writing</h3><p>Shape a strong concept, outline the reader journey, and develop original chapters in a voice that sounds like you.</p><a class="card-link" href="/writing">Explore writing →</a></article>
-      <article class="card card-accent reveal"><div class="icon-tile">02</div><h3>Editing</h3><p>Strengthen structure, clarity, tone, flow, grammar, and consistency without flattening the personality of the work.</p><a class="card-link" href="/editing">Explore editing →</a></article>
-      <article class="card card-accent reveal"><div class="icon-tile">03</div><h3>Formatting</h3><p>Prepare clean, readable interiors for EPUB and PDF, including headings, navigation, front matter, and final checks.</p><a class="card-link" href="/publishing#formatting">Explore formatting →</a></article>
-      <article class="card card-accent reveal"><div class="icon-tile">04</div><h3>Publishing support</h3><p>Plan metadata, platform files, upload steps, and launch assets for Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, and wider distribution.</p><a class="card-link" href="/publishing">Explore Kindle &amp; ebook publishing support →</a></article>
+      <a class="service-card-link reveal" href="/writing"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">01</div><h3>Ebook writing</h3><p>Shape a strong concept, outline the reader journey, and develop original chapters in a voice that sounds like you.</p><span class="card-cta" aria-hidden="true">Explore writing services →</span></article></a>
+      <a class="service-card-link reveal" href="/editing"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">02</div><h3>Editing</h3><p>Strengthen structure, clarity, tone, flow, grammar, and consistency without flattening the personality of the work.</p><span class="card-cta" aria-hidden="true">Explore editing services →</span></article></a>
+      <a class="service-card-link reveal" href="/publishing#formatting"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">03</div><h3>Formatting</h3><p>Prepare clean, readable interiors for EPUB and PDF, including headings, navigation, front matter, and final checks.</p><span class="card-cta" aria-hidden="true">Explore formatting support →</span></article></a>
+      <a class="service-card-link reveal" href="/publishing"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">04</div><h3>Publishing support</h3><p>Plan metadata, platform files, upload steps, and launch assets for Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, and wider distribution.</p><span class="card-cta" aria-hidden="true">Explore publishing support →</span></article></a>
     </div>
   </div>
 </section>
 <section class="section">
+  <div class="container">
+    <p class="eyebrow">Publishing platforms</p>
+    <h2>Prepare your ebook for the platforms that matter.</h2>
+    <p class="lead">We help organise platform-ready files, metadata and publishing materials for leading ebook stores and wider distribution routes.</p>
+    <!--
+      Text tiles are used because no approved platform logo files are bundled with this site.
+      To swap in approved artwork later, drop the file into assets/images/platforms/ and replace
+      the .platform-name span inside a tile with, for example:
+        <img class="platform-logo" src="/assets/images/platforms/amazon-kdp.svg" alt="Amazon Kindle Direct Publishing" loading="lazy" decoding="async">
+      The tile keeps its size and alignment, so the layout does not change.
+      Check each platform's current brand guidelines before using its logo.
+    -->
+    <ul class="platform-grid">
+      <li class="platform-tile"><span class="platform-name">Amazon Kindle Direct Publishing</span></li>
+      <li class="platform-tile"><span class="platform-name">Apple Books</span></li>
+      <li class="platform-tile"><span class="platform-name">Kobo Writing Life</span></li>
+      <li class="platform-tile"><span class="platform-name">Google Play Books</span></li>
+      <li class="platform-tile"><span class="platform-name">Barnes &amp; Noble Press / NOOK</span></li>
+      <li class="platform-tile"><span class="platform-name">Draft2Digital</span></li>
+    </ul>
+    <p class="platform-note">Platform names are shown to describe compatible publishing-support services. The Ebook Edit is an independent editorial service.</p>
+  </div>
+</section>
+<section class="section section-soft">
   <div class="container split">
     <div>
       <p class="eyebrow">Built for thoughtful creators</p>
@@ -99,14 +123,14 @@
 </section>
 <section class="section section-gold">
   <div class="container">
-    <div class="text-center"><p class="eyebrow">A calm, clear workflow</p><h2>How your ebook moves forward</h2><p class="lead">A five-stage process keeps the work focused while leaving room for insight, revision, and creative decisions.</p></div>
+    <div class="text-center"><p class="eyebrow">A calm, clear workflow</p><h2>How your ebook moves forward</h2><p class="lead">A six-stage process keeps the work focused while leaving room for insight, revision and creative decisions.</p></div>
     <div class="grid-3 cards">
       <article class="card reveal"><div class="icon-tile">1</div><h3>Discover</h3><p>Define the reader, purpose, scope, voice, timeline, and success criteria.</p></article>
       <article class="card reveal"><div class="icon-tile">2</div><h3>Plan</h3><p>Build the outline, chapter logic, research plan, and production schedule.</p></article>
       <article class="card reveal"><div class="icon-tile">3</div><h3>Create</h3><p>Write, edit, review, and revise through structured milestones.</p></article>
       <article class="card reveal"><div class="icon-tile">4</div><h3>Polish</h3><p>Complete copyediting, proofreading, formatting, and quality checks.</p></article>
       <article class="card reveal"><div class="icon-tile">5</div><h3>Publish</h3><p>Prepare files, metadata, and upload steps for Kindle Direct Publishing (KDP), Apple Books, Kobo, Google Play Books, and other platforms.</p></article>
-      <article class="card reveal"><div class="icon-tile">→</div><h3>Keep evolving</h3><p>Retain organized source files so updates and new editions stay manageable.</p></article>
+      <article class="card reveal"><div class="icon-tile">6</div><h3>Keep evolving</h3><p>Retain organized source files so updates and new editions stay manageable.</p></article>
     </div>
   </div>
 </section>
@@ -123,7 +147,9 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-brand">
-        <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
+        <a class="footer-logo" href="/" aria-label="The Ebook Edit home">
+          <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
+        </a>
         <p>Thoughtful ebook writing, editing, formatting, and publishing support—shaped around your voice and your reader.</p>
         <p class="footer-contact">Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a> · UK and US · We aim to reply within 24 hours</p>
       </div>
@@ -143,12 +169,15 @@
           <a href="/portfolio">Portfolio</a>
           <a href="/about">About</a>
           <a href="/insights">Insights</a>
+          <a href="/contact">Contact</a>
         </div>
       </div>
       <div>
         <h2 class="footer-title">Start here</h2>
         <p>Tell us about your idea, manuscript, timeline, and publishing goals.</p>
         <a class="button button-gold" href="/contact">Get in touch</a>
+        <!-- Social links placeholder: the WordPress theme renders a "Social Links"
+             menu here when one is assigned. Add real, verified profile URLs only. -->
       </div>
     </div>
     <div class="footer-bottom">
@@ -157,6 +186,6 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/main.js?v=20260805-2" defer></script>
+<script src="assets/js/main.js?v=20260810-1" defer></script>
 </body>
 </html>
