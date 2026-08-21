@@ -1421,3 +1421,50 @@ html.book-js .book-static .book-tabs .book-tab {
   .wa-float:hover,
   .wa-float:focus-visible { transform: none; }
 }
+
+/* =================================================================
+   PORTFOLIO FEATURED-BOOK SPREAD
+   A two-page presentation: editorial copy on the left page, the book
+   cover displayed as a premium object on the right page.
+   ================================================================= */
+.feature-note {
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.featured-book { margin: 0; text-align: center; }
+.featured-book img {
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  padding: 8px;
+  border: 1px solid rgba(182, 141, 44, 0.45);
+  border-radius: 6px;
+  background: #fffdf6;
+  box-shadow:
+    0 18px 38px rgba(35, 20, 3, 0.35),
+    0 4px 10px rgba(35, 20, 3, 0.2);
+  transform: perspective(1200px) rotateY(-2.5deg);
+  transition: transform 0.45s ease;
+}
+.featured-book figcaption { margin-top: 14px; }
+
+@media (min-width: 1000px) and (min-height: 640px) {
+  html.book-cinematic .spread-featured .page-right .page-inner { align-items: center; }
+  html.book-cinematic .featured-book img { max-height: calc(var(--book-h) * 0.68); }
+  html.book-cinematic .featured-book figcaption { margin-top: clamp(8px, 1.8vh, 14px); }
+  /* Restrained entrance: the cover settles by ~2% as its page is revealed. */
+  html.book-cinematic .spread-featured:not(.sp-open):not(.sp-right) .featured-book img {
+    transform: perspective(1200px) rotateY(-2.5deg) translateY(8px) scale(0.98);
+  }
+  html.book-cinematic .feature-note { font-size: clamp(0.9rem, 2.1vh, 1.02rem); }
+}
+
+@media (max-width: 640px) {
+  .featured-book img { max-height: 58vh; }
+}
