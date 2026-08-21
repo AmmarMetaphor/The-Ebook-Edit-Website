@@ -1349,3 +1349,75 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-cinematic .about-motto { font-size: clamp(1.05rem, 2.8vh, 1.5rem); }
   html.book-cinematic .stage-body .stage-h { font-size: clamp(0.9rem, 2.2vh, 1.02rem); }
 }
+
+/* =================================================================
+   GLOBAL FLOATING WHATSAPP CONTACT
+   Injected by book.js on every page; anchored to the viewport, never to
+   the book, so it holds its corner through the cover opening and every
+   page turn. z-index layers: book chrome <= 10, sticky chapter-tab strip
+   60, WhatsApp 90, skip link 9999.
+   ================================================================= */
+.wa-float {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #2ad168, #1cb955);
+  color: #ffffff;
+  box-shadow:
+    0 0 0 2px rgba(255, 253, 248, 0.85),
+    0 10px 24px rgba(30, 20, 4, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.wa-float svg { display: block; width: 28px; height: 28px; }
+.wa-float:hover,
+.wa-float:focus-visible {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 0 0 2px rgba(251, 195, 65, 0.9),
+    0 14px 30px rgba(30, 20, 4, 0.4);
+}
+
+.wa-tip {
+  position: absolute;
+  right: calc(100% + 14px);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 8px 13px;
+  border: 1px solid rgba(251, 195, 65, 0.55);
+  border-radius: 8px;
+  background: linear-gradient(180deg, #0a3f9f, var(--board, #04329c));
+  color: #fdf6e3;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+@media (hover: hover) {
+  .wa-float:hover .wa-tip { opacity: 1; visibility: visible; }
+}
+.wa-float:focus-visible .wa-tip { opacity: 1; visibility: visible; }
+
+@media (max-width: 640px) {
+  .wa-float {
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    width: 50px;
+    height: 50px;
+  }
+  .wa-float svg { width: 26px; height: 26px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-float:hover,
+  .wa-float:focus-visible { transform: none; }
+}
