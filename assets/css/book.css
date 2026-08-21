@@ -1,5 +1,5 @@
-/* The Ebook Edit — interactive book homepage.
-   Loaded by index.html only; secondary pages never see these styles.
+/* The Ebook Edit — shared interactive book design system.
+   Loaded by every public page alongside styles.css.
 
    Two rendering modes share one DOM:
    1. Flow mode (default, no JavaScript required): the cover, chapter tabs and
@@ -26,7 +26,7 @@
   --flow-w: min(100% - 5vw, 1040px);
 }
 
-body.book-home { background: var(--desk-lo); }
+body.book-home { background: #a5845a; }
 .book-home .site-footer { margin-top: 0; }
 
 .book-experience {
@@ -962,4 +962,390 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
   html.book-cinematic .colophon-plaque { width: min(230px, 70%); margin-bottom: clamp(12px, 2.4vh, 22px); }
   html.book-cinematic .colophon .page-ornament { margin: clamp(12px, 2.6vh, 24px) auto; }
   html.book-cinematic .platform-note-page { margin-top: clamp(14px, 3vh, 30px); font-size: clamp(0.72rem, 1.65vh, 0.85rem); }
+}
+
+/* =================================================================
+   SITE-WIDE VOLUME SYSTEM
+   Shared components for the secondary "volumes" (coverless cinematic
+   pages), static book pages, and the per-page theme modifiers.
+   ================================================================= */
+
+/* --------------------------------------------------- theme modifiers
+   Constants (navy, gold, ivory, serif, tabs, spine) never change.
+   Each volume varies only its emphasis colour and paper warmth. */
+body.book-theme-writing { --paper: #fdf7e6; --paper-soft: #f9f0da; --theme-accent: #c9992a; }
+body.book-theme-editing { --theme-accent: #d85a35; }
+body.book-theme-publishing { --theme-accent: #0a90ab; }
+body.book-theme-process { --theme-accent: #044dd5; }
+body.book-theme-portfolio { --theme-accent: #04329c; }
+body.book-theme-insights { --theme-accent: #d85a35; }
+body.book-theme-services,
+body.book-theme-about,
+body.book-theme-contact { --theme-accent: #b98a1e; }
+
+.entry-no,
+.contents-no { color: var(--theme-accent, #b98a1e); }
+
+/* --------------------------------------------- open-start (coverless)
+   Secondary volumes begin with the book already open: the chrome that the
+   homepage animates into place is simply the default here, and the chapter
+   tabs are always available. */
+html.book-js .book-open-start .book-tabs .book-tab,
+html.book-js .book-static .book-tabs .book-tab {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+}
+.book-open-start .book-tabs,
+.book-static .book-tabs { margin-top: clamp(12px, 3vh, 32px); }
+.book-tab[aria-current="page"] {
+  background: linear-gradient(180deg, #0d49b3, #0a3f9f);
+  box-shadow: inset 0 -3px 0 var(--gold-500);
+  color: #ffffff;
+}
+.book-tab-cta[aria-current="page"] {
+  background: linear-gradient(180deg, #ffdd82, #ffd05e);
+  box-shadow: inset 0 -3px 0 var(--blue-700);
+  color: var(--blue-700);
+}
+
+/* ------------------------------------------------- shared components */
+.bookplate {
+  display: inline-block;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(60, 40, 8, 0.18);
+}
+.bookplate img { width: clamp(150px, 20vw, 200px); height: auto; }
+
+.page-inner h1 {
+  color: var(--blue-700);
+  font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+  letter-spacing: -0.03em;
+}
+
+.contents-list { margin: 12px 0 0; padding: 0; list-style: none; }
+.contents-list li { border-bottom: 1px solid var(--gold-line); }
+.contents-list li:first-child { border-top: 1px solid var(--gold-line); }
+.contents-list a {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 14px 2px;
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.contents-no { flex: 0 0 26px; font-size: 0.85rem; }
+.contents-title { flex: 1 1 auto; }
+.contents-meta {
+  color: var(--muted);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.contents-list a:hover .contents-title { color: var(--blue-600); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+
+.diamond-list { display: grid; gap: 10px; margin: 14px 0 0; padding: 0; list-style: none; }
+.diamond-list li { position: relative; padding-left: 20px; }
+.diamond-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  background: var(--gold-500);
+}
+
+.ghost-no {
+  display: block;
+  margin: 0 0 -10px;
+  color: rgba(4, 50, 156, 0.12);
+  color: color-mix(in srgb, var(--theme-accent, #04329c) 18%, transparent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(3rem, 7vw, 4.6rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.journey-dots { display: flex; gap: 7px; margin: 0 0 14px; }
+.journey-dots .jd {
+  width: 9px;
+  height: 9px;
+  border: 1px solid rgba(4, 50, 156, 0.4);
+  border-radius: 50%;
+}
+.journey-dots .jd.on { background: var(--gold-500); border-color: #b98a1e; }
+
+.assessment-insert h3 { margin-top: 0; color: #fffdf8; }
+.assessment-insert p { color: rgba(255, 253, 248, 0.85); }
+.assessment-insert p:last-child { margin-bottom: 0; }
+
+.tipped-note {
+  position: relative;
+  padding: 22px;
+  border: 1px solid rgba(182, 141, 44, 0.5);
+  border-radius: 10px;
+  background: #fffdf6;
+  box-shadow: 0 10px 24px rgba(60, 35, 5, 0.14);
+  transform: rotate(-0.5deg);
+}
+.tipped-note h3 { margin-top: 0; font-size: 1.1rem; }
+.tipped-note p:last-child { margin-bottom: 0; }
+
+.micro-colophon {
+  margin: 30px 0 0;
+  color: #8a7a55;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.micro-colophon a { color: #7b6b45; }
+.micro-colophon a:hover { color: var(--blue-700); }
+
+/* Writing volume: quiet manuscript baselines with a proof caret. */
+.deco-lines {
+  position: relative;
+  height: clamp(64px, 12vw, 110px);
+  margin: 20px 0;
+  background: repeating-linear-gradient(180deg, rgba(0, 0, 0, 0) 0 26px, rgba(4, 50, 156, 0.16) 26px 27px);
+}
+.deco-lines::after {
+  content: "";
+  position: absolute;
+  left: 16%;
+  top: 30px;
+  width: 9px;
+  height: 9px;
+  border-left: 2px solid var(--coral-500);
+  border-bottom: 2px solid var(--coral-500);
+  transform: rotate(-45deg);
+}
+
+/* Editing volume: abstracted proof lines, one marked for revision. */
+.proof-rules { display: grid; gap: 14px; margin: 20px 0; }
+.proof-rules span {
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(4, 50, 156, 0.12);
+  position: relative;
+}
+.proof-rules span:nth-child(2)::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 38%;
+  top: 50%;
+  border-top: 2px solid rgba(228, 103, 65, 0.75);
+}
+.proof-rules span:nth-child(3) { width: 68%; }
+
+/* Portfolio volume: specimen tags. */
+.specimen-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 0; }
+.specimen-tag {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid rgba(4, 50, 156, 0.35);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.5);
+  color: var(--blue-700);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Insights volume: journal masthead. */
+.journal-masthead {
+  margin-bottom: 22px;
+  padding: 10px 0 12px;
+  border-top: 2px solid var(--blue-700);
+  border-bottom: 1px solid var(--gold-line);
+  text-align: center;
+}
+.journal-masthead strong {
+  display: block;
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+}
+.journal-masthead span {
+  color: var(--gold-ink);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* Contact volume: correspondence paper around the Netlify form. */
+.letter-form {
+  position: relative;
+  padding: clamp(22px, 3vw, 34px);
+  border: 1px solid rgba(182, 141, 44, 0.5);
+  border-radius: 12px;
+  background: #fffefa;
+  box-shadow: 0 14px 30px rgba(60, 35, 5, 0.12);
+}
+.letter-form::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(182, 141, 44, 0.25);
+  border-radius: 8px;
+  pointer-events: none;
+}
+.book-home details { border-color: rgba(182, 141, 44, 0.4); background: #fffdf6; }
+
+/* 404 volume: the missing chapter slot. */
+.missing-slot {
+  margin: 24px auto;
+  max-width: 460px;
+  padding: 26px;
+  border: 2px dashed rgba(182, 141, 44, 0.55);
+  border-radius: 10px;
+  background: repeating-linear-gradient(45deg, rgba(182, 141, 44, 0.05) 0 12px, rgba(0, 0, 0, 0) 12px 24px);
+  text-align: center;
+}
+.missing-slot .ghost-no { margin: 0 0 4px; }
+
+/* Thank-you volume: a bookmark over the closing note. */
+.note-ribbon {
+  width: 26px;
+  height: 64px;
+  margin: 0 auto 18px;
+  background: linear-gradient(180deg, #ffd05e, #e8ab1f);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 9px), 0 100%);
+  box-shadow: inset -3px 0 4px rgba(120, 70, 0, 0.3);
+}
+
+/* ------------------------------------------------- static book pages
+   Articles, contact, legal appendices, notes: the same paper and tabs,
+   normal document flow, no fixed-height spreads. */
+.title-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: clamp(36px, 6vw, 64px) clamp(22px, 5vw, 54px) clamp(12px, 2vw, 20px);
+  text-align: center;
+}
+.title-page h1 { font-size: clamp(1.9rem, 4.2vw, 3rem); letter-spacing: -0.03em; }
+.title-page .lead { margin-inline: auto; }
+.title-page .article-meta { justify-content: center; }
+.title-page .page-ornament { margin: 22px auto 0; }
+.title-page .bookplate { margin-bottom: 20px; }
+
+.prose-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: clamp(24px, 4vw, 44px) clamp(22px, 5vw, 54px) clamp(30px, 4vw, 48px);
+}
+.prose-page .prose { max-width: none; }
+.prose-page .prose h2 {
+  margin-top: 1.6em;
+  padding-top: 0.9em;
+  border-top: 1px solid var(--gold-line);
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+}
+.prose-page .prose h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+
+.insert-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 clamp(22px, 5vw, 54px) clamp(26px, 4vw, 40px);
+}
+
+.closing-page {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: clamp(28px, 4vw, 46px) clamp(22px, 5vw, 54px) clamp(38px, 5vw, 56px);
+  text-align: center;
+}
+.closing-page .page-actions { justify-content: center; }
+.closing-page .page-ornament { margin-inline: auto; }
+
+.page-divider {
+  position: relative;
+  border-top: 1px solid rgba(170, 140, 80, 0.35);
+}
+.page-divider::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: repeating-linear-gradient(180deg, rgba(120, 95, 45, 0.12) 0 1px, rgba(0, 0, 0, 0) 1px 3px);
+}
+
+@media (max-width: 640px) {
+  .contents-list a { padding: 12px 2px; font-size: 0.95rem; }
+  .bookplate img { width: clamp(140px, 40vw, 180px); }
+  .ghost-no { font-size: 2.6rem; }
+}
+
+/* ------------------------------- cinematic refinements for the volumes */
+@media (min-width: 1000px) and (min-height: 640px) {
+  html.book-cinematic .book-open-start .book { transform: none; }
+  html.book-cinematic .book-open-start .book-board-open { transform: none; }
+  html.book-cinematic .book-open-start .paper-left { opacity: 1; }
+  html.book-cinematic .book-open-start .book-spine-shade { opacity: 1; }
+  html.book-cinematic .book-open-start .book-ribbon { visibility: visible; }
+  /* Before the engine takes over, the opening spread is already readable. */
+  html.book-cinematic .book-experience.book-open-start:not(.bk-live) .spread:first-of-type { visibility: visible; }
+  html.book-cinematic .book-experience.book-open-start:not(.bk-live) .spread:first-of-type .page { opacity: 1; }
+  html.book-cinematic .book-open-start .book-tabs { margin-top: 0; }
+
+  html.book-cinematic .page-inner h1 { font-size: clamp(1.45rem, 5.2vh, 2.4rem); margin-bottom: 0.45em; }
+  html.book-cinematic .contents-list a { padding: clamp(8px, 1.8vh, 14px) 2px; font-size: clamp(0.9rem, 2.15vh, 1.02rem); }
+  html.book-cinematic .contents-list a .contents-meta { font-size: clamp(0.6rem, 1.5vh, 0.74rem); }
+  html.book-cinematic .diamond-list { gap: clamp(6px, 1.5vh, 10px); }
+  html.book-cinematic .ghost-no { font-size: clamp(2.4rem, 7vh, 4.2rem); margin-bottom: clamp(-12px, -1.2vh, -6px); }
+  html.book-cinematic .journey-dots { margin-bottom: clamp(8px, 1.6vh, 14px); }
+  html.book-cinematic .deco-lines { height: clamp(50px, 11vh, 100px); margin: clamp(10px, 2.2vh, 20px) 0; }
+  html.book-cinematic .proof-rules { gap: clamp(9px, 1.9vh, 14px); margin: clamp(10px, 2.2vh, 20px) 0; }
+  html.book-cinematic .bookplate { padding: clamp(7px, 1.3vh, 10px) clamp(10px, 1.8vh, 14px); }
+  html.book-cinematic .bookplate img { width: clamp(130px, 17vh, 180px); }
+  html.book-cinematic .journal-masthead { margin-bottom: clamp(10px, 2vh, 20px); padding: clamp(6px, 1.3vh, 10px) 0 clamp(7px, 1.5vh, 12px); }
+  html.book-cinematic .micro-colophon { margin-top: auto; padding-top: 14px; }
+  html.book-cinematic .tipped-note { padding: clamp(14px, 2.6vh, 22px); }
+  html.book-cinematic .specimen-row { gap: clamp(6px, 1.4vh, 10px); margin-top: clamp(8px, 1.8vh, 16px); }
+}
+
+.bookplate-row { margin: 0 0 22px; }
+@media (min-width: 1000px) and (min-height: 640px) {
+  html.book-cinematic .bookplate-row { margin-bottom: clamp(10px, 2.2vh, 22px); }
+}
+
+.entry-sub {
+  margin: 14px 0 6px;
+  color: var(--gold-ink);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.about-motto {
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+.closing-page h1 { font-size: clamp(1.7rem, 3.6vw, 2.5rem); letter-spacing: -0.02em; }
+.stage-body .stage-h { margin: 9px 0 0; font-size: 1.02rem; color: var(--blue-700); }
+@media (min-width: 1000px) and (min-height: 640px) {
+  html.book-cinematic .about-motto { font-size: clamp(1.05rem, 2.8vh, 1.5rem); }
+  html.book-cinematic .stage-body .stage-h { font-size: clamp(0.9rem, 2.2vh, 1.02rem); }
 }
