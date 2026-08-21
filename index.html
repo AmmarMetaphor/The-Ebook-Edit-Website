@@ -17,131 +17,370 @@
   <meta name="twitter:description" content="Professional ebook writing, editing, formatting, and publishing support for authors, experts, founders, and organizations.">
   <meta name="twitter:image" content="https://the-ebook-edit.netlify.app/assets/images/the-ebook-edit-logo.png">
   <link rel="icon" href="/favicon.ico">
+  <link rel="preload" as="image" href="/assets/images/the-ebook-edit-logo.png">
   <link rel="stylesheet" href="assets/css/styles.css?v=20260810-1">
+  <link rel="stylesheet" href="assets/css/book-home.css?v=20260821-1">
+  <script>
+    /* Pre-paint mode check so the closed book renders on the first frame with no
+       layout flash. book-home.js confirms boot; if it ever fails to load, the
+       timer removes the cinematic class so all content stays reachable. */
+    (function () {
+      var c = document.documentElement.classList;
+      c.add('book-js');
+      try {
+        if (window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          c.add('book-cinematic');
+          window.__bookBoot = window.setTimeout(function () {
+            c.remove('book-cinematic');
+          }, 2500);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Ebook Edit","url":"https://the-ebook-edit.netlify.app/","description":"Professional ebook writing, editing, formatting, and publishing support.","areaServed":"Worldwide","serviceType":["Ebook writing","Ebook editing","Ebook formatting","Publishing support"]}</script>
 </head>
-<body>
+<body class="book-home">
 <a class="skip-link" href="#main">Skip to main content</a>
-<header class="site-header">
-  <div class="container nav-wrap">
-    <a class="brand" href="/" aria-label="The Ebook Edit home">
-      <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
-    <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
-      <a href="/services">Services</a><a href="/process">Process</a><a href="/portfolio">Portfolio</a><a href="/about">About</a><a href="/insights">Insights</a>
-      <a class="nav-cta" href="/contact">Start a project</a>
-    </nav>
-  </div>
-</header>
 <main id="main">
+<div class="book-experience" id="book-experience">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book" id="book">
+        <div class="book-shadow" aria-hidden="true"></div>
 
-<section class="hero">
-  <div class="container hero-grid">
-    <div>
-      <p class="eyebrow">Ebook writing · editing · publishing</p>
-      <h1>From first idea to a <span>finished ebook.</span></h1>
-      <p class="lead">Turn your expertise, story, or manuscript into a polished digital book with thoughtful writing, rigorous editing, professional formatting, and practical publishing support.</p>
-      <div class="hero-actions">
-        <a class="button button-primary" href="/contact">Discuss your ebook</a>
-        <a class="button button-outline" href="/services">Explore services</a>
+        <!-- Front cover: the homepage hero lives on the book itself. -->
+        <header class="book-cover" id="book-cover">
+          <div class="cover-front">
+            <span class="cover-spine" aria-hidden="true"></span>
+            <div class="cover-plaque">
+              <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit" width="1189" height="323">
+            </div>
+            <p class="cover-eyebrow">Ebook writing · editing · publishing</p>
+            <h1 class="cover-title">From first idea to a <span>finished ebook.</span></h1>
+            <div class="cover-rule" aria-hidden="true"></div>
+            <p class="cover-lead">Turn your expertise, story, or manuscript into a polished digital book with thoughtful writing, rigorous editing, professional formatting, and practical publishing support.</p>
+            <p class="cover-cta"><a class="button button-gold cover-open" href="#chapter-1">Open the book</a></p>
+            <p class="cover-hint">or scroll to begin<span class="cover-chevron" aria-hidden="true">⌄</span></p>
+            <div class="cover-shade" aria-hidden="true"></div>
+          </div>
+          <div class="cover-back" aria-hidden="true"></div>
+        </header>
+
+        <!-- Chapter tabs: the site navigation, attached to the book's top edge. -->
+        <nav class="book-tabs" id="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="/services">Services</a>
+          <a class="book-tab" href="/process">Process</a>
+          <a class="book-tab" href="/portfolio">Portfolio</a>
+          <a class="book-tab" href="/about">About</a>
+          <a class="book-tab" href="/insights">Insights</a>
+          <a class="book-tab book-tab-cta" href="/contact">Start a project</a>
+        </nav>
+
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block" id="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="intro-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Built for thoughtful creators</p>
+                <h2 id="intro-title">Your knowledge deserves more than a rushed document.</h2>
+                <p class="page-lead">A professional ebook should feel coherent, credible, enjoyable to read, and unmistakably yours.</p>
+                <p>We build each project around a clear audience, a strong promise, an intentional structure, and a realistic production plan. You always know what stage the manuscript is in, what feedback is needed, and what comes next.</p>
+                <div class="page-actions">
+                  <a class="button button-primary" href="/contact">Discuss your ebook</a>
+                  <a class="button button-outline" href="/services">Explore services</a>
+                </div>
+                <p class="page-tags">Book strategy · Ghostwriting · Editing · Formatting · Publishing support</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <ul class="promise-list">
+                  <li><strong>Reader-first strategy</strong><span>Clear purpose, structure, and audience before the writing begins.</span></li>
+                  <li><strong>Editorial care</strong><span>Developmental thinking and precise sentence-level refinement.</span></li>
+                  <li><strong>Publishing-ready delivery</strong><span>Clean files and guidance for your chosen publishing route.</span></li>
+                </ul>
+                <div class="page-ornament" aria-hidden="true"></div>
+                <h3>What quality looks like</h3>
+                <ul class="check-list">
+                  <li>A focused idea with a clear reader outcome</li>
+                  <li>Logical chapters that build on one another</li>
+                  <li>A consistent voice and purposeful pacing</li>
+                  <li>Clean language, formatting, and navigation</li>
+                  <li>Files organized for publishing and future updates</li>
+                </ul>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-2" aria-labelledby="services-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Everything your ebook needs</p>
+                <h2 id="services-title">One editorial partner. Every essential stage.</h2>
+                <p class="page-lead">Choose a focused service for an existing manuscript or combine stages into an end-to-end publishing journey.</p>
+                <a class="entry service-entry" href="/writing">
+                  <span class="entry-no" aria-hidden="true">01</span>
+                  <span class="entry-body">
+                    <span class="entry-title">Ebook writing</span>
+                    <span class="entry-text">Shape a strong concept, outline the reader journey, and develop original chapters in a voice that sounds like you.</span>
+                    <span class="entry-cta" aria-hidden="true">Explore writing services →</span>
+                  </span>
+                </a>
+                <a class="entry service-entry" href="/editing">
+                  <span class="entry-no" aria-hidden="true">02</span>
+                  <span class="entry-body">
+                    <span class="entry-title">Editing</span>
+                    <span class="entry-text">Strengthen structure, clarity, tone, flow, grammar, and consistency without flattening the personality of the work.</span>
+                    <span class="entry-cta" aria-hidden="true">Explore editing services →</span>
+                  </span>
+                </a>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">4</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <a class="entry service-entry" href="/publishing#formatting">
+                  <span class="entry-no" aria-hidden="true">03</span>
+                  <span class="entry-body">
+                    <span class="entry-title">Formatting</span>
+                    <span class="entry-text">Prepare clean, readable interiors for EPUB and PDF, including headings, navigation, front matter, and final checks.</span>
+                    <span class="entry-cta" aria-hidden="true">Explore formatting support →</span>
+                  </span>
+                </a>
+                <a class="entry service-entry" href="/publishing">
+                  <span class="entry-no" aria-hidden="true">04</span>
+                  <span class="entry-body">
+                    <span class="entry-title">Publishing support</span>
+                    <span class="entry-text">Plan metadata, platform files, upload steps, and launch assets for Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, and wider distribution.</span>
+                    <span class="entry-cta" aria-hidden="true">Explore publishing support →</span>
+                  </span>
+                </a>
+                <p class="page-more"><a href="/services">All services →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">5</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-3" aria-labelledby="platforms-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Publishing platforms</p>
+                <h2 id="platforms-title">Prepare your ebook for the platforms that matter.</h2>
+                <p class="page-lead">We help organise platform-ready files, metadata and publishing materials for leading ebook stores and wider distribution routes.</p>
+                <p class="platform-note-page">Platform names are shown to describe compatible publishing-support services. The Ebook Edit is an independent editorial service.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">6</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <!--
+                  Platform names are set as text because no approved platform logo files are
+                  bundled with this site. To swap in approved artwork later, drop the file into
+                  assets/images/platforms/ and replace a list item's text with, for example:
+                    <img class="imprint-logo" src="/assets/images/platforms/amazon-kdp.svg" alt="Amazon Kindle Direct Publishing" loading="lazy" decoding="async">
+                  Check each platform's current brand guidelines before using its logo.
+                -->
+                <ul class="imprint-list">
+                  <li>Amazon Kindle Direct Publishing</li>
+                  <li>Apple Books</li>
+                  <li>Kobo Writing Life</li>
+                  <li>Google Play Books</li>
+                  <li>Barnes &amp; Noble Press / NOOK</li>
+                  <li>Draft2Digital</li>
+                </ul>
+                <p class="page-more"><a href="/publishing">Explore publishing support →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">7</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-4" aria-labelledby="process-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">A calm, clear workflow</p>
+                <h2 id="process-title">How your ebook moves forward</h2>
+                <p class="page-lead">A six-stage process keeps the work focused while leaving room for insight, revision and creative decisions.</p>
+                <ol class="stage-list" start="1">
+                  <li><span class="stage-no" aria-hidden="true">1</span><div class="stage-body"><h3>Discover</h3><p>Define the reader, purpose, scope, voice, timeline, and success criteria.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">2</span><div class="stage-body"><h3>Plan</h3><p>Build the outline, chapter logic, research plan, and production schedule.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">3</span><div class="stage-body"><h3>Create</h3><p>Write, edit, review, and revise through structured milestones.</p></div></li>
+                </ol>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">8</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <ol class="stage-list" start="4">
+                  <li><span class="stage-no" aria-hidden="true">4</span><div class="stage-body"><h3>Polish</h3><p>Complete copyediting, proofreading, formatting, and quality checks.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">5</span><div class="stage-body"><h3>Publish</h3><p>Prepare files, metadata, and upload steps for Kindle Direct Publishing (KDP), Apple Books, Kobo, Google Play Books, and other platforms.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">6</span><div class="stage-body"><h3>Keep evolving</h3><p>Retain organized source files so updates and new editions stay manageable.</p></div></li>
+                </ol>
+                <div class="page-stats">
+                  <div class="page-stat"><strong>Clear scope</strong><span>Defined deliverables and milestones</span></div>
+                  <div class="page-stat"><strong>Your voice</strong><span>Preserved through every revision</span></div>
+                </div>
+                <p class="page-more"><a href="/process">See the full process →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">9</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-5" aria-labelledby="portfolio-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Representative project types</p>
+                <h2 id="portfolio-title">Three ways the process can be applied.</h2>
+                <p class="page-lead">These representative project types show how writing, editing, formatting and publishing support can be shaped around different books. They illustrate typical approaches rather than completed client engagements.</p>
+                <article class="type-entry">
+                  <p class="entry-label">Representative project type</p>
+                  <h3>Expertise-led nonfiction</h3>
+                  <p>Turn specialist knowledge, interviews or source material into a structured nonfiction ebook designed around a clear reader outcome.</p>
+                </article>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">10</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <article class="type-entry">
+                  <p class="entry-label">Representative project type</p>
+                  <h3>Reader-friendly practical guide</h3>
+                  <p>Shape educational or instructional material into an accessible guide that helps readers move from information to action.</p>
+                </article>
+                <article class="type-entry">
+                  <p class="entry-label">Representative project type</p>
+                  <h3>Narrative fiction</h3>
+                  <p>Strengthen story structure and sentence-level craft while preserving the author’s narrative voice.</p>
+                </article>
+                <p class="page-more"><a href="/portfolio">Explore the portfolio →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">11</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-6" aria-labelledby="insights-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Useful before you begin</p>
+                <h2 id="insights-title">Start with the right questions.</h2>
+                <p class="page-lead">A strong ebook begins with clarity about who it serves, what it promises, and why it should exist now.</p>
+                <figure class="page-quote">
+                  <blockquote><p>“The best ebook is not the one with the most information. It is the one that guides the right reader toward a meaningful result.”</p></blockquote>
+                  <figcaption>The Ebook Edit editorial principle</figcaption>
+                </figure>
+                <p class="page-more"><a href="/insights">Read the insights →</a></p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">12</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <a class="entry article-entry" href="/insights/turn-expertise-into-an-ebook">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Writing · 8 min read</span>
+                    <span class="entry-title">How to turn your expertise into an ebook</span>
+                    <span class="entry-text">Move from a broad topic to a focused reader promise, useful chapter structure, and realistic writing plan.</span>
+                  </span>
+                </a>
+                <a class="entry article-entry" href="/insights/editing-levels-explained">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Editing · 7 min read</span>
+                    <span class="entry-title">Developmental editing, copy editing, and proofreading</span>
+                    <span class="entry-text">Understand what each editing stage does, when it happens, and why the order matters.</span>
+                  </span>
+                </a>
+                <a class="entry article-entry" href="/insights/pre-publishing-checklist">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Publishing · 9 min read</span>
+                    <span class="entry-title">A pre-publishing checklist for a professional ebook</span>
+                    <span class="entry-text">Review editorial readiness, permissions, metadata, formatting, quality assurance, and launch ownership.</span>
+                  </span>
+                </a>
+                <a class="entry article-entry" href="/insights/kindle-and-ebook-platform-guide">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Publishing · 10 min read</span>
+                    <span class="entry-title">Publishing an ebook on Kindle and other platforms</span>
+                    <span class="entry-text">See what Amazon KDP, Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare.</span>
+                  </span>
+                </a>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">13</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-7" aria-labelledby="assessment-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Not sure what you need?</p>
+                <h2 id="assessment-title">Begin with an editorial assessment.</h2>
+                <p class="page-lead">We review the manuscript’s structure, clarity, consistency, readiness, and likely next steps before recommending a scope.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">14</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="assessment-insert">
+                  <ul class="check-list check-list-light">
+                    <li>Current strengths and risks</li>
+                    <li>Recommended editing level</li>
+                    <li>Priority improvements</li>
+                    <li>Suggested production sequence</li>
+                  </ul>
+                  <a class="button button-gold" href="/contact">Request an assessment</a>
+                </div>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">15</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-8" aria-labelledby="contact-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Ready to shape the book?</p>
+                <h2 id="contact-title">Tell us where your ebook stands today.</h2>
+                <p class="page-lead">Share your idea, draft status, approximate word count, intended reader, and target timeline. We will use that information to recommend a sensible next step.</p>
+                <div class="page-actions">
+                  <a class="button button-gold" href="/contact">Request a project review</a>
+                </div>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">16</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="colophon">
+                  <div class="colophon-plaque">
+                    <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit" width="1189" height="323" loading="lazy" decoding="async">
+                  </div>
+                  <p class="colophon-line">Thoughtful ebook writing, editing, formatting, and publishing support—shaped around your voice and your reader.</p>
+                  <p class="colophon-contact">Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a><br>UK and US · We aim to reply within 24 hours</p>
+                  <div class="page-ornament" aria-hidden="true"></div>
+                  <p class="colophon-end">Thank you for reading</p>
+                </div>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">17</span>
+            </div>
+          </section>
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
+        </div>
+
+        <div class="book-board-closed" aria-hidden="true"></div>
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
       </div>
     </div>
-    <div class="hero-card reveal">
-      <img class="hero-logo" src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit logo">
-      <ul class="mini-list">
-        <li><span class="tick">✓</span><span><strong>Reader-first strategy</strong><br>Clear purpose, structure, and audience before the writing begins.</span></li>
-        <li><span class="tick">✓</span><span><strong>Editorial care</strong><br>Developmental thinking and precise sentence-level refinement.</span></li>
-        <li><span class="tick">✓</span><span><strong>Publishing-ready delivery</strong><br>Clean files and guidance for your chosen publishing route.</span></li>
-      </ul>
-    </div>
   </div>
-</section>
-<section class="trust-strip" aria-label="Core services">
-  <div class="container trust-grid">
-    <div class="trust-item">Book strategy</div><div class="trust-item">Ghostwriting</div><div class="trust-item">Editing</div><div class="trust-item">Formatting</div><div class="trust-item">Publishing support</div>
-  </div>
-</section>
-<section class="section section-soft">
-  <div class="container">
-    <p class="eyebrow">Everything your ebook needs</p>
-    <h2>One editorial partner. Every essential stage.</h2>
-    <p class="lead">Choose a focused service for an existing manuscript or combine stages into an end-to-end publishing journey.</p>
-    <div class="grid-4 cards">
-      <a class="service-card-link reveal" href="/writing"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">01</div><h3>Ebook writing</h3><p>Shape a strong concept, outline the reader journey, and develop original chapters in a voice that sounds like you.</p><span class="card-cta" aria-hidden="true">Explore writing services →</span></article></a>
-      <a class="service-card-link reveal" href="/editing"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">02</div><h3>Editing</h3><p>Strengthen structure, clarity, tone, flow, grammar, and consistency without flattening the personality of the work.</p><span class="card-cta" aria-hidden="true">Explore editing services →</span></article></a>
-      <a class="service-card-link reveal" href="/publishing#formatting"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">03</div><h3>Formatting</h3><p>Prepare clean, readable interiors for EPUB and PDF, including headings, navigation, front matter, and final checks.</p><span class="card-cta" aria-hidden="true">Explore formatting support →</span></article></a>
-      <a class="service-card-link reveal" href="/publishing"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">04</div><h3>Publishing support</h3><p>Plan metadata, platform files, upload steps, and launch assets for Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, and wider distribution.</p><span class="card-cta" aria-hidden="true">Explore publishing support →</span></article></a>
-    </div>
-  </div>
-</section>
-<section class="section">
-  <div class="container">
-    <p class="eyebrow">Publishing platforms</p>
-    <h2>Prepare your ebook for the platforms that matter.</h2>
-    <p class="lead">We help organise platform-ready files, metadata and publishing materials for leading ebook stores and wider distribution routes.</p>
-    <!--
-      Text tiles are used because no approved platform logo files are bundled with this site.
-      To swap in approved artwork later, drop the file into assets/images/platforms/ and replace
-      the .platform-name span inside a tile with, for example:
-        <img class="platform-logo" src="/assets/images/platforms/amazon-kdp.svg" alt="Amazon Kindle Direct Publishing" loading="lazy" decoding="async">
-      The tile keeps its size and alignment, so the layout does not change.
-      Check each platform's current brand guidelines before using its logo.
-    -->
-    <ul class="platform-grid">
-      <li class="platform-tile"><span class="platform-name">Amazon Kindle Direct Publishing</span></li>
-      <li class="platform-tile"><span class="platform-name">Apple Books</span></li>
-      <li class="platform-tile"><span class="platform-name">Kobo Writing Life</span></li>
-      <li class="platform-tile"><span class="platform-name">Google Play Books</span></li>
-      <li class="platform-tile"><span class="platform-name">Barnes &amp; Noble Press / NOOK</span></li>
-      <li class="platform-tile"><span class="platform-name">Draft2Digital</span></li>
-    </ul>
-    <p class="platform-note">Platform names are shown to describe compatible publishing-support services. The Ebook Edit is an independent editorial service.</p>
-  </div>
-</section>
-<section class="section section-soft">
-  <div class="container split">
-    <div>
-      <p class="eyebrow">Built for thoughtful creators</p>
-      <h2>Your knowledge deserves more than a rushed document.</h2>
-      <p class="lead">A professional ebook should feel coherent, credible, enjoyable to read, and unmistakably yours.</p>
-      <p>We build each project around a clear audience, a strong promise, an intentional structure, and a realistic production plan. You always know what stage the manuscript is in, what feedback is needed, and what comes next.</p>
-      <a class="button button-outline" href="/process">See the full process</a>
-    </div>
-    <div class="feature-panel reveal">
-      <h3>What quality looks like</h3>
-      <ul class="mini-list">
-        <li><span class="tick">✓</span><span>A focused idea with a clear reader outcome</span></li>
-        <li><span class="tick">✓</span><span>Logical chapters that build on one another</span></li>
-        <li><span class="tick">✓</span><span>A consistent voice and purposeful pacing</span></li>
-        <li><span class="tick">✓</span><span>Clean language, formatting, and navigation</span></li>
-        <li><span class="tick">✓</span><span>Files organized for publishing and future updates</span></li>
-      </ul>
-      <div class="stats"><div class="stat"><strong>Clear scope</strong><span>Defined deliverables and milestones</span></div><div class="stat"><strong>Your voice</strong><span>Preserved through every revision</span></div></div>
-    </div>
-  </div>
-</section>
-<section class="section section-gold">
-  <div class="container">
-    <div class="text-center"><p class="eyebrow">A calm, clear workflow</p><h2>How your ebook moves forward</h2><p class="lead">A six-stage process keeps the work focused while leaving room for insight, revision and creative decisions.</p></div>
-    <div class="grid-3 cards">
-      <article class="card reveal"><div class="icon-tile">1</div><h3>Discover</h3><p>Define the reader, purpose, scope, voice, timeline, and success criteria.</p></article>
-      <article class="card reveal"><div class="icon-tile">2</div><h3>Plan</h3><p>Build the outline, chapter logic, research plan, and production schedule.</p></article>
-      <article class="card reveal"><div class="icon-tile">3</div><h3>Create</h3><p>Write, edit, review, and revise through structured milestones.</p></article>
-      <article class="card reveal"><div class="icon-tile">4</div><h3>Polish</h3><p>Complete copyediting, proofreading, formatting, and quality checks.</p></article>
-      <article class="card reveal"><div class="icon-tile">5</div><h3>Publish</h3><p>Prepare files, metadata, and upload steps for Kindle Direct Publishing (KDP), Apple Books, Kobo, Google Play Books, and other platforms.</p></article>
-      <article class="card reveal"><div class="icon-tile">6</div><h3>Keep evolving</h3><p>Retain organized source files so updates and new editions stay manageable.</p></article>
-    </div>
-  </div>
-</section>
-<section class="section section-soft">
-  <div class="container split">
-    <div><p class="eyebrow">Useful before you begin</p><h2>Start with the right questions.</h2><p class="lead">A strong ebook begins with clarity about who it serves, what it promises, and why it should exist now.</p><a class="button button-outline" href="/insights">Read the insights</a></div>
-    <div class="quote-block reveal"><p>“The best ebook is not the one with the most information. It is the one that guides the right reader toward a meaningful result.”</p><small>The Ebook Edit editorial principle</small></div>
-  </div>
-</section>
-<section class="section-tight"><div class="container"><div class="cta-band"><p class="eyebrow">Ready to shape the book?</p><h2>Tell us where your ebook stands today.</h2><p>Share your idea, draft status, approximate word count, intended reader, and target timeline. We will use that information to recommend a sensible next step.</p><a class="button button-gold" href="/contact">Request a project review</a></div></div></section>
-
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
 </main>
 <footer class="site-footer">
   <div class="container">
@@ -186,6 +425,6 @@
     </div>
   </div>
 </footer>
-<script src="assets/js/main.js?v=20260810-1" defer></script>
+<script src="assets/js/book-home.js?v=20260821-1" defer></script>
 </body>
 </html>
