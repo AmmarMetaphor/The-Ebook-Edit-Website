@@ -18,74 +18,222 @@
   <meta name="twitter:image" content="https://the-ebook-edit.netlify.app/assets/images/the-ebook-edit-logo.png">
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="assets/css/styles.css?v=20260810-1">
+  <link rel="stylesheet" href="assets/css/book.css?v=20260821-2">
+  <script>
+    /* Pre-paint mode check so the open book renders on the first frame with no
+       layout flash. book.js confirms boot; if it ever fails to load, the timer
+       removes the cinematic class so all content stays reachable. */
+    (function () {
+      var c = document.documentElement.classList;
+      c.add('book-js');
+      try {
+        if (window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          c.add('book-cinematic');
+          window.__bookBoot = window.setTimeout(function () {
+            c.remove('book-cinematic');
+          }, 2500);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Ebook Edit","url":"https://the-ebook-edit.netlify.app/process","description":"Professional ebook writing, editing, formatting, and publishing support.","areaServed":"Worldwide","serviceType":["Ebook writing","Ebook editing","Ebook formatting","Publishing support"]}</script>
 </head>
-<body>
+<body class="book-home book-theme-process">
 <a class="skip-link" href="#main">Skip to main content</a>
-<header class="site-header">
-  <div class="container nav-wrap">
-    <a class="brand" href="/" aria-label="The Ebook Edit home">
-      <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
-    <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
-      <a href="/services">Services</a><a href="/process" aria-current="page">Process</a><a href="/portfolio">Portfolio</a><a href="/about">About</a><a href="/insights">Insights</a>
-      <a class="nav-cta" href="/contact">Start a project</a>
-    </nav>
-  </div>
-</header>
 <main id="main">
+<div class="book-experience book-open-start">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book">
+        <div class="book-shadow" aria-hidden="true"></div>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Our process</p><h1>A structured path that keeps creative work moving.</h1><p class="lead">Every project is different, but each one benefits from clear stages, decision points, responsibilities, and version control.</p></div></section>
-<section class="section"><div class="container"><p class="eyebrow">Step by step</p><h2>Six stages that keep the project on track.</h2><div class="steps"><article class="step"><div><h3>1. Project discovery</h3><p>We discuss your goal, audience, source material, manuscript stage, desired services, timeline, and publishing route.</p><p><strong>Output:</strong> project recommendation and information request.</p></div></article><article class="step"><div><h3>2. Review and scope</h3><p>We review relevant files, identify the real level of work, define deliverables, establish milestones, and confirm what is outside scope.</p><p><strong>Output:</strong> written proposal, timeline, and responsibilities.</p></div></article><article class="step"><div><h3>3. Strategy and planning</h3><p>For writing or developmental projects, we define positioning, outline, chapter goals, voice, source plan, and review cadence.</p><p><strong>Output:</strong> approved project brief and production plan.</p></div></article><article class="step"><div><h3>4. Creation and review</h3><p>Writing or editing proceeds in agreed milestones. Feedback is consolidated so decisions remain clear and revisions stay efficient.</p><p><strong>Output:</strong> milestone drafts and review notes.</p></div></article><article class="step"><div><h3>5. Editorial completion</h3><p>The manuscript moves through the appropriate editing sequence, author review, final text confirmation, and proofreading.</p><p><strong>Output:</strong> approved final manuscript and style record.</p></div></article><article class="step"><div><h3>6. Formatting and publication</h3><p>Final files, navigation, and metadata are prepared for platforms such as Amazon Kindle Direct Publishing (KDP), Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital, then quality checked against a <a href="/publishing">publishing checklist</a>.</p><p><strong>Output:</strong> organized publishing package.</p></div></article></div></div></section>
-<section class="section section-blue"><div class="container grid-3"><article class="card"><h3>Clear communication</h3><p>Receive clear updates, decisions and next steps throughout the project.</p></article><article class="card"><h3>Collaborative checkpoints</h3><p>Feedback and approvals are built into each major stage before the work moves forward.</p></article><article class="card"><h3>Organised delivery</h3><p>Final manuscript, formatting files and publishing materials are supplied in a clear, usable package.</p></article></div></section>
-<section class="section"><div class="container"><p class="eyebrow">What helps a project succeed</p><h2>A few simple working agreements make a major difference.</h2><div class="grid-2 cards"><article class="card"><h3>From the author or client</h3><ul class="service-list"><li>Timely access to source material</li><li>One consolidated set of feedback</li><li>Clear factual corrections and approvals</li><li>Ownership of permissions and account access</li></ul></article><article class="card"><h3>From The Ebook Edit</h3><ul class="service-list"><li>Clear milestones and deliverables</li><li>Respect for voice and confidentiality</li><li>Transparent queries and recommendations</li><li>Organized files and handoff notes</li></ul></article></div></div></section>
-<section class="section-tight"><div class="container"><div class="cta-band"><h2>Start with clarity, not a vague production promise.</h2><p>A short discovery conversation and manuscript review will reveal the right sequence for your project.</p><a class="button button-gold" href="/contact">Begin project discovery</a></div></div></section>
+        <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="/services">Services</a>
+          <a class="book-tab" href="/process" aria-current="page">Process</a>
+          <a class="book-tab" href="/portfolio">Portfolio</a>
+          <a class="book-tab" href="/about">About</a>
+          <a class="book-tab" href="/insights">Insights</a>
+          <a class="book-tab book-tab-cta" href="/contact">Start a project</a>
+        </nav>
 
-</main>
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a class="footer-logo" href="/" aria-label="The Ebook Edit home">
-          <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-        </a>
-        <p>Thoughtful ebook writing, editing, formatting, and publishing support—shaped around your voice and your reader.</p>
-        <p class="footer-contact">Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a> · UK and US · We aim to reply within 24 hours</p>
-      </div>
-      <div>
-        <h2 class="footer-title">Services</h2>
-        <div class="footer-links">
-          <a href="/writing">Ebook writing</a>
-          <a href="/editing">Editing</a>
-          <a href="/publishing">Publishing support</a>
-          <a href="/services">All services</a>
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="process-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="bookplate-row"><a class="bookplate" href="/" aria-label="The Ebook Edit home"><img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit" width="1189" height="323"></a></p>
+                <p class="eyebrow">Our process</p>
+                <h1 id="process-title">A structured path that keeps creative work moving.</h1>
+                <p class="page-lead">Every project is different, but each one benefits from clear stages, decision points, responsibilities, and version control.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <p class="eyebrow">Step by step</p>
+                <h2>Six stages that keep the project on track.</h2>
+                <nav aria-label="Stage contents">
+                  <ul class="contents-list">
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">1</span><span class="contents-title">Project discovery</span></a></li>
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">2</span><span class="contents-title">Review and scope</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">3</span><span class="contents-title">Strategy and planning</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">4</span><span class="contents-title">Creation and review</span></a></li>
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">5</span><span class="contents-title">Editorial completion</span></a></li>
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">6</span><span class="contents-title">Formatting and publication</span></a></li>
+                  </ul>
+                </nav>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-2" aria-labelledby="stage-1-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <div class="journey-dots" aria-hidden="true"><span class="jd on"></span><span class="jd"></span><span class="jd"></span><span class="jd"></span><span class="jd"></span><span class="jd"></span></div>
+                <h2 id="stage-1-title">1. Project discovery</h2>
+                <p>We discuss your goal, audience, source material, manuscript stage, desired services, timeline, and publishing route.</p>
+                <p><strong>Output:</strong> project recommendation and information request.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">4</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="journey-dots" aria-hidden="true"><span class="jd on"></span><span class="jd on"></span><span class="jd"></span><span class="jd"></span><span class="jd"></span><span class="jd"></span></div>
+                <h2>2. Review and scope</h2>
+                <p>We review relevant files, identify the real level of work, define deliverables, establish milestones, and confirm what is outside scope.</p>
+                <p><strong>Output:</strong> written proposal, timeline, and responsibilities.</p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">5</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-3" aria-labelledby="stage-3-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <div class="journey-dots" aria-hidden="true"><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd"></span><span class="jd"></span><span class="jd"></span></div>
+                <h2 id="stage-3-title">3. Strategy and planning</h2>
+                <p>For writing or developmental projects, we define positioning, outline, chapter goals, voice, source plan, and review cadence.</p>
+                <p><strong>Output:</strong> approved project brief and production plan.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">6</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="journey-dots" aria-hidden="true"><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd"></span><span class="jd"></span></div>
+                <h2>4. Creation and review</h2>
+                <p>Writing or editing proceeds in agreed milestones. Feedback is consolidated so decisions remain clear and revisions stay efficient.</p>
+                <p><strong>Output:</strong> milestone drafts and review notes.</p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">7</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-4" aria-labelledby="stage-5-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <div class="journey-dots" aria-hidden="true"><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd"></span></div>
+                <h2 id="stage-5-title">5. Editorial completion</h2>
+                <p>The manuscript moves through the appropriate editing sequence, author review, final text confirmation, and proofreading.</p>
+                <p><strong>Output:</strong> approved final manuscript and style record.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">8</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="journey-dots" aria-hidden="true"><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span><span class="jd on"></span></div>
+                <h2>6. Formatting and publication</h2>
+                <p>Final files, navigation, and metadata are prepared for platforms such as Amazon Kindle Direct Publishing (KDP), Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital, then quality checked against a <a href="/publishing">publishing checklist</a>.</p>
+                <p><strong>Output:</strong> organized publishing package.</p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">9</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-5" aria-labelledby="agreements-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">What helps a project succeed</p>
+                <h2 id="agreements-title">A few simple working agreements make a major difference.</h2>
+                <article class="type-entry">
+                  <h3>Clear communication</h3>
+                  <p>Receive clear updates, decisions and next steps throughout the project.</p>
+                </article>
+                <article class="type-entry">
+                  <h3>Collaborative checkpoints</h3>
+                  <p>Feedback and approvals are built into each major stage before the work moves forward.</p>
+                </article>
+                <article class="type-entry">
+                  <h3>Organised delivery</h3>
+                  <p>Final manuscript, formatting files and publishing materials are supplied in a clear, usable package.</p>
+                </article>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">10</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <h3>From the author or client</h3>
+                <ul class="diamond-list">
+                  <li>Timely access to source material</li>
+                  <li>One consolidated set of feedback</li>
+                  <li>Clear factual corrections and approvals</li>
+                  <li>Ownership of permissions and account access</li>
+                </ul>
+                <div class="page-ornament" aria-hidden="true"></div>
+                <h3>From The Ebook Edit</h3>
+                <ul class="diamond-list">
+                  <li>Clear milestones and deliverables</li>
+                  <li>Respect for voice and confidentiality</li>
+                  <li>Transparent queries and recommendations</li>
+                  <li>Organized files and handoff notes</li>
+                </ul>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">11</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-6" aria-labelledby="process-cta-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Begin the journey</p>
+                <h2 id="process-cta-title">Start with clarity, not a vague production promise.</h2>
+                <p class="page-lead">A short discovery conversation and manuscript review will reveal the right sequence for your project.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">12</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="page-ornament" aria-hidden="true"></div>
+                <div class="page-actions">
+                  <a class="button button-gold" href="/contact">Begin project discovery</a>
+                </div>
+                <p class="page-more"><a href="/services">Explore the services →</a></p>
+                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">13</span>
+            </div>
+          </section>
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
         </div>
+
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
       </div>
-      <div>
-        <h2 class="footer-title">Explore</h2>
-        <div class="footer-links">
-          <a href="/process">Our process</a>
-          <a href="/portfolio">Portfolio</a>
-          <a href="/about">About</a>
-          <a href="/insights">Insights</a>
-          <a href="/contact">Contact</a>
-        </div>
-      </div>
-      <div>
-        <h2 class="footer-title">Start here</h2>
-        <p>Tell us about your idea, manuscript, timeline, and publishing goals.</p>
-        <a class="button button-gold" href="/contact">Get in touch</a>
-        <!-- Social links placeholder: the WordPress theme renders a "Social Links"
-             menu here when one is assigned. Add real, verified profile URLs only. -->
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© <span data-year></span> The Ebook Edit. All rights reserved.</span>
-      <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span>
     </div>
   </div>
-</footer>
-<script src="assets/js/main.js?v=20260810-1" defer></script>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
+</main>
+<script src="assets/js/book.js?v=20260821-2" defer></script>
 </body>
 </html>

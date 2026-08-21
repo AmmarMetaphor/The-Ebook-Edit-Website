@@ -18,77 +18,159 @@
   <meta name="twitter:image" content="https://the-ebook-edit.netlify.app/assets/images/the-ebook-edit-logo.png">
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="assets/css/styles.css?v=20260810-1">
+  <link rel="stylesheet" href="assets/css/book.css?v=20260821-2">
+  <script>
+    /* Pre-paint mode check so the open book renders on the first frame with no
+       layout flash. book.js confirms boot; if it ever fails to load, the timer
+       removes the cinematic class so all content stays reachable. */
+    (function () {
+      var c = document.documentElement.classList;
+      c.add('book-js');
+      try {
+        if (window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          c.add('book-cinematic');
+          window.__bookBoot = window.setTimeout(function () {
+            c.remove('book-cinematic');
+          }, 2500);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Ebook Edit","url":"https://the-ebook-edit.netlify.app/insights","description":"Professional ebook writing, editing, formatting, and publishing support.","areaServed":"Worldwide","serviceType":["Ebook writing","Ebook editing","Ebook formatting","Publishing support"]}</script>
 </head>
-<body>
+<body class="book-home book-theme-insights">
 <a class="skip-link" href="#main">Skip to main content</a>
-<header class="site-header">
-  <div class="container nav-wrap">
-    <a class="brand" href="/" aria-label="The Ebook Edit home">
-      <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
-    <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
-      <a href="/services">Services</a><a href="/process">Process</a><a href="/portfolio">Portfolio</a><a href="/about">About</a><a href="/insights" aria-current="page">Insights</a>
-      <a class="nav-cta" href="/contact">Start a project</a>
-    </nav>
-  </div>
-</header>
 <main id="main">
+<div class="book-experience book-open-start">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book">
+        <div class="book-shadow" aria-hidden="true"></div>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Insights</p><h1>Practical guidance for writing, editing, and publishing an ebook.</h1><p class="lead">Clear explanations and useful checklists for authors who want to make stronger editorial decisions.</p></div></section>
-<section class="section"><div class="container grid-3">
-<article class="card reveal"><p class="eyebrow">Writing · 8 min read</p><h2 class="article-card-title">How to turn your expertise into an ebook</h2><p>Move from a broad topic to a focused reader promise, useful chapter structure, and realistic writing plan.</p><a class="card-link" href="/insights/turn-expertise-into-an-ebook">Read article →</a></article>
-<article class="card reveal"><p class="eyebrow">Editing · 7 min read</p><h2 class="article-card-title">Developmental editing, copy editing, and proofreading</h2><p>Understand what each editing stage does, when it happens, and why the order matters.</p><a class="card-link" href="/insights/editing-levels-explained">Read article →</a></article>
-<article class="card reveal"><p class="eyebrow">Publishing · 9 min read</p><h2 class="article-card-title">A pre-publishing checklist for a professional ebook</h2><p>Review editorial readiness, permissions, metadata, formatting, quality assurance, and launch ownership.</p><a class="card-link" href="/insights/pre-publishing-checklist">Read article →</a></article>
-<article class="card reveal"><p class="eyebrow">Publishing · 10 min read</p><h2 class="article-card-title">Publishing an ebook on Kindle and other platforms</h2><p>See what Amazon KDP, Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare.</p><a class="card-link" href="/insights/kindle-and-ebook-platform-guide">Read article →</a></article>
-</div></section>
-<section class="section section-gold"><div class="container split"><div><p class="eyebrow">Editorial note</p><h2>Useful content earns trust before a sales conversation begins.</h2><p class="lead">These articles focus on real questions authors ask before and during a writing, editing, or publishing project.</p></div><div class="card"><h3>Future topics</h3><ul class="service-list"><li>How long should an ebook be?</li><li>How to brief a ghostwriter</li><li>What belongs in front matter</li><li>How to review an edited manuscript</li><li>How to prepare for EPUB formatting</li></ul></div></div></section>
+        <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="/services">Services</a>
+          <a class="book-tab" href="/process">Process</a>
+          <a class="book-tab" href="/portfolio">Portfolio</a>
+          <a class="book-tab" href="/about">About</a>
+          <a class="book-tab" href="/insights" aria-current="page">Insights</a>
+          <a class="book-tab book-tab-cta" href="/contact">Start a project</a>
+        </nav>
 
-</main>
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a class="footer-logo" href="/" aria-label="The Ebook Edit home">
-          <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-        </a>
-        <p>Thoughtful ebook writing, editing, formatting, and publishing support—shaped around your voice and your reader.</p>
-        <p class="footer-contact">Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a> · UK and US · We aim to reply within 24 hours</p>
-      </div>
-      <div>
-        <h2 class="footer-title">Services</h2>
-        <div class="footer-links">
-          <a href="/writing">Ebook writing</a>
-          <a href="/editing">Editing</a>
-          <a href="/publishing">Publishing support</a>
-          <a href="/services">All services</a>
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="insights-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="bookplate-row"><a class="bookplate" href="/" aria-label="The Ebook Edit home"><img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit" width="1189" height="323"></a></p>
+                <p class="eyebrow">Insights</p>
+                <h1 id="insights-title">Practical guidance for writing, editing, and publishing an ebook.</h1>
+                <p class="page-lead">Clear explanations and useful checklists for authors who want to make stronger editorial decisions.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="journal-masthead"><span>Insights</span><strong>The Ebook Edit</strong></div>
+                <p class="eyebrow">Editorial note</p>
+                <h2>Useful content earns trust before a sales conversation begins.</h2>
+                <p class="page-lead">These articles focus on real questions authors ask before and during a writing, editing, or publishing project.</p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-2" aria-label="Articles">
+            <div class="page page-left">
+              <div class="page-inner">
+                <a class="entry article-entry" href="/insights/turn-expertise-into-an-ebook">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Writing · 8 min read</span>
+                    <span class="entry-title">How to turn your expertise into an ebook</span>
+                    <span class="entry-text">Move from a broad topic to a focused reader promise, useful chapter structure, and realistic writing plan.</span>
+                    <span class="entry-cta" aria-hidden="true">Read article →</span>
+                  </span>
+                </a>
+                <a class="entry article-entry" href="/insights/editing-levels-explained">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Editing · 7 min read</span>
+                    <span class="entry-title">Developmental editing, copy editing, and proofreading</span>
+                    <span class="entry-text">Understand what each editing stage does, when it happens, and why the order matters.</span>
+                    <span class="entry-cta" aria-hidden="true">Read article →</span>
+                  </span>
+                </a>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">4</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <a class="entry article-entry" href="/insights/pre-publishing-checklist">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Publishing · 9 min read</span>
+                    <span class="entry-title">A pre-publishing checklist for a professional ebook</span>
+                    <span class="entry-text">Review editorial readiness, permissions, metadata, formatting, quality assurance, and launch ownership.</span>
+                    <span class="entry-cta" aria-hidden="true">Read article →</span>
+                  </span>
+                </a>
+                <a class="entry article-entry" href="/insights/kindle-and-ebook-platform-guide">
+                  <span class="entry-body">
+                    <span class="entry-kicker">Publishing · 10 min read</span>
+                    <span class="entry-title">Publishing an ebook on Kindle and other platforms</span>
+                    <span class="entry-text">See what Amazon KDP, Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare.</span>
+                    <span class="entry-cta" aria-hidden="true">Read article →</span>
+                  </span>
+                </a>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">5</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-3" aria-labelledby="future-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <h3 id="future-title">Future topics</h3>
+                <ul class="diamond-list">
+                  <li>How long should an ebook be?</li>
+                  <li>How to brief a ghostwriter</li>
+                  <li>What belongs in front matter</li>
+                  <li>How to review an edited manuscript</li>
+                  <li>How to prepare for EPUB formatting</li>
+                </ul>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">6</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="page-ornament" aria-hidden="true"></div>
+                <div class="page-actions">
+                  <a class="button button-gold" href="/contact">Discuss your project</a>
+                </div>
+                <p class="page-more"><a href="/services">Explore the services →</a></p>
+                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">7</span>
+            </div>
+          </section>
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
         </div>
+
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
       </div>
-      <div>
-        <h2 class="footer-title">Explore</h2>
-        <div class="footer-links">
-          <a href="/process">Our process</a>
-          <a href="/portfolio">Portfolio</a>
-          <a href="/about">About</a>
-          <a href="/insights">Insights</a>
-          <a href="/contact">Contact</a>
-        </div>
-      </div>
-      <div>
-        <h2 class="footer-title">Start here</h2>
-        <p>Tell us about your idea, manuscript, timeline, and publishing goals.</p>
-        <a class="button button-gold" href="/contact">Get in touch</a>
-        <!-- Social links placeholder: the WordPress theme renders a "Social Links"
-             menu here when one is assigned. Add real, verified profile URLs only. -->
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© <span data-year></span> The Ebook Edit. All rights reserved.</span>
-      <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span>
     </div>
   </div>
-</footer>
-<script src="assets/js/main.js?v=20260810-1" defer></script>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
+</main>
+<script src="assets/js/book.js?v=20260821-2" defer></script>
 </body>
 </html>

@@ -18,74 +18,231 @@
   <meta name="twitter:image" content="https://the-ebook-edit.netlify.app/assets/images/the-ebook-edit-logo.png">
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="assets/css/styles.css?v=20260810-1">
+  <link rel="stylesheet" href="assets/css/book.css?v=20260821-2">
+  <script>
+    /* Pre-paint mode check so the open book renders on the first frame with no
+       layout flash. book.js confirms boot; if it ever fails to load, the timer
+       removes the cinematic class so all content stays reachable. */
+    (function () {
+      var c = document.documentElement.classList;
+      c.add('book-js');
+      try {
+        if (window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches &&
+            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          c.add('book-cinematic');
+          window.__bookBoot = window.setTimeout(function () {
+            c.remove('book-cinematic');
+          }, 2500);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"The Ebook Edit","url":"https://the-ebook-edit.netlify.app/editing","description":"Professional ebook writing, editing, formatting, and publishing support.","areaServed":"Worldwide","serviceType":["Ebook writing","Ebook editing","Ebook formatting","Publishing support"]}</script>
 </head>
-<body>
+<body class="book-home book-theme-editing">
 <a class="skip-link" href="#main">Skip to main content</a>
-<header class="site-header">
-  <div class="container nav-wrap">
-    <a class="brand" href="/" aria-label="The Ebook Edit home">
-      <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-    </a>
-    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-navigation">Menu</button>
-    <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
-      <a href="/services" aria-current="page">Services</a><a href="/process">Process</a><a href="/portfolio">Portfolio</a><a href="/about">About</a><a href="/insights">Insights</a>
-      <a class="nav-cta" href="/contact">Start a project</a>
-    </nav>
-  </div>
-</header>
 <main id="main">
+<div class="book-experience book-open-start">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book">
+        <div class="book-shadow" aria-hidden="true"></div>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Editing</p><h1>Make the manuscript clearer, stronger, and more consistent—without losing its voice.</h1><p class="lead">The right editing level depends on where the manuscript is in its development. We begin by identifying the problems that matter most.</p></div></section>
-<section class="section"><div class="container grid-2"><article class="card reveal"><div class="icon-tile">A</div><h2>Editorial assessment</h2><p>A diagnostic review that identifies the manuscript’s strengths, weaknesses, audience fit, and recommended next steps.</p><ul class="service-list"><li>Structure and chapter logic</li><li>Clarity and reader experience</li><li>Voice and positioning</li><li>Priority revision plan</li></ul></article><article class="card reveal"><div class="icon-tile">D</div><h2>Developmental editing</h2><p>Big-picture work on argument, story, sequence, pacing, repetition, gaps, and the overall architecture of the book.</p><ul class="service-list"><li>Chapter-level comments</li><li>Structural recommendations</li><li>Content additions or cuts</li><li>Revision roadmap</li></ul></article><article class="card reveal"><div class="icon-tile">C</div><h2>Line and copy editing</h2><p>Sentence-level refinement for readability, tone, grammar, syntax, word choice, consistency, and flow.</p><ul class="service-list"><li>Tracked changes</li><li>Editorial queries</li><li>Style sheet</li><li>Consistency checks</li></ul></article><article class="card reveal"><div class="icon-tile">P</div><h2>Proofreading</h2><p>A final quality check after layout, focused on remaining errors rather than major rewrites.</p><ul class="service-list"><li>Typos and punctuation</li><li>Formatting consistency</li><li>Headings and navigation</li><li>Final file review</li></ul></article></div></section>
-<section class="section section-soft"><div class="container split"><div><p class="eyebrow">A useful distinction</p><h2>Editing is not one single pass.</h2><p class="lead">Structural issues should be solved before sentence polishing, and sentence polishing should be completed before final proofreading.</p><p>Skipping that sequence often means paying to perfect paragraphs that later need to be rewritten or removed.</p></div><div class="feature-panel reveal"><h3>Recommended order</h3><ol><li>Editorial assessment</li><li>Developmental edit</li><li>Author revision</li><li>Line/copy edit</li><li>Formatting</li><li>Proofread</li></ol></div></div></section>
-<section class="section"><div class="container"><p class="eyebrow">What you receive</p><h2>Clear edits, clear reasoning, and a manageable revision path.</h2><div class="grid-3 cards"><article class="card"><h3>Marked manuscript</h3><p>Tracked changes and comments that distinguish direct corrections from author decisions.</p></article><article class="card"><h3>Editorial letter</h3><p>A concise explanation of major patterns, priorities, and recommended revision order.</p></article><article class="card"><h3>Style sheet</h3><p>A project reference for spelling, capitalization, terminology, numbers, and recurring choices.</p></article></div></div></section>
-<section class="section-tight"><div class="container"><div class="cta-band"><h2>Not sure which edit the manuscript needs?</h2><p>Send a representative sample, approximate word count, genre, and publication goal. We will recommend the most appropriate starting point.</p><a class="button button-gold" href="/contact">Request an editorial review</a></div></div></section>
+        <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="/services">Services</a>
+          <a class="book-tab" href="/process">Process</a>
+          <a class="book-tab" href="/portfolio">Portfolio</a>
+          <a class="book-tab" href="/about">About</a>
+          <a class="book-tab" href="/insights">Insights</a>
+          <a class="book-tab book-tab-cta" href="/contact">Start a project</a>
+        </nav>
 
-</main>
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <a class="footer-logo" href="/" aria-label="The Ebook Edit home">
-          <img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit">
-        </a>
-        <p>Thoughtful ebook writing, editing, formatting, and publishing support—shaped around your voice and your reader.</p>
-        <p class="footer-contact">Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a> · UK and US · We aim to reply within 24 hours</p>
-      </div>
-      <div>
-        <h2 class="footer-title">Services</h2>
-        <div class="footer-links">
-          <a href="/writing">Ebook writing</a>
-          <a href="/editing">Editing</a>
-          <a href="/publishing">Publishing support</a>
-          <a href="/services">All services</a>
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="editing-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="bookplate-row"><a class="bookplate" href="/" aria-label="The Ebook Edit home"><img src="/assets/images/the-ebook-edit-logo.png" alt="The Ebook Edit" width="1189" height="323"></a></p>
+                <p class="eyebrow">Editing</p>
+                <h1 id="editing-title">Make the manuscript clearer, stronger, and more consistent—without losing its voice.</h1>
+                <p class="page-lead">The right editing level depends on where the manuscript is in its development. We begin by identifying the problems that matter most.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="proof-rules" aria-hidden="true"><span></span><span></span><span></span></div>
+                <nav aria-label="Editing contents">
+                  <ul class="contents-list">
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">01</span><span class="contents-title">Editorial assessment</span></a></li>
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">02</span><span class="contents-title">Developmental editing</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">03</span><span class="contents-title">Line and copy editing</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">04</span><span class="contents-title">Proofreading</span></a></li>
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">05</span><span class="contents-title">Recommended order</span></a></li>
+                    <li><a href="#chapter-5"><span class="contents-no" aria-hidden="true">06</span><span class="contents-title">What you receive</span></a></li>
+                  </ul>
+                </nav>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-2" aria-labelledby="assess-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">01</span>
+                <h2 id="assess-title">Editorial assessment</h2>
+                <p>A diagnostic review that identifies the manuscript’s strengths, weaknesses, audience fit, and recommended next steps.</p>
+                <ul class="diamond-list">
+                  <li>Structure and chapter logic</li>
+                  <li>Clarity and reader experience</li>
+                  <li>Voice and positioning</li>
+                  <li>Priority revision plan</li>
+                </ul>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">4</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">02</span>
+                <h2>Developmental editing</h2>
+                <p>Big-picture work on argument, story, sequence, pacing, repetition, gaps, and the overall architecture of the book.</p>
+                <ul class="diamond-list">
+                  <li>Chapter-level comments</li>
+                  <li>Structural recommendations</li>
+                  <li>Content additions or cuts</li>
+                  <li>Revision roadmap</li>
+                </ul>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">5</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-3" aria-labelledby="line-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">03</span>
+                <h2 id="line-title">Line and copy editing</h2>
+                <p>Sentence-level refinement for readability, tone, grammar, syntax, word choice, consistency, and flow.</p>
+                <ul class="diamond-list">
+                  <li>Tracked changes</li>
+                  <li>Editorial queries</li>
+                  <li>Style sheet</li>
+                  <li>Consistency checks</li>
+                </ul>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">6</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">04</span>
+                <h2>Proofreading</h2>
+                <p>A final quality check after layout, focused on remaining errors rather than major rewrites.</p>
+                <ul class="diamond-list">
+                  <li>Typos and punctuation</li>
+                  <li>Formatting consistency</li>
+                  <li>Headings and navigation</li>
+                  <li>Final file review</li>
+                </ul>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">7</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-4" aria-labelledby="order-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">A useful distinction</p>
+                <h2 id="order-title">Editing is not one single pass.</h2>
+                <p class="page-lead">Structural issues should be solved before sentence polishing, and sentence polishing should be completed before final proofreading.</p>
+                <p>Skipping that sequence often means paying to perfect paragraphs that later need to be rewritten or removed.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">8</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <h3>Recommended order</h3>
+                <ol class="stage-list" start="1">
+                  <li><span class="stage-no" aria-hidden="true">1</span><div class="stage-body"><h4 class="stage-h">Editorial assessment</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">2</span><div class="stage-body"><h4 class="stage-h">Developmental edit</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">3</span><div class="stage-body"><h4 class="stage-h">Author revision</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">4</span><div class="stage-body"><h4 class="stage-h">Line/copy edit</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">5</span><div class="stage-body"><h4 class="stage-h">Formatting</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">6</span><div class="stage-body"><h4 class="stage-h">Proofread</h4></div></li>
+                </ol>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">9</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-5" aria-labelledby="receive-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">What you receive</p>
+                <h2 id="receive-title">Clear edits, clear reasoning, and a manageable revision path.</h2>
+                <article class="type-entry">
+                  <h3>Marked manuscript</h3>
+                  <p>Tracked changes and comments that distinguish direct corrections from author decisions.</p>
+                </article>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">10</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <article class="type-entry">
+                  <h3>Editorial letter</h3>
+                  <p>A concise explanation of major patterns, priorities, and recommended revision order.</p>
+                </article>
+                <article class="type-entry">
+                  <h3>Style sheet</h3>
+                  <p>A project reference for spelling, capitalization, terminology, numbers, and recurring choices.</p>
+                </article>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">11</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-6" aria-labelledby="editing-cta-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Find the right level</p>
+                <h2 id="editing-cta-title">Not sure which edit the manuscript needs?</h2>
+                <p class="page-lead">Send a representative sample, approximate word count, genre, and publication goal. We will recommend the most appropriate starting point.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">12</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="page-ornament" aria-hidden="true"></div>
+                <div class="page-actions">
+                  <a class="button button-gold" href="/contact">Request an editorial review</a>
+                </div>
+                <p class="page-more"><a href="/insights/editing-levels-explained">Read: editing levels explained →</a></p>
+                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">13</span>
+            </div>
+          </section>
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
         </div>
+
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
       </div>
-      <div>
-        <h2 class="footer-title">Explore</h2>
-        <div class="footer-links">
-          <a href="/process">Our process</a>
-          <a href="/portfolio">Portfolio</a>
-          <a href="/about">About</a>
-          <a href="/insights">Insights</a>
-          <a href="/contact">Contact</a>
-        </div>
-      </div>
-      <div>
-        <h2 class="footer-title">Start here</h2>
-        <p>Tell us about your idea, manuscript, timeline, and publishing goals.</p>
-        <a class="button button-gold" href="/contact">Get in touch</a>
-        <!-- Social links placeholder: the WordPress theme renders a "Social Links"
-             menu here when one is assigned. Add real, verified profile URLs only. -->
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© <span data-year></span> The Ebook Edit. All rights reserved.</span>
-      <span><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span>
     </div>
   </div>
-</footer>
-<script src="assets/js/main.js?v=20260810-1" defer></script>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
+</main>
+<script src="assets/js/book.js?v=20260821-2" defer></script>
 </body>
 </html>

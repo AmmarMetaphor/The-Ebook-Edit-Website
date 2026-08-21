@@ -1,10 +1,12 @@
-/* The Ebook Edit — interactive book homepage driver.
-   Progressive enhancement over the flow layout in book-home.css:
-   - Flow mode: gentle page reveals and chapter tabs that appear once the
-     cover has been passed.
-   - Cinematic mode (large, motion-ok viewports): maps natural scroll to a
-     timeline that opens the cover and turns the pages. Transform/opacity
-     only, one rAF-gated scroll handler, no scroll hijacking. */
+/* The Ebook Edit — shared interactive book engine.
+   One engine serves three kinds of page:
+   1. The homepage: closed cover, scroll-driven opening, page turns.
+   2. Coverless volumes (services, process, …): the book starts open on its
+      first spread (.book-open-start) and scroll turns the pages.
+   3. Static book pages (.book-static: articles, contact, legal, notes):
+      normal document flow on book paper — only gentle reveals and the year.
+   Progressive enhancement over the flow layout in book.css: transform/opacity
+   only, one rAF-gated scroll handler, no scroll hijacking. */
 (() => {
   'use strict';
 
@@ -23,23 +25,13 @@
   const experience = doc.querySelector('.book-experience');
   if (!experience) return;
 
-  const scene = experience.querySelector('.book-scene');
-  const book = experience.querySelector('.book');
-  const cover = experience.querySelector('.book-cover');
-  const coverShade = experience.querySelector('.cover-shade');
-  const boardClosed = experience.querySelector('.book-board-closed');
-  const boardOpen = experience.querySelector('.book-board-open');
-  const paperLeft = experience.querySelector('.paper-left');
-  const leaf = experience.querySelector('.book-leaf');
-  const turnShade = experience.querySelector('.turn-shade');
-  const ribbon = experience.querySelector('.book-ribbon');
-  const tabs = experience.querySelector('.book-tabs');
-  const openLink = experience.querySelector('.cover-open');
-  const spreads = Array.from(experience.querySelectorAll('.spread'));
-  if (!scene || !book || !cover || !spreads.length) return;
-
   const mqMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mqStage = window.matchMedia('(min-width: 1000px) and (min-height: 640px)');
+
+  const tabs = experience.querySelector('.book-tabs');
+  const cover = experience.querySelector('.book-cover');
+  const spreads = Array.from(experience.querySelectorAll('.spread'));
+  const isStatic = experience.classList.contains('book-static');
 
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const easeInOut = t => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -48,7 +40,74 @@
     else if (typeof mq.addListener === 'function') mq.addListener(fn);
   };
 
-  /* ---------------------------------------------------- spread states */
+  /* --------------------------------------------------------- flow mode */
+  let pageObserver = null;
+  let coverObserver = null;
+
+  function flowInit() {
+    const motionOK = !mqMotion.matches;
+    if (motionOK && 'IntersectionObserver' in window) {
+      pageObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fx-on');
+            pageObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      experience.querySelectorAll('.spread .page').forEach(page => {
+        page.classList.add('fx');
+        pageObserver.observe(page);
+      });
+
+      if (tabs && cover) {
+        coverObserver = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            tabs.classList.toggle('tabs-on', entry.intersectionRatio < 0.3);
+          });
+        }, { threshold: [0, 0.3, 0.6] });
+        coverObserver.observe(cover);
+      } else if (tabs) {
+        tabs.classList.add('tabs-on');
+      }
+    } else if (tabs) {
+      // Reduced motion or no IntersectionObserver: static book, nav available.
+      tabs.classList.add('tabs-on');
+    }
+  }
+
+  function flowTeardown() {
+    if (pageObserver) { pageObserver.disconnect(); pageObserver = null; }
+    if (coverObserver) { coverObserver.disconnect(); coverObserver = null; }
+    experience.querySelectorAll('.spread .page').forEach(page => {
+      page.classList.remove('fx', 'fx-on');
+    });
+  }
+
+  // Static book pages need nothing beyond the flow niceties.
+  if (isStatic) {
+    flowInit();
+    return;
+  }
+
+  /* --------------------------------------------------- cinematic engine */
+  const scene = experience.querySelector('.book-scene');
+  const book = experience.querySelector('.book');
+  const coverShade = experience.querySelector('.cover-shade');
+  const boardClosed = experience.querySelector('.book-board-closed');
+  const boardOpen = experience.querySelector('.book-board-open');
+  const paperLeft = experience.querySelector('.paper-left');
+  const leaf = experience.querySelector('.book-leaf');
+  const turnShade = experience.querySelector('.turn-shade');
+  const ribbon = experience.querySelector('.book-ribbon');
+
+  if (!scene || !book || !spreads.length) {
+    flowInit();
+    return;
+  }
+
+  const hasCover = !!cover;
+
   // '' hidden · 'sp-right' right page only · 'sp-left' left page only · 'sp-open' both
   function setSpreadState(el, state) {
     if (el._bhState === state) return;
@@ -60,12 +119,12 @@
     spreads.forEach(sp => { if (!keep.includes(sp)) setSpreadState(sp, ''); });
   };
 
-  /* ------------------------------------------------- cinematic timeline */
-  const HOLD = 0.3;    // pause on the closed cover
-  const OPEN = 1.35;   // cover opening
-  const DWELL = 0.9;   // reading time per spread
+  const HOLD = 0.3;        // pause on the closed cover (homepage)
+  const OPEN = 1.35;       // cover opening (homepage)
+  const DWELL = 0.9;       // reading time per spread
+  const DWELL_FIRST = 1.0; // opening spread of a coverless volume
   const DWELL_END = 1.1;
-  const TURN = 0.75;   // page turn
+  const TURN = 0.75;       // page turn
   let segs = [];
   let totalU = 0;
 
@@ -73,10 +132,14 @@
     segs = [];
     let u = 0;
     const push = (type, len, i) => { segs.push({ type, i, a: u, b: u + len }); u += len; };
-    push('hold', HOLD);
-    push('open', OPEN);
+    if (hasCover) {
+      push('hold', HOLD);
+      push('open', OPEN);
+    }
     spreads.forEach((sp, i) => {
-      push('dwell', i === spreads.length - 1 ? DWELL_END : DWELL, i);
+      const len = i === spreads.length - 1 ? DWELL_END
+        : (i === 0 && !hasCover ? DWELL_FIRST : DWELL);
+      push('dwell', len, i);
       if (i < spreads.length - 1) push('turn', TURN, i);
     });
     totalU = u;
@@ -87,7 +150,7 @@
   let vh = window.innerHeight;
   let expTop = 0;
   let ticking = false;
-  const last = { o: -1, turnT: -1, turnI: -1, leafOn: null, isOpen: null, flat: null, rp: -1 };
+  const last = { o: -1, turnT: -1, leafOn: null, isOpen: null, flat: null, rp: -1 };
 
   function measure() {
     vh = Math.max(1, window.innerHeight);
@@ -99,6 +162,7 @@
   }
 
   function applyOpen(o) {
+    if (!hasCover) return;
     if (o !== last.o) {
       last.o = o;
       const e = easeInOut(o);
@@ -190,48 +254,6 @@
     });
   }
 
-  /* --------------------------------------------------------- flow mode */
-  let pageObserver = null;
-  let coverObserver = null;
-
-  function flowInit() {
-    const motionOK = !mqMotion.matches;
-    if (motionOK && 'IntersectionObserver' in window) {
-      pageObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('fx-on');
-            pageObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.12 });
-      experience.querySelectorAll('.spread .page').forEach(page => {
-        page.classList.add('fx');
-        pageObserver.observe(page);
-      });
-
-      if (tabs) {
-        coverObserver = new IntersectionObserver(entries => {
-          entries.forEach(entry => {
-            tabs.classList.toggle('tabs-on', entry.intersectionRatio < 0.3);
-          });
-        }, { threshold: [0, 0.3, 0.6] });
-        coverObserver.observe(cover);
-      }
-    } else if (tabs) {
-      // Reduced motion or no IntersectionObserver: static open book, nav available.
-      tabs.classList.add('tabs-on');
-    }
-  }
-
-  function flowTeardown() {
-    if (pageObserver) { pageObserver.disconnect(); pageObserver = null; }
-    if (coverObserver) { coverObserver.disconnect(); coverObserver = null; }
-    experience.querySelectorAll('.spread .page').forEach(page => {
-      page.classList.remove('fx', 'fx-on');
-    });
-  }
-
   /* ------------------------------------------------------ mode switching */
   function clearInline() {
     [book, cover, coverShade, boardClosed, boardOpen, paperLeft, leaf, turnShade, ribbon].forEach(el => {
@@ -241,8 +263,8 @@
   }
 
   function resetState() {
-    Object.assign(last, { o: -1, turnT: -1, turnI: -1, leafOn: null, isOpen: null, flat: null, rp: -1 });
-    cover.classList.remove('cover-flat');
+    Object.assign(last, { o: -1, turnT: -1, leafOn: null, isOpen: null, flat: null, rp: -1 });
+    if (cover) cover.classList.remove('cover-flat');
     scene.classList.remove('is-open');
     if (tabs) tabs.classList.remove('tabs-on');
     if (leaf) leaf.classList.remove('on');
@@ -261,6 +283,11 @@
 
     if (mode === 'cinematic') {
       resetState();
+      experience.classList.add('bk-live');
+      if (!hasCover) {
+        scene.classList.add('is-open');
+        if (tabs) tabs.classList.add('tabs-on');
+      }
       measure();
       render();
     } else {
@@ -271,30 +298,40 @@
   }
 
   /* ------------------------------------------------------- interactions */
-  function openTarget() {
-    return Math.round(expTop + (HOLD + OPEN + 0.08) * vh);
+  function dwellTop(idx) {
+    const seg = segs.find(s => s.type === 'dwell' && s.i === idx);
+    return seg ? Math.round(expTop + (seg.a + 0.03) * vh) : null;
   }
 
-  function openTheBook(event) {
-    if (mode !== 'cinematic') return; // flow mode: let the anchor jump natively
+  // In-book chapter anchors (the cover's "Open the book" link, contents
+  // pages) map onto the cinematic timeline; in flow mode they jump natively.
+  experience.addEventListener('click', event => {
+    if (mode !== 'cinematic') return;
+    const link = event.target.closest('a[href^="#chapter-"]');
+    if (!link) return;
+    const match = /^#chapter-(\d+)$/.exec(link.getAttribute('href') || '');
+    if (!match) return;
+    const top = dwellTop(clamp(parseInt(match[1], 10) - 1, 0, spreads.length - 1));
+    if (top === null) return;
     event.preventDefault();
-    window.scrollTo({ top: openTarget(), behavior: 'smooth' });
-  }
-
-  if (openLink) openLink.addEventListener('click', openTheBook);
-  cover.addEventListener('click', event => {
-    if (mode !== 'cinematic' || cover.classList.contains('cover-flat')) return;
-    if (event.target.closest('a')) return; // the button handles itself
-    window.scrollTo({ top: openTarget(), behavior: 'smooth' });
+    window.scrollTo({ top, behavior: 'smooth' });
   });
 
-  // Deep links like /#chapter-3 map onto the timeline in cinematic mode.
+  if (cover) {
+    cover.addEventListener('click', event => {
+      if (mode !== 'cinematic' || cover.classList.contains('cover-flat')) return;
+      if (event.target.closest('a')) return; // the open link handles itself
+      const top = dwellTop(0);
+      if (top !== null) window.scrollTo({ top, behavior: 'smooth' });
+    });
+  }
+
+  // Deep links like /services#chapter-3 map onto the timeline in cinematic mode.
   function jumpToHash() {
     const match = /^#chapter-(\d+)$/.exec(window.location.hash || '');
     if (!match || mode !== 'cinematic') return;
-    const idx = clamp(parseInt(match[1], 10) - 1, 0, spreads.length - 1);
-    const seg = segs.find(s => s.type === 'dwell' && s.i === idx);
-    if (seg) window.scrollTo(0, Math.round(expTop + (seg.a + 0.02) * vh));
+    const top = dwellTop(clamp(parseInt(match[1], 10) - 1, 0, spreads.length - 1));
+    if (top !== null) window.scrollTo(0, top);
   }
 
   let resizeTimer = 0;
