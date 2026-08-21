@@ -670,7 +670,9 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
     pointer-events: none;
   }
 
-  /* Back board and rim of the open book. */
+  /* Back board and rim of the open book. It starts as the right half (hidden
+     behind the closed book) and grows leftward as the cover opens — a solid
+     transform instead of a translucent cross-fade. */
   html.book-cinematic .book-board-open {
     display: block;
     position: absolute;
@@ -679,7 +681,9 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
     border-radius: 14px;
     background: linear-gradient(160deg, var(--board-hi), var(--board) 40%, var(--board-lo) 80%, var(--board-edge));
     box-shadow: 0 26px 55px rgba(40, 22, 2, 0.42);
-    opacity: 0;
+    transform: scaleX(0.5);
+    transform-origin: right center;
+    will-change: transform;
   }
 
   /* Closed page stack and back board peeking beyond the front cover. */

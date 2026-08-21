@@ -105,7 +105,7 @@
       cover.style.transform = 'perspective(3000px) rotateY(' + (-180 * e).toFixed(2) + 'deg)';
       book.style.transform = 'translate3d(' + (-25 * (1 - e)).toFixed(3) + '%,0,0)';
       if (boardClosed) boardClosed.style.opacity = (1 - clamp((o - 0.3) / 0.25, 0, 1)).toFixed(3);
-      if (boardOpen) boardOpen.style.opacity = clamp((o - 0.42) / 0.33, 0, 1).toFixed(3);
+      if (boardOpen) boardOpen.style.transform = 'scaleX(' + (0.5 + 0.5 * e).toFixed(4) + ')';
       if (paperLeft) paperLeft.style.opacity = clamp((o - 0.78) / 0.14, 0, 1).toFixed(3);
       if (coverShade) coverShade.style.opacity = ((o < 0.5 ? o : 1 - o) * 0.8).toFixed(3);
     }
