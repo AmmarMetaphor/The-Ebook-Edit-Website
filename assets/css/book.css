@@ -1409,12 +1409,12 @@ html.book-js .book-static .book-tabs .book-tab {
 
 @media (max-width: 640px) {
   .wa-float {
-    right: 16px;
-    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-    width: 50px;
-    height: 50px;
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    width: 56px;
+    height: 56px;
   }
-  .wa-float svg { width: 26px; height: 26px; }
+  .wa-float svg { width: 28px; height: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1467,4 +1467,263 @@ html.book-js .book-static .book-tabs .book-tab {
 
 @media (max-width: 640px) {
   .featured-book img { max-height: 58vh; }
+}
+
+/* =================================================================
+   MOBILE PORTRAIT BOOK (html.book-mbook)
+   One portrait leaf at a time inside a sticky stage; scroll scrubs a
+   vertical page turn (the leaf lifts from its lower edge around the top
+   hinge, revealing the next leaf already lying beneath). Applied to the
+   cinematic volumes on viewports <=900px wide and >=500px tall when JS
+   runs and motion is allowed; otherwise the flow column remains.
+   The .m-pg wrapper is display:contents everywhere except when it acts
+   as its own mobile leaf, so desktop layout is untouched by the markup.
+   ================================================================= */
+.m-pg { display: contents; }
+
+@media (max-width: 900px) and (min-height: 500px) {
+  html.book-mbook .book-experience { padding-bottom: 0; }
+
+  html.book-mbook .book-stage {
+    --m-w: min(100vw - 28px, 430px);
+    --m-h: min(78vh, 700px);
+    --m-h: min(78svh, 700px);
+    --m-top: calc((100vh - var(--m-h)) / 2 + 18px);
+    --m-top: calc((100svh - var(--m-h)) / 2 + 18px);
+    --m-left: calc((100vw - var(--m-w)) / 2);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  /* Collapse the desktop/flow structure: the stage is the positioning
+     context and the leaves are placed directly against it. */
+  html.book-mbook .book-scene,
+  html.book-mbook .book,
+  html.book-mbook .book-block {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    transform: none;
+  }
+  html.book-mbook .spread {
+    display: contents;
+  }
+  html.book-mbook .paper-left,
+  html.book-mbook .paper-right,
+  html.book-mbook .book-shadow,
+  html.book-mbook .book-board-open,
+  html.book-mbook .book-board-closed,
+  html.book-mbook .book-spine-shade,
+  html.book-mbook .turn-shade,
+  html.book-mbook .book-leaf,
+  html.book-mbook .book-ribbon,
+  html.book-mbook .book-endcap,
+  html.book-mbook .folio { display: none; }
+  html.book-mbook .m-split,
+  html.book-mbook .m-split > .page-inner { display: contents; }
+
+  /* Portrait leaves. The second selector shows the first page before the
+     engine takes over, so there is never a blank first paint. */
+  html.book-mbook .m-leaf,
+  html.book-mbook .book-experience:not(.bk-live) .spread:first-of-type .page:first-of-type {
+    position: absolute;
+    left: var(--m-left);
+    top: var(--m-top);
+    width: var(--m-w);
+    height: var(--m-h);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(24px, 4.2svh, 34px) 22px clamp(34px, 5svh, 44px);
+    border-radius: 10px;
+    overflow: hidden;
+    visibility: hidden;
+    background: linear-gradient(105deg, #efe3c8 0%, #f7efdb 4%, var(--paper) 13%, #fdf9ee 88%, #f6ecd4 100%);
+    box-shadow: inset 7px 0 14px -9px rgba(60, 38, 8, 0.4);
+    transform-origin: 50% 0;
+  }
+  html.book-mbook .m-leaf > .page-inner,
+  html.book-mbook .book-experience:not(.bk-live) .spread:first-of-type .page:first-of-type > .page-inner {
+    display: contents;
+  }
+  html.book-mbook .book-experience:not(.bk-live) .spread:first-of-type .page:first-of-type {
+    visibility: visible;
+    z-index: 2;
+  }
+  html.book-mbook .m-leaf.m-on { visibility: visible; z-index: 2; }
+  html.book-mbook .m-leaf.m-top {
+    visibility: visible;
+    z-index: 4;
+    will-change: transform;
+    box-shadow: inset 7px 0 14px -9px rgba(60, 38, 8, 0.4), 0 22px 34px -8px rgba(40, 22, 2, 0.38);
+  }
+
+  /* Injected chrome: board beneath, turn shade, progress, page indicator. */
+  html.book-mbook .m-chrome .m-board {
+    position: absolute;
+    left: calc(var(--m-left) - 7px);
+    top: calc(var(--m-top) - 7px);
+    width: calc(var(--m-w) + 14px);
+    height: calc(var(--m-h) + 14px);
+    z-index: 1;
+    border-radius: 14px;
+    background: linear-gradient(165deg, var(--board-hi), var(--board) 45%, var(--board-lo) 85%, var(--board-edge));
+    box-shadow: 0 22px 44px rgba(40, 22, 2, 0.42);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  html.book-mbook .book-stage.m-open .m-board { opacity: 1; }
+  html.book-mbook .m-chrome .m-shade {
+    position: absolute;
+    left: var(--m-left);
+    top: var(--m-top);
+    width: var(--m-w);
+    height: var(--m-h);
+    z-index: 3;
+    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(40, 22, 2, 0.3), rgba(40, 22, 2, 0.02) 60%, rgba(40, 22, 2, 0));
+    opacity: 0;
+    pointer-events: none;
+  }
+  html.book-mbook .m-chrome .m-progress {
+    position: absolute;
+    left: calc(var(--m-left) + 10px);
+    top: calc(var(--m-top) + var(--m-h) - 3px);
+    width: calc(var(--m-w) - 20px);
+    height: 2px;
+    z-index: 5;
+    background: rgba(182, 141, 44, 0.18);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  html.book-mbook .m-chrome .m-progress span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #ffd05e, var(--gold-500));
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+  html.book-mbook .m-chrome .m-indicator {
+    /* Bottom-left, clear of the floating WhatsApp button on the right. */
+    position: absolute;
+    top: calc(var(--m-top) + var(--m-h) + 9px);
+    left: calc(var(--m-left) + 10px);
+    z-index: 5;
+    color: #b98a1e;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  html.book-mbook .book-stage.m-open .m-progress,
+  html.book-mbook .book-stage.m-open .m-indicator { opacity: 1; }
+
+  /* Portrait closed cover on the homepage. */
+  html.book-mbook .book-cover {
+    position: absolute;
+    left: calc(var(--m-left) - 6px);
+    top: calc(var(--m-top) - 6px);
+    width: calc(var(--m-w) + 12px);
+    height: calc(var(--m-h) + 12px);
+    min-height: 0;
+    margin: 0;
+    z-index: 6;
+    border-radius: 12px;
+    transform-origin: 50% 0;
+    will-change: transform;
+    box-shadow:
+      0 3px 0 #f6ecd4,
+      0 6px 0 #ebdfc0,
+      0 9px 0 var(--board-edge),
+      0 24px 40px rgba(56, 33, 4, 0.42);
+  }
+  html.book-mbook .cover-front { height: 100%; padding: clamp(22px, 4.6svh, 40px) 20px; border-radius: inherit; }
+  html.book-mbook .cover-back { display: none; }
+  html.book-mbook .book-cover.m-off { visibility: hidden; }
+  html.book-mbook .cover-plaque img { width: clamp(150px, 40vw, 210px); }
+  html.book-mbook .cover-title { font-size: clamp(1.7rem, 8.4vw, 2.4rem); }
+  html.book-mbook .cover-lead { font-size: clamp(0.92rem, 3.9vw, 1.05rem); }
+
+  /* Chapter tabs attached to the top edge of the portrait book. */
+  html.book-mbook .book-tabs {
+    position: absolute;
+    left: var(--m-left);
+    top: calc(var(--m-top) - 48px);
+    width: var(--m-w);
+    margin: 0;
+    padding: 0 2px 2px;
+    z-index: 5;
+    background: none;
+    border-radius: 0;
+    box-shadow: none;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  html.book-mbook .book-tab {
+    padding: 13px 13px 12px;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+  }
+
+  /* Comfortable portrait typography and compact printed components. */
+  html.book-mbook .m-leaf { font-size: 1rem; }
+  html.book-mbook .m-leaf h1 { font-size: clamp(1.55rem, 6.8vw, 2.05rem); margin-bottom: 0.4em; }
+  html.book-mbook .m-leaf h2 { font-size: clamp(1.35rem, 6vw, 1.8rem); margin-bottom: 0.35em; }
+  html.book-mbook .m-leaf h3 { font-size: clamp(1.08rem, 4.6vw, 1.28rem); }
+  html.book-mbook .m-leaf .page-lead { font-size: clamp(0.96rem, 4.1vw, 1.06rem); margin-bottom: 0.9em; }
+  html.book-mbook .m-leaf .eyebrow { font-size: 0.66rem; margin-bottom: 7px; }
+  html.book-mbook .m-leaf p { margin-bottom: 0.8em; }
+  html.book-mbook .m-leaf .button { min-height: 44px; padding: 10px 16px; font-size: 0.93rem; }
+  html.book-mbook .m-leaf .page-actions { margin-top: 12px; gap: 9px; }
+  html.book-mbook .m-leaf .page-tags { margin-top: 14px; font-size: 0.6rem; }
+  html.book-mbook .m-leaf .page-more { margin-top: 14px; }
+  html.book-mbook .m-leaf .page-ornament { margin: 16px 0; }
+  html.book-mbook .m-leaf .bookplate-row { margin-bottom: 14px; }
+  html.book-mbook .m-leaf .bookplate { padding: 8px 11px; }
+  html.book-mbook .m-leaf .bookplate img { width: clamp(130px, 34vw, 165px); }
+  html.book-mbook .m-leaf .ghost-no { font-size: clamp(2.2rem, 9vw, 3rem); margin-bottom: -6px; }
+  html.book-mbook .m-leaf .entry { padding: 12px 2px; gap: 11px; }
+  html.book-mbook .m-leaf .entry-title { font-size: 1.04rem; }
+  html.book-mbook .m-leaf .entry-text { font-size: 0.88rem; }
+  html.book-mbook .m-leaf .promise-list { gap: 11px; }
+  html.book-mbook .m-leaf .promise-list span { font-size: 0.88rem; }
+  html.book-mbook .m-leaf .check-list { gap: 9px; margin-top: 10px; }
+  html.book-mbook .m-leaf .check-list li { font-size: 0.92rem; }
+  html.book-mbook .m-leaf .diamond-list { gap: 8px; margin-top: 9px; }
+  html.book-mbook .m-leaf .diamond-list li { font-size: 0.92rem; line-height: 1.5; }
+  html.book-mbook .m-leaf .contents-list a { padding: 11px 2px; font-size: 0.94rem; }
+  html.book-mbook .m-leaf .stage-list { gap: 11px; margin-top: 12px; }
+  html.book-mbook .m-leaf .stage-no { flex-basis: 32px; width: 32px; height: 32px; font-size: 0.9rem; border-radius: 9px; }
+  html.book-mbook .m-leaf .stage-body h3 { font-size: 1.02rem; margin-bottom: 2px; }
+  html.book-mbook .m-leaf .stage-body p { font-size: 0.86rem; line-height: 1.5; }
+  html.book-mbook .m-leaf .imprint-list li { padding: 11px 2px 11px 22px; font-size: 0.96rem; }
+  html.book-mbook .m-leaf .type-entry { margin-top: 14px; padding-top: 12px; }
+  html.book-mbook .m-leaf .type-entry p { font-size: 0.9rem; }
+  html.book-mbook .m-leaf .page-quote { margin-top: 14px; padding-left: 16px; }
+  html.book-mbook .m-leaf .page-quote p { font-size: 1.08rem; }
+  html.book-mbook .m-leaf .page-stats { grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 12px; }
+  html.book-mbook .m-leaf .page-stat { padding: 10px 14px; }
+  html.book-mbook .m-leaf .assessment-insert { padding: 20px 18px; }
+  html.book-mbook .m-leaf .deco-lines { height: 56px; margin: 14px 0; }
+  html.book-mbook .m-leaf .proof-rules { margin: 14px 0; gap: 11px; }
+  html.book-mbook .m-leaf .journal-masthead { margin-bottom: 14px; padding: 7px 0 9px; }
+  html.book-mbook .m-leaf .colophon-plaque { width: min(200px, 62%); margin-bottom: 14px; }
+  html.book-mbook .m-leaf .micro-colophon { margin-top: 18px; }
+  html.book-mbook .m-leaf .platform-note-page { margin-top: 16px; font-size: 0.8rem; }
+  html.book-mbook .m-leaf .specimen-row { margin-top: 10px; }
+  html.book-mbook .m-leaf .featured-book { margin: 0 auto; }
+  html.book-mbook .m-leaf .featured-book img { max-height: min(52svh, 460px); width: auto; max-width: 100%; }
 }
