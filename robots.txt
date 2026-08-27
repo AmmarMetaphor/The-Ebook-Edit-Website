@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://the-ebook-edit.netlify.app/sitemap.xml
+Sitemap: https://theebookedit.com/sitemap.xml

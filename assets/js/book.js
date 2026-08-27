@@ -2,7 +2,8 @@
    One engine serves four kinds of presentation:
    1. Desktop cinematic (>=1000x640): closed cover / open spreads, horizontal
       page turns — the approved experience, unchanged.
-   2. Mobile portrait book (html.book-mbook, <=900px wide and >=500px tall):
+   2. Mobile portrait book (html.book-mbook, 360-900px wide, >=740px tall so
+      a full portrait page always fits):
       one portrait page at a time in a sticky stage; scroll scrubs vertical
       page turns (the current page lifts from its lower edge and turns upward,
       revealing the next page beneath). Same no-hijack philosophy as desktop:
@@ -55,7 +56,7 @@
 
   const mqMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mqStage = window.matchMedia('(min-width: 1000px) and (min-height: 640px)');
-  const mqMobile = window.matchMedia('(max-width: 900px) and (min-height: 500px)');
+  const mqMobile = window.matchMedia('(max-width: 900px) and (min-width: 360px) and (min-height: 740px)');
 
   const tabs = experience.querySelector('.book-tabs');
   const cover = experience.querySelector('.book-cover');
@@ -183,7 +184,7 @@
   const mLeaves = []; // { el, spreadIdx }
   spreads.forEach((sp, si) => {
     sp.querySelectorAll(':scope > .page').forEach(pg => {
-      const groups = pg.querySelectorAll(':scope > .page-inner > .m-pg');
+      const groups = pg.querySelectorAll(':scope > .page-inner > .m-pg, :scope > .page-inner > * > .m-pg');
       if (groups.length) {
         pg.classList.add('m-split');
         groups.forEach(g => { g.classList.add('m-leaf'); mLeaves.push({ el: g, spreadIdx: si }); });
