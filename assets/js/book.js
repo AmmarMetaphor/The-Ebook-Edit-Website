@@ -1,10 +1,16 @@
 /* The Ebook Edit — shared interactive book engine.
-   One engine serves three kinds of page:
-   1. The homepage: closed cover, scroll-driven opening, page turns.
-   2. Coverless volumes (services, process, …): the book starts open on its
-      first spread (.book-open-start) and scroll turns the pages.
-   3. Static book pages (.book-static: articles, contact, legal, notes):
-      normal document flow on book paper — only gentle reveals and the year.
+   One engine serves four kinds of presentation:
+   1. Desktop cinematic (>=1000x640): closed cover / open spreads, horizontal
+      page turns — the approved experience, unchanged.
+   2. Mobile portrait book (html.book-mbook, <=900px wide and >=500px tall):
+      one portrait page at a time in a sticky stage; scroll scrubs vertical
+      page turns (the current page lifts from its lower edge and turns upward,
+      revealing the next page beneath). Same no-hijack philosophy as desktop:
+      native scrolling is the only input.
+   3. Flow: the readable stacked-paper column — the reduced-motion, no-JS and
+      odd-viewport fallback for the volumes.
+   4. Static book pages (.book-static: articles, contact, legal, notes):
+      always flow — long-form text and forms scroll normally.
    Progressive enhancement over the flow layout in book.css: transform/opacity
    only, one rAF-gated scroll handler, no scroll hijacking. */
 (() => {
@@ -49,6 +55,7 @@
 
   const mqMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const mqStage = window.matchMedia('(min-width: 1000px) and (min-height: 640px)');
+  const mqMobile = window.matchMedia('(max-width: 900px) and (min-height: 500px)');
 
   const tabs = experience.querySelector('.book-tabs');
   const cover = experience.querySelector('.book-cover');
@@ -122,6 +129,7 @@
   const leaf = experience.querySelector('.book-leaf');
   const turnShade = experience.querySelector('.turn-shade');
   const ribbon = experience.querySelector('.book-ribbon');
+  const stage = experience.querySelector('.book-stage');
 
   if (!scene || !book || !spreads.length) {
     flowInit();
@@ -168,11 +176,80 @@
   }
   buildSegs();
 
+  /* ------------------------------------------- mobile portrait book (mbook)
+     Each desktop half-spread (or an authored .m-pg sub-group of one) becomes
+     a portrait leaf. Scroll position scrubs vertical page turns: the current
+     leaf rotates up around its top edge; the next leaf already lies beneath. */
+  const mLeaves = []; // { el, spreadIdx }
+  spreads.forEach((sp, si) => {
+    sp.querySelectorAll(':scope > .page').forEach(pg => {
+      const groups = pg.querySelectorAll(':scope > .page-inner > .m-pg');
+      if (groups.length) {
+        pg.classList.add('m-split');
+        groups.forEach(g => { g.classList.add('m-leaf'); mLeaves.push({ el: g, spreadIdx: si }); });
+      } else {
+        pg.classList.add('m-leaf');
+        mLeaves.push({ el: pg, spreadIdx: si });
+      }
+    });
+  });
+
+  const M_HOLD = 0.25, M_OPEN = 1.0, M_DWELL = 0.75, M_DWELL_FIRST = 0.9, M_DWELL_END = 1.0, M_TURN = 0.55;
+  let msegs = [];
+  let mTotalU = 0;
+
+  function buildMsegs() {
+    msegs = [];
+    let u = 0;
+    const push = (type, len, i) => { msegs.push({ type, i, a: u, b: u + len }); u += len; };
+    if (hasCover) {
+      push('hold', M_HOLD);
+      push('open', M_OPEN);
+    }
+    mLeaves.forEach((l, i) => {
+      const len = i === mLeaves.length - 1 ? M_DWELL_END
+        : (i === 0 && !hasCover ? M_DWELL_FIRST : M_DWELL);
+      push('dwell', len, i);
+      if (i < mLeaves.length - 1) push('turn', M_TURN, i);
+    });
+    mTotalU = u;
+  }
+  buildMsegs();
+
+  let mChrome = null, mShadeEl = null, mIndEl = null, mProgEl = null;
+  function ensureMobileChrome() {
+    if (mChrome || !stage) return;
+    mChrome = doc.createElement('div');
+    mChrome.className = 'm-chrome';
+    mChrome.setAttribute('aria-hidden', 'true');
+    mChrome.innerHTML = '<div class="m-board"></div><div class="m-shade"></div>' +
+      '<div class="m-progress"><span></span></div><div class="m-indicator"></div>';
+    stage.appendChild(mChrome);
+    mShadeEl = mChrome.querySelector('.m-shade');
+    mIndEl = mChrome.querySelector('.m-indicator');
+    mProgEl = mChrome.querySelector('.m-progress span');
+  }
+
+  function setMLeafState(l, state) { // '' hidden · 'on' resting/incoming · 'top' turning above
+    if (l._m === state) return;
+    l._m = state;
+    l.el.classList.remove('m-on', 'm-top');
+    if (state) l.el.classList.add(state === 'on' ? 'm-on' : 'm-top');
+    if (state !== 'top') {
+      l.el.style.transform = '';
+      l.el.style.opacity = '';
+    }
+  }
+  const hideOtherMLeaves = (...keep) => {
+    mLeaves.forEach(l => { if (!keep.includes(l)) setMLeafState(l, ''); });
+  };
+
   let mode = null;
   let vh = window.innerHeight;
   let expTop = 0;
   let ticking = false;
   const last = { o: -1, turnT: -1, leafOn: null, isOpen: null, flat: null, rp: -1 };
+  const mlast = { coverT: -1, turnT: -1, turnI: -1, opened: null, ind: '', prog: -1 };
 
   function measure() {
     vh = Math.max(1, window.innerHeight);
@@ -180,9 +257,12 @@
     expTop = rect.top + window.scrollY;
     if (mode === 'cinematic') {
       experience.style.height = Math.round((totalU + 1) * vh) + 'px';
+    } else if (mode === 'mbook') {
+      experience.style.height = Math.round((mTotalU + 1) * vh) + 'px';
     }
   }
 
+  /* ------------------------------------------------ cinematic rendering */
   function applyOpen(o) {
     if (!hasCover) return;
     if (o !== last.o) {
@@ -222,7 +302,7 @@
     }
   }
 
-  function render() {
+  function renderCinematic() {
     const u = clamp((window.scrollY - expTop) / vh, 0, totalU - 0.0001);
 
     if (ribbon) {
@@ -267,12 +347,110 @@
     }
   }
 
+  /* --------------------------------------------------- mbook rendering */
+  function mSetOpened(open) {
+    if (open === mlast.opened) return;
+    mlast.opened = open;
+    if (stage) stage.classList.toggle('m-open', open);
+    if (tabs && hasCover) tabs.classList.toggle('tabs-on', open);
+    if (cover) cover.classList.toggle('m-off', open && mlast.coverT >= 1);
+  }
+
+  function mCoverTo(t) {
+    if (!cover || t === mlast.coverT) return;
+    mlast.coverT = t;
+    if (t <= 0) {
+      cover.style.transform = '';
+      cover.style.opacity = '';
+      cover.classList.remove('m-off');
+    } else if (t >= 1) {
+      cover.classList.add('m-off');
+    } else {
+      cover.classList.remove('m-off');
+      const e = easeInOut(t);
+      cover.style.transform = 'perspective(1400px) rotateX(' + (-100 * e).toFixed(2) + 'deg)';
+      cover.style.opacity = String(1 - clamp((t - 0.85) / 0.15, 0, 1));
+    }
+  }
+
+  function mIndicator(n) {
+    const text = n < 1 ? '' : n + ' / ' + mLeaves.length;
+    if (text !== mlast.ind) {
+      mlast.ind = text;
+      if (mIndEl) mIndEl.textContent = text;
+    }
+  }
+
+  function renderMobile() {
+    const u = clamp((window.scrollY - expTop) / vh, 0, mTotalU - 0.0001);
+
+    if (mProgEl) {
+      const p = Math.round((u / mTotalU) * 200) / 200;
+      if (p !== mlast.prog) {
+        mlast.prog = p;
+        mProgEl.style.transform = 'scaleX(' + p + ')';
+      }
+    }
+
+    let seg = msegs[0];
+    for (let s = 0; s < msegs.length; s++) {
+      if (u < msegs[s].b) { seg = msegs[s]; break; }
+      seg = msegs[s];
+    }
+    const t = clamp((u - seg.a) / (seg.b - seg.a), 0, 1);
+
+    if (seg.type === 'hold') {
+      mCoverTo(0);
+      mSetOpened(false);
+      hideOtherMLeaves();
+      if (mShadeEl) mShadeEl.style.opacity = '0';
+      mIndicator(0);
+    } else if (seg.type === 'open') {
+      // The cover lifts up from its lower edge; page 1 already lies beneath.
+      mCoverTo(t);
+      mSetOpened(t > 0.55);
+      const first = mLeaves[0];
+      setMLeafState(first, 'on');
+      hideOtherMLeaves(first);
+      if (mShadeEl) mShadeEl.style.opacity = (Math.sin(Math.PI * easeInOut(t)) * 0.3).toFixed(3);
+      mIndicator(t > 0.55 ? 1 : 0);
+    } else if (seg.type === 'dwell') {
+      mCoverTo(hasCover ? 1 : 0);
+      mSetOpened(true);
+      const l = mLeaves[seg.i];
+      setMLeafState(l, 'on');
+      hideOtherMLeaves(l);
+      if (mShadeEl) mShadeEl.style.opacity = '0';
+      mIndicator(seg.i + 1);
+    } else if (seg.type === 'turn') {
+      mCoverTo(hasCover ? 1 : 0);
+      mSetOpened(true);
+      const out = mLeaves[seg.i];
+      const inc = mLeaves[seg.i + 1];
+      setMLeafState(inc, 'on');
+      if (t <= 0.002 || t >= 0.998) {
+        setMLeafState(out, t < 0.5 ? 'on' : '');
+        if (t < 0.5) setMLeafState(inc, '');
+        if (mShadeEl) mShadeEl.style.opacity = '0';
+      } else {
+        setMLeafState(out, 'top');
+        const e = easeInOut(t);
+        out.el.style.transform = 'perspective(1400px) rotateX(' + (-96 * e).toFixed(2) + 'deg)';
+        out.el.style.opacity = String(1 - clamp((t - 0.82) / 0.18, 0, 1));
+        if (mShadeEl) mShadeEl.style.opacity = (Math.sin(Math.PI * e) * 0.32).toFixed(3);
+      }
+      hideOtherMLeaves(out, inc);
+      mIndicator(t < 0.5 ? seg.i + 1 : seg.i + 2);
+    }
+  }
+
   function onScroll() {
-    if (mode !== 'cinematic' || ticking) return;
+    if ((mode !== 'cinematic' && mode !== 'mbook') || ticking) return;
     ticking = true;
     requestAnimationFrame(() => {
       ticking = false;
-      render();
+      if (mode === 'cinematic') renderCinematic();
+      else if (mode === 'mbook') renderMobile();
     });
   }
 
@@ -293,15 +471,31 @@
     spreads.forEach(sp => setSpreadState(sp, ''));
   }
 
+  function resetMobile() {
+    Object.assign(mlast, { coverT: -1, turnT: -1, turnI: -1, opened: null, ind: '', prog: -1 });
+    if (cover) {
+      cover.classList.remove('m-off');
+      cover.removeAttribute('style');
+    }
+    if (stage) stage.classList.remove('m-open');
+    if (tabs) tabs.classList.remove('tabs-on');
+    mLeaves.forEach(l => setMLeafState(l, ''));
+    experience.style.height = '';
+  }
+
   function setMode() {
-    const target = mqStage.matches && !mqMotion.matches ? 'cinematic' : 'flow';
+    let target = 'flow';
+    if (mqStage.matches && !mqMotion.matches) target = 'cinematic';
+    else if (mqMobile.matches && !mqMotion.matches) target = 'mbook';
     if (target === mode) return;
 
     if (mode === 'flow') flowTeardown();
     if (mode === 'cinematic') { clearInline(); resetState(); }
+    if (mode === 'mbook') resetMobile();
 
     mode = target;
     root.classList.toggle('book-cinematic', mode === 'cinematic');
+    root.classList.toggle('book-mbook', mode === 'mbook');
 
     if (mode === 'cinematic') {
       resetState();
@@ -311,29 +505,51 @@
         if (tabs) tabs.classList.add('tabs-on');
       }
       measure();
-      render();
+      renderCinematic();
+    } else if (mode === 'mbook') {
+      ensureMobileChrome();
+      resetMobile();
+      experience.classList.add('bk-live');
+      if (!hasCover && tabs) tabs.classList.add('tabs-on');
+      measure();
+      renderMobile();
     } else {
-      spreads.forEach(sp => setSpreadState(sp, ''));
+      resetState();
+      resetMobile();
       measure();
       flowInit();
     }
   }
 
   /* ------------------------------------------------------- interactions */
-  function dwellTop(idx) {
+  function dwellTopForSpread(idx) {
+    if (mode === 'mbook') {
+      const li = mLeaves.findIndex(l => l.spreadIdx === idx);
+      if (li < 0) return null;
+      const seg = msegs.find(s => s.type === 'dwell' && s.i === li);
+      return seg ? Math.round(expTop + (seg.a + 0.03) * vh) : null;
+    }
     const seg = segs.find(s => s.type === 'dwell' && s.i === idx);
     return seg ? Math.round(expTop + (seg.a + 0.03) * vh) : null;
   }
 
+  function spreadIndexForHash(hash) {
+    const id = (hash || '').replace(/^#/, '');
+    if (!id) return -1;
+    const el = doc.getElementById(id);
+    if (!el) return -1;
+    return spreads.indexOf(el.closest('.spread'));
+  }
+
   // In-book chapter anchors (the cover's "Open the book" link, contents
-  // pages) map onto the cinematic timeline; in flow mode they jump natively.
+  // pages) map onto the active timeline; in flow mode they jump natively.
   experience.addEventListener('click', event => {
-    if (mode !== 'cinematic') return;
-    const link = event.target.closest('a[href^="#chapter-"]');
+    if (mode !== 'cinematic' && mode !== 'mbook') return;
+    const link = event.target.closest('a[href^="#"]');
     if (!link) return;
-    const match = /^#chapter-(\d+)$/.exec(link.getAttribute('href') || '');
-    if (!match) return;
-    const top = dwellTop(clamp(parseInt(match[1], 10) - 1, 0, spreads.length - 1));
+    const idx = spreadIndexForHash(link.getAttribute('href'));
+    if (idx < 0) return;
+    const top = dwellTopForSpread(idx);
     if (top === null) return;
     event.preventDefault();
     window.scrollTo({ top, behavior: 'smooth' });
@@ -341,18 +557,20 @@
 
   if (cover) {
     cover.addEventListener('click', event => {
-      if (mode !== 'cinematic' || cover.classList.contains('cover-flat')) return;
+      if (mode !== 'cinematic' && mode !== 'mbook') return;
+      if (cover.classList.contains('cover-flat') || cover.classList.contains('m-off')) return;
       if (event.target.closest('a')) return; // the open link handles itself
-      const top = dwellTop(0);
+      const top = dwellTopForSpread(0);
       if (top !== null) window.scrollTo({ top, behavior: 'smooth' });
     });
   }
 
-  // Deep links like /services#chapter-3 map onto the timeline in cinematic mode.
+  // Deep links like /services#chapter-3 map onto the timeline.
   function jumpToHash() {
-    const match = /^#chapter-(\d+)$/.exec(window.location.hash || '');
-    if (!match || mode !== 'cinematic') return;
-    const top = dwellTop(clamp(parseInt(match[1], 10) - 1, 0, spreads.length - 1));
+    if (mode !== 'cinematic' && mode !== 'mbook') return;
+    const idx = spreadIndexForHash(window.location.hash);
+    if (idx < 0) return;
+    const top = dwellTopForSpread(idx);
     if (top !== null) window.scrollTo(0, top);
   }
 
@@ -361,12 +579,14 @@
     clearTimeout(resizeTimer);
     resizeTimer = setTimeout(() => {
       measure();
-      if (mode === 'cinematic') render();
+      if (mode === 'cinematic') renderCinematic();
+      else if (mode === 'mbook') renderMobile();
     }, 120);
   });
 
   window.addEventListener('scroll', onScroll, { passive: true });
   onMq(mqStage, setMode);
+  onMq(mqMobile, setMode);
   onMq(mqMotion, setMode);
 
   setMode();

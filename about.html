@@ -18,20 +18,26 @@
   <meta name="twitter:image" content="https://the-ebook-edit.netlify.app/assets/images/the-ebook-edit-logo.png">
   <link rel="icon" href="/favicon.ico">
   <link rel="stylesheet" href="assets/css/styles.css?v=20260810-1">
-  <link rel="stylesheet" href="assets/css/book.css?v=20260821-3">
+  <link rel="stylesheet" href="assets/css/book.css?v=20260822-1">
   <script>
-    /* Pre-paint mode check so the open book renders on the first frame with no
-       layout flash. book.js confirms boot; if it ever fails to load, the timer
-       removes the cinematic class so all content stays reachable. */
+    /* Pre-paint mode check so the correct book state renders on the first
+       frame with no layout flash: desktop cinematic, mobile portrait book,
+       or the flow fallback. book.js confirms boot; if it ever fails to load,
+       the timer clears the classes so all content stays reachable. */
     (function () {
       var c = document.documentElement.classList;
       c.add('book-js');
       try {
-        if (window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches &&
-            !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (!reduce && window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches) {
           c.add('book-cinematic');
+        } else if (!reduce && window.matchMedia('(max-width: 900px) and (min-height: 500px)').matches) {
+          c.add('book-mbook');
+        }
+        if (c.contains('book-cinematic') || c.contains('book-mbook')) {
           window.__bookBoot = window.setTimeout(function () {
             c.remove('book-cinematic');
+            c.remove('book-mbook');
           }, 2500);
         }
       } catch (e) {}
@@ -164,6 +170,6 @@
   <div class="book-endcap" aria-hidden="true"></div>
 </div>
 </main>
-<script src="assets/js/book.js?v=20260821-3" defer></script>
+<script src="assets/js/book.js?v=20260822-1" defer></script>
 </body>
 </html>
