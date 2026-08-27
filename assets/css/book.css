@@ -14,15 +14,15 @@
   --desk-hi: #eddebf;
   --desk-mid: #d8bf96;
   --desk-lo: #b3946a;
-  --board-hi: #0a45b0;
-  --board: #04329c;
-  --board-lo: #052a72;
-  --board-edge: #03205a;
+  --board-hi: #0047b9;
+  --board: #003190;
+  --board-lo: #02276f;
+  --board-edge: #011c52;
   --paper: #fdf9ee;
   --paper-soft: #f9f2e0;
   --paper-edge: #efe3c8;
   --gold-line: rgba(182, 141, 44, 0.32);
-  --gold-ink: #86753f;
+  --gold-ink: #6f6033;
   --flow-w: min(100% - 5vw, 1040px);
 }
 
@@ -71,13 +71,13 @@ body.book-home { background: #a5845a; }
   border-radius: inherit;
   background:
     repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.016) 0 2px, rgba(0, 0, 0, 0) 2px 5px),
-    radial-gradient(130% 100% at 50% 0%, var(--board-hi) 0%, #05379f 40%, #032a7c 74%, #02215f 100%);
+    radial-gradient(130% 100% at 50% 0%, var(--board-hi) 0%, #00389d 40%, #022a76 74%, #011f58 100%);
 }
 .cover-front::before {
   content: "";
   position: absolute;
   inset: clamp(12px, 2.2vh, 20px);
-  border: 2px solid rgba(251, 195, 65, 0.6);
+  border: 2px solid rgba(245, 167, 10, 0.6);
   border-radius: 10px;
   pointer-events: none;
 }
@@ -85,7 +85,7 @@ body.book-home { background: #a5845a; }
   content: "";
   position: absolute;
   inset: clamp(20px, 3.4vh, 32px);
-  border: 1px solid rgba(251, 195, 65, 0.28);
+  border: 1px solid rgba(245, 167, 10, 0.28);
   border-radius: 7px;
   pointer-events: none;
 }
@@ -102,20 +102,21 @@ body.book-home { background: #a5845a; }
 .cover-plaque {
   position: relative;
   z-index: 1;
-  margin-bottom: clamp(16px, 3.2vh, 30px);
-  padding: clamp(10px, 1.6vh, 16px) clamp(14px, 2vh, 20px);
+  margin-bottom: clamp(14px, 2.6vh, 26px);
+  padding: clamp(12px, 2vh, 20px) clamp(18px, 2.8vh, 30px);
+  border: 1px solid rgba(245, 167, 10, 0.55);
   border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 12px 30px rgba(0, 10, 40, 0.45);
+  background: linear-gradient(180deg, #fffdf6, #f7efdc);
+  box-shadow: inset 0 0 0 4px rgba(255, 253, 246, 0.7), 0 8px 22px rgba(0, 10, 40, 0.32);
 }
-.cover-plaque img { width: clamp(190px, 26vh, 320px); height: auto; }
+.cover-plaque img { width: clamp(150px, 21vh, 220px); height: auto; }
 .cover-eyebrow {
   position: relative;
   z-index: 1;
   margin: 0 0 clamp(12px, 2.4vh, 22px);
   padding: 9px 18px;
-  border-top: 1px solid rgba(251, 195, 65, 0.5);
-  border-bottom: 1px solid rgba(251, 195, 65, 0.5);
+  border-top: 1px solid rgba(245, 167, 10, 0.5);
+  border-bottom: 1px solid rgba(245, 167, 10, 0.5);
   color: var(--gold-500);
   font-size: clamp(0.62rem, 1.5vh, 0.76rem);
   font-weight: 800;
@@ -138,7 +139,7 @@ body.book-home { background: #a5845a; }
   width: 110px;
   height: 2px;
   margin: 0 auto clamp(12px, 2.2vh, 20px);
-  background: linear-gradient(90deg, rgba(251, 195, 65, 0), rgba(251, 195, 65, 0.85), rgba(251, 195, 65, 0));
+  background: linear-gradient(90deg, rgba(245, 167, 10, 0), rgba(245, 167, 10, 0.85), rgba(245, 167, 10, 0));
 }
 .cover-rule::after {
   content: "";
@@ -170,7 +171,7 @@ body.book-home { background: #a5845a; }
   justify-items: center;
   gap: 4px;
   margin: clamp(12px, 2.4vh, 22px) 0 0;
-  color: rgba(251, 195, 65, 0.85);
+  color: rgba(245, 167, 10, 0.85);
   font-size: 0.66rem;
   font-weight: 800;
   letter-spacing: 0.2em;
@@ -217,10 +218,10 @@ body.book-home { background: #a5845a; }
   align-items: center;
   flex: 0 0 auto;
   padding: 10px 14px 9px;
-  border: 1px solid rgba(251, 195, 65, 0.4);
+  border: 1px solid rgba(245, 167, 10, 0.4);
   border-bottom: 0;
   border-radius: 9px 9px 0 0;
-  background: linear-gradient(180deg, #0a3f9f, var(--board));
+  background: linear-gradient(180deg, #003a9e, var(--board));
   color: #fdf6e3;
   font-size: 0.7rem;
   font-weight: 800;
@@ -230,13 +231,13 @@ body.book-home { background: #a5845a; }
   white-space: nowrap;
   transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
 }
-.book-tab:hover { color: #ffffff; background: linear-gradient(180deg, #0d49b3, #0a3f9f); transform: translateY(-2px); }
+.book-tab:hover { color: #ffffff; background: linear-gradient(180deg, #0050cf, #003a9e); transform: translateY(-2px); }
 .book-tab-cta {
   border-color: rgba(4, 50, 156, 0.3);
-  background: linear-gradient(180deg, #ffd05e, var(--gold-500));
+  background: linear-gradient(180deg, #ffb92e, var(--gold-500));
   color: var(--blue-700);
 }
-.book-tab-cta:hover { color: var(--blue-700); background: linear-gradient(180deg, #ffdd82, #ffd05e); }
+.book-tab-cta:hover { color: var(--blue-700); background: linear-gradient(180deg, #ffc95c, #ffb92e); }
 
 /* With JavaScript, the tabs stay tucked inside the book until it opens.
    The paper strip keeps its place; only the tabs themselves emerge. */
@@ -437,7 +438,7 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--coral-500);
+  color: var(--brand-cyan);
   font-weight: 900;
 }
 .check-list-light li { color: rgba(255, 253, 248, 0.92); }
@@ -544,7 +545,7 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
   position: relative;
   padding: 30px 28px;
   border-radius: 14px;
-  background: linear-gradient(150deg, #0a3f9f, var(--board-lo));
+  background: linear-gradient(150deg, #003a9e, var(--board-lo));
   color: #fffdf8;
   box-shadow: 0 18px 40px rgba(35, 20, 3, 0.35);
 }
@@ -552,7 +553,7 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
   content: "";
   position: absolute;
   inset: 10px;
-  border: 1px solid rgba(251, 195, 65, 0.5);
+  border: 1px solid rgba(245, 167, 10, 0.5);
   border-radius: 9px;
   pointer-events: none;
 }
@@ -562,14 +563,7 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
 
 /* Closing spread colophon */
 .colophon { display: grid; justify-items: center; text-align: center; }
-.colophon-plaque {
-  width: min(280px, 82%);
-  margin-bottom: 24px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  background: #ffffff;
-  box-shadow: 0 10px 26px rgba(60, 40, 8, 0.18);
-}
+.colophon-plaque { width: min(190px, 58%); margin-bottom: 18px; }
 .colophon-line {
   max-width: 40ch;
   margin-bottom: 14px;
@@ -613,7 +607,7 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
   .book-home { --flow-w: min(100% - 20px, 1040px); }
   .book-cover { width: min(100% - 16px, 1064px); min-height: min(88svh, 760px); }
   .cover-front { padding: 40px 18px; }
-  .cover-plaque img { width: clamp(170px, 52vw, 240px); }
+  .cover-plaque img { width: clamp(128px, 34vw, 180px); }
   .book-tabs { padding: 10px 10px 0; gap: 5px; }
   .book-tab { padding: 9px 11px 8px; font-size: 0.64rem; letter-spacing: 0.08em; }
   .page-inner { padding: 30px 20px 46px; }
@@ -870,7 +864,7 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
     -webkit-backface-visibility: hidden;
   }
   html.book-cinematic .cover-spine { border-radius: 6px 0 0 6px; width: clamp(12px, 1.6vw, 20px); }
-  html.book-cinematic .cover-plaque img { width: clamp(160px, 23vh, 280px); }
+  html.book-cinematic .cover-plaque img { width: clamp(140px, 20vh, 210px); }
   html.book-cinematic .cover-title { font-size: clamp(1.7rem, 6.6vh, 3.2rem); }
   html.book-cinematic .cover-back {
     display: block;
@@ -927,7 +921,7 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
     height: 100%;
     transform: translate3d(0, calc((var(--rp, 0) - 1) * 100%), 0);
     transition: transform 0.15s linear;
-    background: linear-gradient(180deg, #ffd05e, var(--gold-500) 60%, #e8ab1f);
+    background: linear-gradient(180deg, #ffb92e, var(--gold-500) 60%, #e8ab1f);
     clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 10px), 0 100%);
     box-shadow: inset -3px 0 4px rgba(120, 70, 0, 0.35);
   }
@@ -959,7 +953,7 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
   html.book-cinematic .page-stats { margin-top: clamp(12px, 2.6vh, 24px); }
   html.book-cinematic .assessment-insert { padding: clamp(18px, 3.4vh, 30px) clamp(18px, 3vh, 28px); }
   html.book-cinematic .colophon-plaque img { width: 100%; }
-  html.book-cinematic .colophon-plaque { width: min(230px, 70%); margin-bottom: clamp(12px, 2.4vh, 22px); }
+  html.book-cinematic .colophon-plaque { width: min(165px, 52%); margin-bottom: clamp(10px, 2vh, 18px); }
   html.book-cinematic .colophon .page-ornament { margin: clamp(12px, 2.6vh, 24px) auto; }
   html.book-cinematic .platform-note-page { margin-top: clamp(14px, 3vh, 30px); font-size: clamp(0.72rem, 1.65vh, 0.85rem); }
 }
@@ -974,11 +968,11 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
    Constants (navy, gold, ivory, serif, tabs, spine) never change.
    Each volume varies only its emphasis colour and paper warmth. */
 body.book-theme-writing { --paper: #fdf7e6; --paper-soft: #f9f0da; --theme-accent: #c9992a; }
-body.book-theme-editing { --theme-accent: #d85a35; }
-body.book-theme-publishing { --theme-accent: #0a90ab; }
-body.book-theme-process { --theme-accent: #044dd5; }
-body.book-theme-portfolio { --theme-accent: #04329c; }
-body.book-theme-insights { --theme-accent: #d85a35; }
+body.book-theme-editing { --theme-accent: #0090c8; }
+body.book-theme-publishing { --theme-accent: #0068f6; }
+body.book-theme-process { --theme-accent: #0047b9; }
+body.book-theme-portfolio { --theme-accent: #003190; }
+body.book-theme-insights { --theme-accent: #b98a1e; }
 body.book-theme-services,
 body.book-theme-about,
 body.book-theme-contact { --theme-accent: #b98a1e; }
@@ -999,25 +993,87 @@ html.book-js .book-static .book-tabs .book-tab {
 .book-open-start .book-tabs,
 .book-static .book-tabs { margin-top: clamp(12px, 3vh, 32px); }
 .book-tab[aria-current="page"] {
-  background: linear-gradient(180deg, #0d49b3, #0a3f9f);
+  background: linear-gradient(180deg, #0050cf, #003a9e);
   box-shadow: inset 0 -3px 0 var(--gold-500);
   color: #ffffff;
 }
 .book-tab-cta[aria-current="page"] {
-  background: linear-gradient(180deg, #ffdd82, #ffd05e);
+  background: linear-gradient(180deg, #ffc95c, #ffb92e);
   box-shadow: inset 0 -3px 0 var(--blue-700);
   color: var(--blue-700);
 }
 
 /* ------------------------------------------------- shared components */
-.bookplate {
-  display: inline-block;
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0 8px 20px rgba(60, 40, 8, 0.18);
+.bookplate { display: inline-block; }
+.bookplate img { width: clamp(96px, 12vw, 132px); height: auto; }
+
+/* Article thumbnails: a miniature branded placeholder beside each entry.
+   Swap for a real 3:2 thumbnail image when article art is approved. */
+.entry-thumb {
+  flex: 0 0 88px;
+  align-self: center;
+  aspect-ratio: 3 / 2;
+  display: grid;
+  place-content: center;
+  padding: 6px;
+  border: 1px solid rgba(185, 138, 30, 0.45);
+  border-radius: 7px;
+  background: linear-gradient(160deg, rgba(0, 71, 185, 0.05), rgba(0, 71, 185, 0) 60%), #fdf7ea;
+  box-shadow: inset 0 0 0 3px var(--paper), inset 0 0 0 4px rgba(185, 138, 30, 0.24);
 }
-.bookplate img { width: clamp(150px, 20vw, 200px); height: auto; }
+.entry-thumb svg { width: 24px; height: 24px; color: #b98a1e; }
+@media (max-width: 500px) {
+  .entry-thumb { display: none; }
+}
+
+/* Pathway entries: audience routes with a small line icon. */
+.entry-ico {
+  flex: 0 0 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--brand-cyan);
+}
+.entry-ico svg { width: 26px; height: 26px; }
+
+/* Editing levels: a genuine table on wide pages that restacks into
+   comparison cards on narrow screens via each cell's data-th label. */
+.compare-table { width: 100%; margin: 20px 0 0; border-collapse: collapse; table-layout: fixed; }
+/* A table split across two m-pg groups reads as one table on desktop. */
+.m-pg + .m-pg > .compare-table { margin-top: 0; }
+.compare-table th,
+.compare-table td { padding: 11px 12px 11px 0; text-align: left; vertical-align: top; }
+.compare-table thead th {
+  padding-top: 0;
+  border-bottom: 2px solid rgba(245, 167, 10, 0.55);
+  color: var(--gold-ink);
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.compare-table tbody th,
+.compare-table tbody td { border-bottom: 1px solid var(--gold-line); }
+.compare-table tbody th {
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+}
+.compare-table tbody td { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+.compare-table td::before { content: none; }
+
+/* Process stages: what we do beside what the author does. */
+.role-duo { display: grid; gap: 7px; margin: 12px 0 0; }
+.role-duo > div { display: grid; grid-template-columns: 96px 1fr; gap: 10px; align-items: baseline; }
+.role-who {
+  color: var(--gold-ink);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.role-what { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
 
 .page-inner h1 {
   color: var(--blue-700);
@@ -1028,6 +1084,9 @@ html.book-js .book-static .book-tabs .book-tab {
 .contents-list { margin: 12px 0 0; padding: 0; list-style: none; }
 .contents-list li { border-bottom: 1px solid var(--gold-line); }
 .contents-list li:first-child { border-top: 1px solid var(--gold-line); }
+/* A contents list split across two m-pg groups reads as one run on desktop. */
+.m-pg + .m-pg > .contents-list { margin-top: 0; }
+.m-pg + .m-pg > .contents-list li:first-child { border-top: 0; }
 .contents-list a {
   display: flex;
   align-items: baseline;
@@ -1067,8 +1126,14 @@ html.book-js .book-static .book-tabs .book-tab {
 .ghost-no {
   display: block;
   margin: 0 0 -10px;
+}
+/* A kicker following the ghost numeral clears its descender. */
+.ghost-no + .entry-label { margin-top: 18px; }
+/* Breathing room between an inclusions list and the "You receive" line. */
+.diamond-list + .entry-text { margin-top: 16px; }
+.ghost-no {
   color: rgba(4, 50, 156, 0.12);
-  color: color-mix(in srgb, var(--theme-accent, #04329c) 18%, transparent);
+  color: color-mix(in srgb, var(--theme-accent, #003190) 18%, transparent);
   font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(3rem, 7vw, 4.6rem);
   font-weight: 700;
@@ -1125,8 +1190,8 @@ html.book-js .book-static .book-tabs .book-tab {
   top: 30px;
   width: 9px;
   height: 9px;
-  border-left: 2px solid var(--coral-500);
-  border-bottom: 2px solid var(--coral-500);
+  border-left: 2px solid var(--brand-cyan);
+  border-bottom: 2px solid var(--brand-cyan);
   transform: rotate(-45deg);
 }
 
@@ -1223,7 +1288,7 @@ html.book-js .book-static .book-tabs .book-tab {
   width: 26px;
   height: 64px;
   margin: 0 auto 18px;
-  background: linear-gradient(180deg, #ffd05e, #e8ab1f);
+  background: linear-gradient(180deg, #ffb92e, #e8ab1f);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 9px), 0 100%);
   box-shadow: inset -3px 0 4px rgba(120, 70, 0, 0.3);
 }
@@ -1289,7 +1354,7 @@ html.book-js .book-static .book-tabs .book-tab {
 
 @media (max-width: 640px) {
   .contents-list a { padding: 12px 2px; font-size: 0.95rem; }
-  .bookplate img { width: clamp(140px, 40vw, 180px); }
+  .bookplate img { width: clamp(88px, 24vw, 118px); }
   .ghost-no { font-size: 2.6rem; }
 }
 
@@ -1379,7 +1444,7 @@ html.book-js .book-static .book-tabs .book-tab {
 .wa-float:focus-visible {
   transform: translateY(-2px) scale(1.04);
   box-shadow:
-    0 0 0 2px rgba(251, 195, 65, 0.9),
+    0 0 0 2px rgba(245, 167, 10, 0.9),
     0 14px 30px rgba(30, 20, 4, 0.4);
 }
 
@@ -1389,9 +1454,9 @@ html.book-js .book-static .book-tabs .book-tab {
   top: 50%;
   transform: translateY(-50%);
   padding: 8px 13px;
-  border: 1px solid rgba(251, 195, 65, 0.55);
+  border: 1px solid rgba(245, 167, 10, 0.55);
   border-radius: 8px;
-  background: linear-gradient(180deg, #0a3f9f, var(--board, #04329c));
+  background: linear-gradient(180deg, #003a9e, var(--board, #003190));
   color: #fdf6e3;
   font-size: 0.76rem;
   font-weight: 700;
@@ -1481,7 +1546,7 @@ html.book-js .book-static .book-tabs .book-tab {
    ================================================================= */
 .m-pg { display: contents; }
 
-@media (max-width: 900px) and (min-height: 500px) {
+@media (max-width: 900px) and (min-width: 360px) and (min-height: 740px) {
   html.book-mbook .book-experience { padding-bottom: 0; }
 
   html.book-mbook .book-stage {
@@ -1608,7 +1673,7 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-chrome .m-progress span {
     display: block;
     height: 100%;
-    background: linear-gradient(90deg, #ffd05e, var(--gold-500));
+    background: linear-gradient(90deg, #ffb92e, var(--gold-500));
     transform: scaleX(0);
     transform-origin: left center;
   }
@@ -1618,7 +1683,7 @@ html.book-js .book-static .book-tabs .book-tab {
     top: calc(var(--m-top) + var(--m-h) + 9px);
     left: calc(var(--m-left) + 10px);
     z-index: 5;
-    color: #b98a1e;
+    color: #3a2f0b;
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.14em;
@@ -1651,7 +1716,13 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .cover-front { height: 100%; padding: clamp(22px, 4.6svh, 40px) 20px; border-radius: inherit; }
   html.book-mbook .cover-back { display: none; }
   html.book-mbook .book-cover.m-off { visibility: hidden; }
-  html.book-mbook .cover-plaque img { width: clamp(150px, 40vw, 210px); }
+  html.book-mbook .cover-plaque img { width: clamp(120px, 34vw, 170px); }
+  html.book-mbook .page.m-split > .page-inner > nav { display: contents; }
+  html.book-mbook .m-leaf .visual-placeholder { max-height: min(32svh, 280px); padding: 16px; }
+  html.book-mbook .m-leaf .visual-placeholder--portrait,
+  html.book-mbook .m-leaf .visual-placeholder--book-cover { max-height: min(38svh, 320px); }
+  html.book-mbook .m-leaf .role-duo > div { grid-template-columns: 84px 1fr; gap: 8px; }
+  html.book-mbook .m-leaf .diamond-list + .entry-text { margin-top: 8px; }
   html.book-mbook .cover-title { font-size: clamp(1.7rem, 8.4vw, 2.4rem); }
   html.book-mbook .cover-lead { font-size: clamp(0.92rem, 3.9vw, 1.05rem); }
 
@@ -1693,7 +1764,7 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf .page-ornament { margin: 16px 0; }
   html.book-mbook .m-leaf .bookplate-row { margin-bottom: 14px; }
   html.book-mbook .m-leaf .bookplate { padding: 8px 11px; }
-  html.book-mbook .m-leaf .bookplate img { width: clamp(130px, 34vw, 165px); }
+  html.book-mbook .m-leaf .bookplate img { width: clamp(92px, 25vw, 120px); }
   html.book-mbook .m-leaf .ghost-no { font-size: clamp(2.2rem, 9vw, 3rem); margin-bottom: -6px; }
   html.book-mbook .m-leaf .entry { padding: 12px 2px; gap: 11px; }
   html.book-mbook .m-leaf .entry-title { font-size: 1.04rem; }
@@ -1720,10 +1791,62 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf .deco-lines { height: 56px; margin: 14px 0; }
   html.book-mbook .m-leaf .proof-rules { margin: 14px 0; gap: 11px; }
   html.book-mbook .m-leaf .journal-masthead { margin-bottom: 14px; padding: 7px 0 9px; }
-  html.book-mbook .m-leaf .colophon-plaque { width: min(200px, 62%); margin-bottom: 14px; }
+  html.book-mbook .m-leaf .colophon-plaque { width: min(150px, 46%); margin-bottom: 12px; }
   html.book-mbook .m-leaf .micro-colophon { margin-top: 18px; }
   html.book-mbook .m-leaf .platform-note-page { margin-top: 16px; font-size: 0.8rem; }
   html.book-mbook .m-leaf .specimen-row { margin-top: 10px; }
   html.book-mbook .m-leaf .featured-book { margin: 0 auto; }
   html.book-mbook .m-leaf .featured-book img { max-height: min(52svh, 460px); width: auto; max-width: 100%; }
+}
+
+/* Comparison table restacks into cards on narrow presentations. */
+html.book-mbook .compare-table,
+html.book-mbook .compare-table tbody,
+html.book-mbook .compare-table tr,
+html.book-mbook .compare-table th,
+html.book-mbook .compare-table td { display: block; padding: 0; border: 0; }
+html.book-mbook .compare-table thead { display: none; }
+html.book-mbook .compare-table tr {
+  margin-top: 12px;
+  padding: 13px 15px;
+  border: 1px solid var(--gold-line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.45);
+}
+html.book-mbook .compare-table tbody th { margin-bottom: 6px; }
+html.book-mbook .compare-table tbody td { margin-top: 5px; }
+html.book-mbook .compare-table td::before {
+  content: attr(data-th);
+  display: block;
+  color: var(--gold-ink);
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+@media (max-width: 700px) {
+  html:not(.book-mbook) .compare-table,
+  html:not(.book-mbook) .compare-table tbody,
+  html:not(.book-mbook) .compare-table tr,
+  html:not(.book-mbook) .compare-table th,
+  html:not(.book-mbook) .compare-table td { display: block; padding: 0; border: 0; }
+  html:not(.book-mbook) .compare-table thead { display: none; }
+  html:not(.book-mbook) .compare-table tr {
+    margin-top: 12px;
+    padding: 13px 15px;
+    border: 1px solid var(--gold-line);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.45);
+  }
+  html:not(.book-mbook) .compare-table tbody th { margin-bottom: 6px; }
+  html:not(.book-mbook) .compare-table tbody td { margin-top: 5px; }
+  html:not(.book-mbook) .compare-table td::before {
+    content: attr(data-th);
+    display: block;
+    color: var(--gold-ink);
+    font-size: 0.56rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
 }

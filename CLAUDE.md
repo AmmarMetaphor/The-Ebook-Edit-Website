@@ -4,8 +4,8 @@
 Maintain a polished, fast, accessible, multi-page static website for The Ebook Edit, an ebook writing, editing, formatting, and publishing-support brand.
 
 ## Non-negotiable brand rules
-- Preserve the uploaded logo and its white background.
-- Core colors: royal blue #044DD5, deep blue #04329C, gold #FBC341, coral #E46741, cyan #0AC2E5, warm white #FFFDF8.
+- Preserve the approved logo master at assets/images/brand/the-ebook-edit-logo.png (transparent). Never redraw, regenerate, or recolour it; derivatives (WebP, favicon, OG card) are produced from it.
+- Core colors (derived from the approved logo, defined in styles.css :root): deep blue #003190, royal blue #0047B9, bright blue #0068F6 (sparing), cyan #0090C8 (sparing), gold #F5A70A, cream paper #FDF9EE, warm white #FFFDF8. Blue and cream stay dominant; gold is the main accent.
 - Keep the visual style elegant, vibrant, spacious, and editorial—not childish or template-like.
 - Use plain HTML, CSS, and JavaScript. Do not add a framework or build dependency unless explicitly requested.
 - Keep the site deployable on Netlify with publish directory `.` and no build command.
