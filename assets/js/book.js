@@ -534,12 +534,29 @@
     return seg ? Math.round(expTop + (seg.a + 0.03) * vh) : null;
   }
 
-  function spreadIndexForHash(hash) {
+  // Resolve an in-book anchor to its dwell position. Any element id inside a
+  // spread works, not just chapter ids; in mbook mode the target's own leaf
+  // wins so a link can open the book to an exact portrait page.
+  function dwellTopForHash(hash) {
     const id = (hash || '').replace(/^#/, '');
-    if (!id) return -1;
+    if (!id) return null;
     const el = doc.getElementById(id);
-    if (!el) return -1;
-    return spreads.indexOf(el.closest('.spread'));
+    if (!el) return null;
+    if (mode === 'mbook') {
+      const leaf = el.closest('.m-leaf');
+      let li = leaf ? mLeaves.findIndex(l => l.el === leaf) : -1;
+      if (li < 0) {
+        const idx = spreads.indexOf(el.closest('.spread'));
+        li = mLeaves.findIndex(l => l.spreadIdx === idx);
+      }
+      if (li < 0) return null;
+      const seg = msegs.find(s => s.type === 'dwell' && s.i === li);
+      return seg ? Math.round(expTop + (seg.a + 0.03) * vh) : null;
+    }
+    const idx = spreads.indexOf(el.closest('.spread'));
+    if (idx < 0) return null;
+    const seg = segs.find(s => s.type === 'dwell' && s.i === idx);
+    return seg ? Math.round(expTop + (seg.a + 0.03) * vh) : null;
   }
 
   // In-book chapter anchors (the cover's "Open the book" link, contents
@@ -548,9 +565,7 @@
     if (mode !== 'cinematic' && mode !== 'mbook') return;
     const link = event.target.closest('a[href^="#"]');
     if (!link) return;
-    const idx = spreadIndexForHash(link.getAttribute('href'));
-    if (idx < 0) return;
-    const top = dwellTopForSpread(idx);
+    const top = dwellTopForHash(link.getAttribute('href'));
     if (top === null) return;
     event.preventDefault();
     window.scrollTo({ top, behavior: 'smooth' });
@@ -569,9 +584,7 @@
   // Deep links like /services#chapter-3 map onto the timeline.
   function jumpToHash() {
     if (mode !== 'cinematic' && mode !== 'mbook') return;
-    const idx = spreadIndexForHash(window.location.hash);
-    if (idx < 0) return;
-    const top = dwellTopForSpread(idx);
+    const top = dwellTopForHash(window.location.hash);
     if (top !== null) window.scrollTo(0, top);
   }
 
