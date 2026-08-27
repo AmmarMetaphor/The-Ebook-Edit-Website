@@ -102,14 +102,15 @@ body.book-home { background: #a5845a; }
 .cover-plaque {
   position: relative;
   z-index: 1;
-  margin-bottom: clamp(14px, 2.6vh, 26px);
-  padding: clamp(12px, 2vh, 20px) clamp(18px, 2.8vh, 30px);
+  margin-top: clamp(6px, 1.4vh, 14px);
+  margin-bottom: clamp(14px, 2.4vh, 24px);
+  padding: clamp(10px, 1.7vh, 17px) clamp(16px, 2.5vh, 26px);
   border: 1px solid rgba(245, 167, 10, 0.55);
   border-radius: 12px;
   background: linear-gradient(180deg, #fffdf6, #f7efdc);
   box-shadow: inset 0 0 0 4px rgba(255, 253, 246, 0.7), 0 8px 22px rgba(0, 10, 40, 0.32);
 }
-.cover-plaque img { width: clamp(150px, 21vh, 220px); height: auto; }
+.cover-plaque img { width: clamp(140px, 19vh, 200px); height: auto; }
 .cover-eyebrow {
   position: relative;
   z-index: 1;
@@ -339,14 +340,6 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
 .page-lead { color: var(--muted); font-size: clamp(1.02rem, 2vw, 1.18rem); max-width: 56ch; }
 
 .page-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 26px; }
-.page-tags {
-  margin: 36px 0 0;
-  color: var(--gold-ink);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
 .page-more { margin: 24px 0 0; }
 .page-more a { font-weight: 800; text-decoration: none; }
 .page-more a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
@@ -411,26 +404,6 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
 .entry:hover .entry-cta { color: var(--blue-700); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
 
 /* Introduction spread */
-.promise-list { display: grid; gap: 16px; margin: 0 0 6px; padding: 0; list-style: none; }
-.promise-list li { position: relative; padding-left: 20px; }
-.promise-list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.5em;
-  width: 8px;
-  height: 8px;
-  transform: rotate(45deg);
-  background: var(--gold-500);
-}
-.promise-list strong {
-  display: block;
-  color: var(--blue-700);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.05rem;
-}
-.promise-list span { color: var(--muted); font-size: 0.95rem; }
-
 .check-list { display: grid; gap: 12px; margin: 16px 0 0; padding: 0; list-style: none; }
 .check-list li { position: relative; padding-left: 30px; }
 .check-list li::before {
@@ -495,21 +468,6 @@ html.book-js .book-tabs.tabs-on .book-tab:nth-child(6) { transition-delay: 0.25s
 }
 .stage-body h3 { margin: 2px 0 4px; font-size: 1.14rem; }
 .stage-body p { margin: 0; color: var(--muted); font-size: 0.95rem; }
-
-.page-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
-.page-stat {
-  padding: 14px 16px;
-  border: 1px solid rgba(182, 141, 44, 0.35);
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.45);
-}
-.page-stat strong {
-  display: block;
-  color: var(--blue-700);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.1rem;
-}
-.page-stat span { color: var(--muted); font-size: 0.82rem; }
 
 /* Portfolio spread */
 .type-entry { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--gold-line); }
@@ -607,14 +565,13 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
   .book-home { --flow-w: min(100% - 20px, 1040px); }
   .book-cover { width: min(100% - 16px, 1064px); min-height: min(88svh, 760px); }
   .cover-front { padding: 40px 18px; }
-  .cover-plaque img { width: clamp(128px, 34vw, 180px); }
+  .cover-plaque img { width: clamp(118px, 30vw, 160px); }
   .book-tabs { padding: 10px 10px 0; gap: 5px; }
   .book-tab { padding: 9px 11px 8px; font-size: 0.64rem; letter-spacing: 0.08em; }
   .page-inner { padding: 30px 20px 46px; }
   .folio { bottom: 12px; }
   .folio-left { left: 18px; }
   .folio-right { right: 18px; }
-  .page-stats { grid-template-columns: 1fr; }
   .assessment-insert { padding: 24px 20px; }
 }
 
@@ -864,8 +821,23 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
     -webkit-backface-visibility: hidden;
   }
   html.book-cinematic .cover-spine { border-radius: 6px 0 0 6px; width: clamp(12px, 1.6vw, 20px); }
-  html.book-cinematic .cover-plaque img { width: clamp(140px, 20vh, 210px); }
+  html.book-cinematic .cover-plaque img { width: clamp(126px, 17vh, 190px); }
   html.book-cinematic .cover-title { font-size: clamp(1.7rem, 6.6vh, 3.2rem); }
+  /* Short desktop viewports (e.g. 1366x768): compress the cover composition so
+     the logo plaque and every cover element stay inside the gold frame. */
+  @media (max-height: 830px) {
+    html.book-cinematic .cover-plaque {
+      margin-top: 0;
+      margin-bottom: 12px;
+      padding: 8px 16px;
+    }
+    html.book-cinematic .cover-plaque img { width: clamp(104px, 13.5vh, 140px); }
+    html.book-cinematic .cover-eyebrow { margin-bottom: 10px; padding: 6px 15px; }
+    html.book-cinematic .cover-title { margin-bottom: 8px; font-size: clamp(1.6rem, 5.4vh, 2.6rem); }
+    html.book-cinematic .cover-rule { margin-bottom: 10px; }
+    html.book-cinematic .cover-lead { margin-bottom: 12px; font-size: clamp(0.92rem, 2vh, 1.05rem); }
+    html.book-cinematic .cover-hint { margin-top: 10px; }
+  }
   html.book-cinematic .cover-back {
     display: block;
     position: absolute;
@@ -936,13 +908,11 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
   html.book-cinematic .page-inner .eyebrow { font-size: clamp(0.58rem, 1.35vh, 0.72rem); margin-bottom: 10px; }
   html.book-cinematic .page-inner .button { min-height: 40px; padding: 9px 16px; font-size: 0.85rem; }
   html.book-cinematic .page-actions { margin-top: clamp(12px, 2.6vh, 24px); }
-  html.book-cinematic .page-tags { margin-top: auto; padding-top: 16px; }
   html.book-cinematic .page-more { margin-top: clamp(12px, 2.4vh, 22px); }
   html.book-cinematic .page-ornament { margin: clamp(14px, 2.8vh, 26px) 0; }
   html.book-cinematic .entry { padding: clamp(10px, 1.9vh, 18px) 4px; }
   html.book-cinematic .entry-title { font-size: clamp(0.98rem, 2.4vh, 1.16rem); }
   html.book-cinematic .entry-text { font-size: clamp(0.78rem, 1.75vh, 0.92rem); }
-  html.book-cinematic .promise-list { gap: clamp(9px, 1.9vh, 16px); }
   html.book-cinematic .check-list { gap: clamp(7px, 1.5vh, 12px); }
   html.book-cinematic .stage-list { gap: clamp(10px, 2.2vh, 20px); margin-top: clamp(12px, 2.6vh, 24px); }
   html.book-cinematic .stage-body p { font-size: clamp(0.78rem, 1.75vh, 0.92rem); }
@@ -950,7 +920,6 @@ html.book-js:not(.book-cinematic) .page.fx.fx-on { opacity: 1; transform: none; 
   html.book-cinematic .type-entry { margin-top: clamp(10px, 2.2vh, 22px); padding-top: clamp(8px, 1.8vh, 18px); }
   html.book-cinematic .type-entry p { font-size: clamp(0.78rem, 1.8vh, 0.92rem); }
   html.book-cinematic .page-quote p { font-size: clamp(1rem, 2.6vh, 1.35rem); }
-  html.book-cinematic .page-stats { margin-top: clamp(12px, 2.6vh, 24px); }
   html.book-cinematic .assessment-insert { padding: clamp(18px, 3.4vh, 30px) clamp(18px, 3vh, 28px); }
   html.book-cinematic .colophon-plaque img { width: 100%; }
   html.book-cinematic .colophon-plaque { width: min(165px, 52%); margin-bottom: clamp(10px, 2vh, 18px); }
@@ -1026,16 +995,177 @@ html.book-js .book-static .book-tabs .book-tab {
   .entry-thumb { display: none; }
 }
 
-/* Pathway entries: audience routes with a small line icon. */
-.entry-ico {
-  flex: 0 0 36px;
-  height: 36px;
+
+/* Publishing-ambition page (homepage page 2) */
+.feature-heading {
+  margin: 4px 0 10px;
+  color: var(--gold-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+.feature-note {
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1rem;
+}
+.page-emblem {
+  position: absolute;
+  right: 6%;
+  bottom: 7%;
+  width: 150px;
+  color: var(--blue-600);
+  opacity: 0.07;
+  pointer-events: none;
+}
+
+/* In-book enquiry form (homepage page 3) */
+.page-form { margin-top: 6px; }
+.page-form .form-grid { gap: 12px 14px; }
+.page-form label { font-size: 0.78rem; }
+.page-form .label-optional { color: var(--muted); font-weight: 600; }
+.page-form input,
+.page-form select { min-height: 44px; padding: 9px 12px; font-size: 0.95rem; }
+.page-form textarea { min-height: 84px; padding: 9px 12px; font-size: 0.95rem; }
+.page-form .button { width: 100%; }
+.page-form .form-note { margin: 10px 0 0; font-size: 0.78rem; line-height: 1.5; }
+
+/* Five-stage process infographic (homepage pages 4-5) */
+.info-sub {
+  margin: -4px 0 22px;
+  color: var(--gold-ink);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 0.98rem;
+}
+.info-stages { position: relative; display: grid; gap: 22px; margin: 8px 0 0; padding: 0; list-style: none; }
+.info-stages li { position: relative; display: flex; gap: 16px; }
+.info-stages li::before {
+  content: "";
+  position: absolute;
+  left: 23px;
+  top: 50px;
+  bottom: -22px;
+  border-left: 2px dotted rgba(245, 167, 10, 0.55);
+}
+.info-stages li:last-child::before { display: none; }
+.info-no {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
   display: grid;
   place-items: center;
-  color: var(--brand-cyan);
+  border: 2px solid var(--gold-500);
+  border-radius: 50%;
+  background: #fffdf6;
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.02rem;
+  font-weight: 700;
+  box-shadow: 0 0 0 4px rgba(245, 167, 10, 0.14);
 }
-.entry-ico svg { width: 26px; height: 26px; }
+.info-body h3 { margin: 4px 0 4px; font-size: 1.08rem; }
+.info-body p { margin: 0; max-width: 42ch; color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+.info-emblem { width: min(150px, 34%); margin: 0 auto 18px; }
+.info-emblem svg { width: 100%; height: auto; display: block; filter: drop-shadow(0 8px 18px rgba(1, 28, 82, 0.18)); }
+/* The journey line leaves the left page and enters the right one. */
+.info-flow {
+  position: relative;
+  height: 2px;
+  margin: 24px 0 0;
+  border-top: 2px dotted rgba(245, 167, 10, 0.55);
+}
+.info-flow-out { margin-left: 46%; }
+.info-flow-out::after {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: -5px;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid rgba(245, 167, 10, 0.8);
+  border-right: 2px solid rgba(245, 167, 10, 0.8);
+  transform: rotate(45deg);
+}
+.info-flow-in { margin: 0 46% 20px 0; }
 
+/* Journey pathway cards (homepage pages 6-7) */
+.journey-card {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+  padding: 16px 18px;
+  border: 1px solid rgba(185, 138, 30, 0.45);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 6px 18px rgba(60, 40, 8, 0.07);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.journey-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--blue-600);
+  box-shadow: 0 14px 30px rgba(1, 28, 82, 0.14);
+}
+.jc-ico {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  background: linear-gradient(160deg, var(--blue-600), var(--blue-700));
+  color: var(--gold-500);
+  box-shadow: inset 0 0 0 1px rgba(245, 167, 10, 0.35);
+}
+.jc-ico svg { width: 26px; height: 26px; }
+.journey-card:nth-of-type(2n) .jc-ico { color: #7adcf7; }
+.jc-body { display: grid; gap: 5px; min-width: 0; }
+.jc-title {
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.journey-card:hover .jc-title { color: var(--blue-600); }
+.jc-text { color: var(--muted); font-size: 0.9rem; line-height: 1.5; }
+.jc-cta { color: var(--blue-600); font-size: 0.86rem; font-weight: 800; }
+.journey-card:hover .jc-cta { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.jc-link {
+  width: 2px;
+  height: 20px;
+  margin: 2px 0 2px 40px;
+  border-left: 2px dotted rgba(245, 167, 10, 0.6);
+}
+.jc-more { margin-top: 22px; }
+
+/* Emotional closing page (homepage page 12) */
+.close-mark {
+  position: absolute;
+  right: 4%;
+  top: 1%;
+  color: rgba(245, 167, 10, 0.18);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 11rem;
+  line-height: 1;
+  pointer-events: none;
+}
+.close-line {
+  margin: 4px 0 0;
+  color: var(--blue-700);
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: 1.15rem;
+}
+
+/* Pathway entries retired: replaced by .journey-card. */
 /* Editing levels: a genuine table on wide pages that restacks into
    comparison cards on narrow screens via each cell's data-th label. */
 .compare-table { width: 100%; margin: 20px 0 0; border-collapse: collapse; table-layout: fixed; }
@@ -1716,13 +1846,48 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .cover-front { height: 100%; padding: clamp(22px, 4.6svh, 40px) 20px; border-radius: inherit; }
   html.book-mbook .cover-back { display: none; }
   html.book-mbook .book-cover.m-off { visibility: hidden; }
-  html.book-mbook .cover-plaque img { width: clamp(120px, 34vw, 170px); }
+  html.book-mbook .cover-plaque img { width: clamp(108px, 28vw, 150px); }
   html.book-mbook .page.m-split > .page-inner > nav { display: contents; }
   html.book-mbook .m-leaf .visual-placeholder { max-height: min(32svh, 280px); padding: 16px; }
   html.book-mbook .m-leaf .visual-placeholder--portrait,
   html.book-mbook .m-leaf .visual-placeholder--book-cover { max-height: min(38svh, 320px); }
   html.book-mbook .m-leaf .role-duo > div { grid-template-columns: 84px 1fr; gap: 8px; }
   html.book-mbook .m-leaf .diamond-list + .entry-text { margin-top: 8px; }
+  html.book-mbook .m-leaf .page-emblem { display: none; }
+  html.book-mbook .m-leaf .close-mark { font-size: 7rem; right: 2%; top: 0; }
+  html.book-mbook .m-leaf .info-sub { margin: -2px 0 14px; font-size: 0.9rem; }
+  html.book-mbook .m-leaf .info-stages { gap: 16px; }
+  html.book-mbook .m-leaf .info-stages li::before { bottom: -16px; }
+  html.book-mbook .m-leaf .info-no { flex-basis: 40px; width: 40px; height: 40px; font-size: 0.92rem; }
+  html.book-mbook .m-leaf .info-stages li::before { left: 20px; top: 44px; }
+  html.book-mbook .m-leaf .info-body p { font-size: 0.86rem; }
+  html.book-mbook .m-leaf .info-emblem { width: min(118px, 32%); margin-bottom: 12px; }
+  html.book-mbook .m-leaf .info-flow { display: none; }
+  html.book-mbook .m-leaf .journey-card { padding: 13px 14px; gap: 12px; }
+  html.book-mbook .m-leaf .jc-ico { flex-basis: 40px; width: 40px; height: 40px; border-radius: 11px; }
+  html.book-mbook .m-leaf .jc-ico svg { width: 22px; height: 22px; }
+  html.book-mbook .m-leaf .jc-title { font-size: 1rem; }
+  html.book-mbook .m-leaf .jc-text { font-size: 0.85rem; }
+  html.book-mbook .m-leaf .jc-link { height: 14px; margin-left: 34px; }
+  html.book-mbook .m-leaf .jc-more { margin-top: 14px; }
+  html.book-mbook .m-leaf .page-form label { font-size: 0.72rem; }
+  html.book-mbook .m-leaf .page-form input,
+  html.book-mbook .m-leaf .page-form select { min-height: 44px; padding: 8px 11px; font-size: 16px; }
+  html.book-mbook .m-leaf .page-form textarea { min-height: 60px; padding: 8px 11px; font-size: 16px; }
+  html.book-mbook .m-leaf .page-form .form-note { margin-top: 7px; font-size: 0.68rem; line-height: 1.45; }
+  html.book-mbook .m-leaf .field { gap: 3px; }
+  html.book-mbook .m-leaf.page-form-page .eyebrow { margin-bottom: 6px; font-size: 0.62rem; }
+  html.book-mbook .m-leaf.page-form-page h2 { margin-bottom: 0.28em; font-size: 1.1rem; }
+  html.book-mbook .m-leaf.page-form-page .page-lead { margin-bottom: 0.5em; font-size: 0.83rem; }
+  html.book-mbook .m-leaf.page-form-page .page-form { margin-top: 0; }
+  html.book-mbook .m-leaf.page-form-page .page-form .form-grid { grid-template-columns: 1fr 1fr; gap: 6px 8px; }
+  html.book-mbook .m-leaf.page-form-page .page-form .form-grid > .field:has(select) { grid-column: 1 / -1; }
+  html.book-mbook .m-leaf.page-form-page .page-form label { font-size: 0.68rem; }
+  html.book-mbook .m-leaf.page-form-page .page-form input,
+  html.book-mbook .m-leaf.page-form-page .page-form select { min-height: 42px; padding: 7px 10px; }
+  html.book-mbook .m-leaf.page-form-page .page-form textarea { min-height: 42px; padding: 7px 10px; }
+  html.book-mbook .m-leaf.page-form-page .page-form .button { min-height: 44px; padding: 9px 16px; }
+  html.book-mbook .m-leaf.page-form-page .page-form .form-note { margin-top: 6px; font-size: 0.64rem; line-height: 1.4; }
   html.book-mbook .cover-title { font-size: clamp(1.7rem, 8.4vw, 2.4rem); }
   html.book-mbook .cover-lead { font-size: clamp(0.92rem, 3.9vw, 1.05rem); }
 
@@ -1759,7 +1924,6 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf p { margin-bottom: 0.8em; }
   html.book-mbook .m-leaf .button { min-height: 44px; padding: 10px 16px; font-size: 0.93rem; }
   html.book-mbook .m-leaf .page-actions { margin-top: 12px; gap: 9px; }
-  html.book-mbook .m-leaf .page-tags { margin-top: 14px; font-size: 0.6rem; }
   html.book-mbook .m-leaf .page-more { margin-top: 14px; }
   html.book-mbook .m-leaf .page-ornament { margin: 16px 0; }
   html.book-mbook .m-leaf .bookplate-row { margin-bottom: 14px; }
@@ -1769,8 +1933,6 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf .entry { padding: 12px 2px; gap: 11px; }
   html.book-mbook .m-leaf .entry-title { font-size: 1.04rem; }
   html.book-mbook .m-leaf .entry-text { font-size: 0.88rem; }
-  html.book-mbook .m-leaf .promise-list { gap: 11px; }
-  html.book-mbook .m-leaf .promise-list span { font-size: 0.88rem; }
   html.book-mbook .m-leaf .check-list { gap: 9px; margin-top: 10px; }
   html.book-mbook .m-leaf .check-list li { font-size: 0.92rem; }
   html.book-mbook .m-leaf .diamond-list { gap: 8px; margin-top: 9px; }
@@ -1785,8 +1947,6 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf .type-entry p { font-size: 0.9rem; }
   html.book-mbook .m-leaf .page-quote { margin-top: 14px; padding-left: 16px; }
   html.book-mbook .m-leaf .page-quote p { font-size: 1.08rem; }
-  html.book-mbook .m-leaf .page-stats { grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 12px; }
-  html.book-mbook .m-leaf .page-stat { padding: 10px 14px; }
   html.book-mbook .m-leaf .assessment-insert { padding: 20px 18px; }
   html.book-mbook .m-leaf .deco-lines { height: 56px; margin: 14px 0; }
   html.book-mbook .m-leaf .proof-rules { margin: 14px 0; gap: 11px; }
