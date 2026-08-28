@@ -996,6 +996,56 @@ html.book-js .book-static .book-tabs .book-tab {
 }
 
 
+
+/* Start a Project: the enquiry form designed into the book page. */
+.form-title {
+  margin: 0 0 4px;
+  color: var(--gold-ink);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.form-support { margin: 0 0 clamp(8px, 1.5vh, 16px); color: var(--muted); font-size: clamp(0.78rem, 1.8vh, 0.9rem); }
+.start-form { width: 100%; }
+.start-form .form-grid { gap: clamp(6px, 1.2vh, 14px) 14px; }
+.m-pg + .m-pg > .form-grid { margin-top: clamp(6px, 1.2vh, 14px); }
+.start-form label { font-size: clamp(0.72rem, 1.75vh, 0.85rem); font-weight: 800; color: var(--blue-700); }
+.start-form .field { gap: clamp(2px, 0.5vh, 6px); }
+.start-form input,
+.start-form select {
+  min-height: clamp(34px, 4.2vh, 46px);
+  padding: 6px 12px;
+  font-size: clamp(0.86rem, 1.9vh, 0.95rem);
+  border-color: rgba(185, 138, 30, 0.55);
+  background: #fffdf6;
+}
+.start-form textarea {
+  min-height: clamp(48px, 6.5vh, 110px);
+  padding: 8px 12px;
+  font-size: clamp(0.86rem, 1.9vh, 0.95rem);
+  border-color: rgba(185, 138, 30, 0.55);
+  background: #fffdf6;
+}
+.start-form .button { width: 100%; min-height: clamp(40px, 5.4vh, 50px); padding: 8px 20px; }
+.start-form .form-note { margin: clamp(5px, 1vh, 10px) 0 0; font-size: clamp(0.64rem, 1.5vh, 0.76rem); line-height: 1.45; }
+.start-form .field-error {
+  margin: 2px 0 0;
+  color: #b3261e;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.start-form .field.has-error input,
+.start-form .field.has-error select { border-color: #b3261e; }
+body.book-theme-contact .page-inner h1 { font-size: clamp(1.5rem, 4.8vh, 2.7rem); }
+body.book-theme-contact .bookplate img { width: clamp(96px, 13vh, 132px); }
+body.book-theme-contact .page-lead { font-size: clamp(0.92rem, 2.2vh, 1.12rem); }
+.start-steps { margin-top: clamp(8px, 1.6vh, 16px); gap: clamp(10px, 2vh, 18px); }
+.start-steps .stage-body p { font-size: clamp(0.85rem, 2vh, 0.95rem); }
+.start-steps .stage-no { flex-basis: 32px; width: 32px; height: 32px; font-size: 0.9rem; border-radius: 10px; }
+.start-hint { margin: clamp(8px, 1.6vh, 16px) 0 0; color: var(--muted); font-size: clamp(0.76rem, 1.8vh, 0.85rem); }
+
 /* Publishing-ambition page (homepage page 2) */
 .feature-heading {
   margin: 4px 0 10px;
@@ -1383,22 +1433,6 @@ html.book-js .book-static .book-tabs .book-tab {
 }
 
 /* Contact volume: correspondence paper around the Netlify form. */
-.letter-form {
-  position: relative;
-  padding: clamp(22px, 3vw, 34px);
-  border: 1px solid rgba(182, 141, 44, 0.5);
-  border-radius: 12px;
-  background: #fffefa;
-  box-shadow: 0 14px 30px rgba(60, 35, 5, 0.12);
-}
-.letter-form::before {
-  content: "";
-  position: absolute;
-  inset: 9px;
-  border: 1px solid rgba(182, 141, 44, 0.25);
-  border-radius: 8px;
-  pointer-events: none;
-}
 .book-home details { border-color: rgba(182, 141, 44, 0.4); background: #fffdf6; }
 
 /* 404 volume: the missing chapter slot. */
@@ -1847,7 +1881,8 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .cover-back { display: none; }
   html.book-mbook .book-cover.m-off { visibility: hidden; }
   html.book-mbook .cover-plaque img { width: clamp(108px, 28vw, 150px); }
-  html.book-mbook .page.m-split > .page-inner > nav { display: contents; }
+  html.book-mbook .page.m-split > .page-inner > nav,
+  html.book-mbook .page.m-split > .page-inner > form { display: contents; }
   html.book-mbook .m-leaf .visual-placeholder { max-height: min(32svh, 280px); padding: 16px; }
   html.book-mbook .m-leaf .visual-placeholder--portrait,
   html.book-mbook .m-leaf .visual-placeholder--book-cover { max-height: min(38svh, 320px); }
@@ -1876,6 +1911,18 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf .page-form textarea { min-height: 60px; padding: 8px 11px; font-size: 16px; }
   html.book-mbook .m-leaf .page-form .form-note { margin-top: 7px; font-size: 0.68rem; line-height: 1.45; }
   html.book-mbook .m-leaf .field { gap: 3px; }
+  html.book-mbook .m-leaf .start-form-part .form-grid,
+  html.book-mbook .start-form .m-leaf .form-grid { grid-template-columns: 1fr; }
+  html.book-mbook .m-leaf.start-form-part .form-grid { grid-template-columns: 1fr; gap: 10px; }
+  html.book-mbook .m-leaf.start-form-part label { font-size: 0.8rem; }
+  html.book-mbook .m-leaf.start-form-part input,
+  html.book-mbook .m-leaf.start-form-part select { min-height: 48px; font-size: 16px; }
+  html.book-mbook .m-leaf.start-form-part textarea { min-height: 120px; font-size: 16px; }
+  html.book-mbook .m-leaf.start-form-part .button { min-height: 52px; }
+  html.book-mbook .m-leaf.start-form-part .form-support { margin-bottom: 8px; font-size: 0.82rem; }
+  html.book-mbook .m-leaf.start-form-part .form-title { font-size: 0.66rem; margin-bottom: 4px; }
+  html.book-mbook .m-leaf.start-form-part .field { gap: 3px; }
+  html.book-mbook .m-leaf.start-form-part .form-note { margin-top: 8px; font-size: 0.68rem; line-height: 1.45; }
   html.book-mbook .m-leaf.page-form-page .eyebrow { margin-bottom: 6px; font-size: 0.62rem; }
   html.book-mbook .m-leaf.page-form-page h2 { margin-bottom: 0.28em; font-size: 1.1rem; }
   html.book-mbook .m-leaf.page-form-page .page-lead { margin-bottom: 0.5em; font-size: 0.83rem; }
@@ -1958,6 +2005,32 @@ html.book-js .book-static .book-tabs .book-tab {
   html.book-mbook .m-leaf .featured-book { margin: 0 auto; }
   html.book-mbook .m-leaf .featured-book img { max-height: min(52svh, 460px); width: auto; max-width: 100%; }
 }
+
+
+/* Start a Project chapter: height-responsive scaling that must outrank the
+   generic cinematic typography overrides. */
+html.book-cinematic body.book-theme-contact .bookplate img { width: clamp(92px, 12.5vh, 132px); }
+html.book-cinematic body.book-theme-contact .page-inner h1 { font-size: clamp(1.45rem, 4.5vh, 2.6rem); }
+html.book-cinematic body.book-theme-contact .page-lead { font-size: clamp(0.88rem, 1.95vh, 1.08rem); line-height: 1.5; margin-bottom: clamp(8px, 1.5vh, 16px); }
+html.book-cinematic body.book-theme-contact .feature-note { font-size: clamp(0.85rem, 1.95vh, 1rem); margin-bottom: clamp(8px, 1.5vh, 18px); }
+html.book-cinematic body.book-theme-contact .start-steps .stage-no {
+  flex-basis: clamp(26px, 3.6vh, 32px);
+  width: clamp(26px, 3.6vh, 32px);
+  height: clamp(26px, 3.6vh, 32px);
+  font-size: clamp(0.78rem, 1.8vh, 0.9rem);
+}
+html.book-cinematic body.book-theme-contact .start-steps .stage-body p { margin: 2px 0 0; }
+html.book-cinematic body.book-theme-contact .start-steps { gap: clamp(8px, 1.7vh, 16px); }
+html.book-cinematic body.book-theme-contact .bookplate-row { margin-bottom: clamp(6px, 1.4vh, 14px); }
+html.book-cinematic body.book-theme-contact .form-title {
+  font-size: clamp(0.72rem, 1.7vh, 0.8rem);
+  font-family: inherit;
+  letter-spacing: 0.16em;
+  margin-bottom: clamp(2px, 0.6vh, 6px);
+}
+html.book-cinematic body.book-theme-contact .start-hint { margin-top: clamp(6px, 1.2vh, 14px); font-size: clamp(0.74rem, 1.7vh, 0.85rem); }
+html.book-cinematic body.book-theme-contact #chapter-1 .eyebrow { margin-bottom: clamp(5px, 1.1vh, 12px); }
+html.book-cinematic body.book-theme-contact #chapter-1 h1 { margin-bottom: clamp(6px, 1.4vh, 14px); }
 
 /* Comparison table restacks into cards on narrow presentations. */
 html.book-mbook .compare-table,
