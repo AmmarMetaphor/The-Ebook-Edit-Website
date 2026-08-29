@@ -1,6 +1,7 @@
 <?php
 /**
- * Services overview page.
+ * services — generated from the static site by wordpress/sync-from-static.py.
+ * Edit the static page and re-run the script; do not hand-edit this file.
  *
  * @package the-ebook-edit
  */
@@ -8,16 +9,290 @@
 get_header();
 ?>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Services</p><h1>Editorial support from idea to publication.</h1><p class="lead">Build a complete ebook or strengthen one specific stage with writing, editing, formatting, and publishing services tailored to your manuscript.</p></div></section>
-<section class="section"><div class="container grid-2 service-card-grid">
-  <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/writing/' ) ); ?>"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">W</div><h2>Ebook writing</h2><p>Transform expertise, interviews, notes, recordings, or a rough draft into a coherent manuscript that sounds natural and purposeful.</p><ul class="service-list"><li>Concept and audience positioning</li><li>Book promise and chapter outline</li><li>Research planning and source organization</li><li>Ghostwriting or collaborative writing</li><li>Revision based on structured feedback</li></ul><span class="card-cta" aria-hidden="true">Explore writing services →</span></article></a>
-  <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/editing/' ) ); ?>"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">E</div><h2>Editing</h2><p>Choose the editing level that matches the manuscript’s needs, from big-picture structure to final proofreading.</p><ul class="service-list"><li>Editorial assessment</li><li>Developmental editing</li><li>Line and copy editing</li><li>Proofreading</li><li>Style sheet and consistency checks</li></ul><span class="card-cta" aria-hidden="true">Explore editing services →</span></article></a>
-  <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>#formatting"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">F</div><h2>Formatting and conversion</h2><p>Prepare an attractive, readable, and technically clean ebook interior for common digital reading environments.</p><ul class="service-list"><li>EPUB preparation</li><li>PDF layout</li><li>Clickable table of contents</li><li>Front and back matter setup</li><li>Device and file quality checks</li></ul><span class="card-cta" aria-hidden="true">Explore formatting support →</span></article></a>
-  <a class="service-card-link reveal" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>"><article class="card card-accent service-card"><div class="icon-tile" aria-hidden="true">P</div><h2>Publishing support</h2><p>Move from final files to a clear publication plan with practical guidance around metadata, platforms such as Amazon KDP, Apple Books, Kobo, Google Play Books, and Barnes &amp; Noble Press, and launch materials.</p><ul class="service-list"><li>Publishing route planning</li><li>Book description and metadata support</li><li>Upload checklist and file organization</li><li>Quality assurance before launch</li><li>Post-publication update plan</li></ul><span class="card-cta" aria-hidden="true">Explore publishing support →</span></article></a>
-</div></section>
-<section class="section section-blue"><div class="container split"><div><p class="eyebrow">Not sure what you need?</p><h2>Begin with an editorial assessment.</h2><p class="lead">We review the manuscript’s structure, clarity, consistency, readiness, and likely next steps before recommending a scope.</p></div><div class="assessment-panel"><ul class="mini-list"><li><span class="tick">✓</span><span>Current strengths and risks</span></li><li><span class="tick">✓</span><span>Recommended editing level</span></li><li><span class="tick">✓</span><span>Priority improvements</span></li><li><span class="tick">✓</span><span>Suggested production sequence</span></li></ul><a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request an assessment</a></div></div></section>
-<section class="section"><div class="container"><p class="eyebrow">Common combinations</p><h2>Services can be combined without overcomplicating the project.</h2><div class="grid-3 cards"><article class="card"><h3>Draft to polished manuscript</h3><p>Developmental edit → author revision → copy edit → proofread.</p></article><article class="card"><h3>Idea to complete ebook</h3><p>Strategy → outline → collaborative writing → full editorial workflow.</p></article><article class="card"><h3>Manuscript to market</h3><p>Final edit → formatting → metadata → upload and launch checklist.</p></article></div></div></section>
-<section class="section-tight"><div class="container"><div class="cta-band"><h2>Get a scope built around the actual manuscript.</h2><p>Share the current draft, approximate length, desired services, and target date. No generic package should replace a careful review of the work.</p><a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Tell us about your project</a></div></div></section>
+<div class="book-experience book-open-start">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book">
+        <div class="book-shadow" aria-hidden="true"></div>
+
+        <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>" aria-current="page">Services</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
+          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
+        </nav>
+
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="services-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="bookplate-row"><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
+                <p class="eyebrow">Services</p>
+                <h1 id="services-title">Editorial support from idea to publication.</h1>
+                <p class="page-lead">Build a complete ebook or strengthen one specific stage. Every engagement is scoped around the actual manuscript — never a generic package.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <nav aria-label="Catalogue contents">
+                  <div class="m-pg">
+                  <ul class="contents-list">
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">01</span><span class="contents-title">Ebook strategy and planning</span></a></li>
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">02</span><span class="contents-title">Ebook ghostwriting</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">03</span><span class="contents-title">Developmental editing</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">04</span><span class="contents-title">Line editing</span></a></li>
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">05</span><span class="contents-title">Copy editing</span></a></li>
+                  </ul>
+                  </div>
+                  <div class="m-pg">
+                  <ul class="contents-list">
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">06</span><span class="contents-title">Proofreading</span></a></li>
+                    <li><a href="#chapter-5"><span class="contents-no" aria-hidden="true">07</span><span class="contents-title">Ebook formatting and conversion</span></a></li>
+                    <li><a href="#chapter-5"><span class="contents-no" aria-hidden="true">08</span><span class="contents-title">Publishing support</span></a></li>
+                    <li><a href="#chapter-6"><span class="contents-no" aria-hidden="true">09</span><span class="contents-title">Editorial assessment</span></a></li>
+                    <li><a href="#chapter-6"><span class="contents-no" aria-hidden="true">10</span><span class="contents-title">End-to-end ebook development</span></a></li>
+                  </ul>
+                  </div>
+                </nav>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-2" aria-labelledby="strategy-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">01</span>
+                <p class="entry-label">For authors and experts at the idea stage</p>
+                <h2 id="strategy-title">Ebook strategy and planning</h2>
+                <p>Solves the hardest early problem: knowing exactly what book to write, for whom, and in what shape.</p>
+                <ul class="diamond-list">
+                  <li>Reader definition and book promise</li>
+                  <li>Chapter map and content plan</li>
+                  <li>Length, format and voice recommendation</li>
+                  <li>Realistic production schedule</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> an approved book brief and outline, ready for writing to begin — yours or ours.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">4</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">02</span>
+                <p class="entry-label">For experts without the time to write</p>
+                <h2>Ebook ghostwriting</h2>
+                <p>You provide interviews, source material and feedback; we develop the chapters in an agreed voice.</p>
+                <ul class="diamond-list">
+                  <li>Interview-led research and drafting</li>
+                  <li>Voice sample approved before full writing</li>
+                  <li>Milestone reviews and structured revisions</li>
+                  <li>Confidential collaboration throughout</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a complete manuscript published in your name — authorship and ownership stay with you.</p>
+                <p class="page-more"><a href="<?php echo esc_url( home_url( '/writing/' ) ); ?>">Explore writing in detail →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">5</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-3" aria-labelledby="dev-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">03</span>
+                <p class="entry-label">For complete drafts with structural doubts</p>
+                <h2 id="dev-title">Developmental editing</h2>
+                <p>Solves problems of argument, order and depth before any sentence polishing. You provide the full draft; we examine how the book works as a whole.</p>
+                <ul class="diamond-list">
+                  <li>Chapter-level comments and analysis</li>
+                  <li>Structural recommendations</li>
+                  <li>Content additions, cuts and reordering</li>
+                  <li>A prioritised revision roadmap</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a marked manuscript and editorial letter. You revise next, with a clear plan.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">6</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">04</span>
+                <p class="entry-label">For settled structure, unpolished prose</p>
+                <h2>Line editing</h2>
+                <p>Refines how the writing reads: rhythm, clarity, tone, emphasis and flow, sentence by sentence — while protecting the personality of your voice.</p>
+                <ul class="diamond-list">
+                  <li>Sentence-level rewriting and tightening</li>
+                  <li>Tracked changes with editorial queries</li>
+                  <li>Tone and transition refinement</li>
+                  <li>Voice preserved and strengthened</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a refined manuscript that still sounds unmistakably like you.</p>
+                <p class="page-more"><a href="<?php echo esc_url( home_url( '/editing/' ) ); ?>">Compare the editing levels →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">7</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-4" aria-labelledby="copy-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">05</span>
+                <p class="entry-label">For stable manuscripts needing correctness</p>
+                <h2 id="copy-title">Copy editing</h2>
+                <p>Brings professional accuracy and consistency once the content is settled. You provide the revised draft; we correct and standardise it line by line.</p>
+                <ul class="diamond-list">
+                  <li>Grammar, punctuation and usage</li>
+                  <li>Consistency of terms, names and numbers</li>
+                  <li>Cross-references and internal logic</li>
+                  <li>A project style sheet</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a corrected manuscript and the style sheet that keeps future updates consistent.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">8</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">06</span>
+                <p class="entry-label">For formatted books before release</p>
+                <h2>Proofreading</h2>
+                <p>The final quality check after editing and formatting are complete — catching remaining errors rather than reworking the writing.</p>
+                <ul class="diamond-list">
+                  <li>Typos, punctuation and spacing</li>
+                  <li>Formatting and heading consistency</li>
+                  <li>Navigation, links and page breaks</li>
+                  <li>Final file review</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a clean, publication-ready text. Proofreading is a last check, not a substitute for editing.</p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">9</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-5" aria-labelledby="format-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">07</span>
+                <p class="entry-label">For approved final manuscripts</p>
+                <h2 id="format-title">Ebook formatting and conversion</h2>
+                <p>Turns the finished text into clean, technically sound files that read comfortably on every major device and store.</p>
+                <ul class="diamond-list">
+                  <li>EPUB conversion and cleanup</li>
+                  <li>Kindle-compatible preparation</li>
+                  <li>PDF layout where required</li>
+                  <li>Clickable contents, front and back matter</li>
+                  <li>Validation and device checks</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> upload-ready files plus the organised source manuscript.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">10</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">08</span>
+                <p class="entry-label">For authors facing the upload stage</p>
+                <h2>Publishing support</h2>
+                <p>Removes the uncertainty of the final steps. We prepare everything the platforms ask for; your accounts, rights and publishing decision remain entirely yours.</p>
+                <ul class="diamond-list">
+                  <li>Metadata, description and categories</li>
+                  <li>Checklists for Amazon KDP, Apple Books, Kobo and more</li>
+                  <li>Pre-launch quality assurance</li>
+                  <li>Written handoff of files and settings</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> an organised publishing package and a clear upload plan.</p>
+                <p class="page-more"><a href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>">Explore publishing in detail →</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">11</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-6" aria-labelledby="assessment-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">09</span>
+                <p class="entry-label">For manuscripts with an unclear diagnosis</p>
+                <h2 id="assessment-title">Editorial assessment</h2>
+                <p>The sensible starting point when you are unsure what the manuscript needs. A diagnostic read that tells you what is working, what is not, and what to do first.</p>
+                <ul class="diamond-list">
+                  <li>Strengths, risks and audience fit</li>
+                  <li>Recommended editing level</li>
+                  <li>Priority improvements</li>
+                  <li>Suggested production sequence</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a written assessment and a recommendation you can act on — with us or independently.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">12</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">10</span>
+                <p class="entry-label">For one partner from idea to publication</p>
+                <h2>End-to-end ebook development</h2>
+                <p>One managed engagement that carries the book from strategy through writing, editing, formatting and publishing preparation — without you coordinating separate specialists.</p>
+                <ul class="diamond-list">
+                  <li>Strategy, outline and voice development</li>
+                  <li>Writing or collaborative drafting</li>
+                  <li>Full editorial sequence</li>
+                  <li>Formatting and publishing package</li>
+                </ul>
+                <p class="entry-text"><strong>You receive:</strong> a finished, publication-ready ebook and organised files for future editions.</p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">13</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-7" aria-labelledby="engagement-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">How engagements work</p>
+                <h2 id="engagement-title">Every service answers the same three questions.</h2>
+                <ul class="stage-list">
+                  <li><span class="stage-no" aria-hidden="true">P</span><div class="stage-body"><h3>What you provide</h3><p>Source material, one consolidated set of feedback per milestone, and approvals at agreed decision points.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">R</span><div class="stage-body"><h3>What you receive</h3><p>Defined deliverables — manuscripts, letters, style sheets, files — organised and explained, never a vague handover.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">N</span><div class="stage-body"><h3>What happens next</h3><p>A recommendation for the following stage, with no obligation to continue. Scope is agreed in writing before work begins.</p></div></li>
+                </ul>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">14</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="assessment-insert">
+                  <h3>Not sure where to begin?</h3>
+                  <ul class="check-list check-list-light">
+                    <li>Current strengths and risks</li>
+                    <li>Recommended editing level</li>
+                    <li>Priority improvements</li>
+                    <li>Suggested production sequence</li>
+                  </ul>
+                  <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request an assessment</a>
+                </div>
+                <p class="page-more"><a href="#chapter-1">Back to contents ↑</a></p>
+                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">15</span>
+            </div>
+          </section>
+
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
+        </div>
+
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
 
 <?php
 get_footer();

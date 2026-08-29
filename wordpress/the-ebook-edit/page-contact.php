@@ -1,32 +1,90 @@
 <?php
 /**
- * Contact page. The page body holds the Contact Form 7 shortcode, which renders
- * inside the original form shell.
+ * contact — generated from the static site by wordpress/sync-from-static.py.
+ * Edit the static page and re-run the script; do not hand-edit this file.
  *
  * @package the-ebook-edit
  */
 
 get_header();
-
-$teebe_form_markup = '';
-
-if ( have_posts() ) {
-	the_post();
-	$teebe_form_markup = trim( get_the_content() );
-}
 ?>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Start a project</p><h1>Tell us about the ebook you want to create or improve.</h1><p class="lead">The more context you provide, the easier it is to recommend the right scope, sequence, and next step.</p></div></section>
-<section class="section"><div class="container split"><div><p class="eyebrow">Helpful information</p><h2>What to include in your inquiry</h2><ul class="service-list"><li>Your ebook topic, genre, and intended reader</li><li>Current manuscript stage and approximate word count</li><li>Services you think you need</li><li>Your desired completion or launch date</li><li>Any source material, brand requirements, or publishing platform (for example, Amazon KDP, Apple Books, Kobo, Google Play Books, Barnes &amp; Noble Press, or Draft2Digital)</li></ul><div class="notice"><strong>Contact details:</strong> Email <a href="mailto:info@theebookedit.com">info@theebookedit.com</a>. We work with authors and organizations across the UK and US, and we aim to reply within 24 hours.</div></div><div class="form-shell">
-<?php
-if ( '' !== $teebe_form_markup ) {
-	the_content();
-} else {
-	echo '<div class="notice"><strong>Contact form not configured.</strong> Add the Contact Form 7 shortcode to this page in WordPress. The form configuration is in DEPLOYMENT.md inside the theme folder.</div>';
-}
-?>
-</div></div></section>
-<section class="section section-soft"><div class="container"><p class="eyebrow">Frequently asked questions</p><h2>Before you send the inquiry</h2><div class="faqs"><details><summary>Can I ask for help if I only have an idea?</summary><p>Yes. A writing or book-development project can begin with a concept, notes, interviews, or existing content rather than a complete draft.</p></details><details><summary>Do you guarantee sales or bestseller status?</summary><p>No. Editorial and publishing support can improve quality and readiness, but sales depend on many factors outside an editor’s control.</p></details><details><summary>Will you publish my ebook for me on Kindle or another platform?</summary><p>No. You keep control of your publishing accounts, rights, tax and payment details, and the final decision to publish. We prepare your files, metadata, and a practical plan for your chosen platform(s) — see <a href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>">publishing support</a> for more detail.</p></details><details><summary>Will my material remain confidential?</summary><p>Confidentiality expectations, file handling, access, and any formal agreement should be confirmed before sensitive material is shared.</p></details></div></div></section>
+<div class="book-experience book-open-start">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book">
+        <div class="book-shadow" aria-hidden="true"></div>
+
+        <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
+          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" aria-current="page">Start a project</a>
+        </nav>
+
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="start-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <div class="m-pg">
+                <p class="bookplate-row"><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
+                <p class="eyebrow">Start a project</p>
+                <h1 id="start-title">Tell Us About the Book You Want to Create or Improve.</h1>
+                <p class="page-lead">Whether you have an early idea, notes, a manuscript in progress or a book ready for publication, tell us where you are and we will help identify the most suitable next step.</p>
+                <p class="feature-note">You do not need to know exactly which service you need before getting in touch.</p>
+                </div>
+                <div class="m-pg">
+                <p class="eyebrow">What happens next</p>
+                <ol class="stage-list start-steps">
+                  <li><span class="stage-no" aria-hidden="true">1</span><div class="stage-body"><p>We review your enquiry.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">2</span><div class="stage-body"><p>We identify the most suitable next step.</p></div></li>
+                  <li><span class="stage-no" aria-hidden="true">3</span><div class="stage-body"><p>We contact you using your preferred method.</p></div></li>
+                </ol>
+                <p class="start-hint">Helpful details include your topic, current manuscript stage and the kind of support you think you may need.</p>
+                </div>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <?php
+                  /*
+                   * Contact Form 7 renders the enquiry form here. The static
+                   * site posts to Netlify Forms, which WordPress has no
+                   * equivalent of, so the form body — including its book page
+                   * classes — is supplied by a CF7 form. Paste the markup from
+                   * DEPLOYMENT.md into a form named "project-inquiry" and the page renders
+                   * exactly as the static site does.
+                   */
+                  teebe_render_enquiry_form( 'project-inquiry' );
+                  ?>
+                <p class="micro-colophon">Prefer email? <a href="mailto:support@theebookedit.com">support@theebookedit.com</a> · © <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
+        </div>
+
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
 
 <?php
 get_footer();

@@ -1,6 +1,7 @@
 <?php
 /**
- * Editing service page.
+ * editing — generated from the static site by wordpress/sync-from-static.py.
+ * Edit the static page and re-run the script; do not hand-edit this file.
  *
  * @package the-ebook-edit
  */
@@ -8,11 +9,258 @@
 get_header();
 ?>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Editing</p><h1>Make the manuscript clearer, stronger, and more consistent—without losing its voice.</h1><p class="lead">The right editing level depends on where the manuscript is in its development. We begin by identifying the problems that matter most.</p></div></section>
-<section class="section"><div class="container grid-2"><article class="card reveal"><div class="icon-tile">A</div><h2>Editorial assessment</h2><p>A diagnostic review that identifies the manuscript’s strengths, weaknesses, audience fit, and recommended next steps.</p><ul class="service-list"><li>Structure and chapter logic</li><li>Clarity and reader experience</li><li>Voice and positioning</li><li>Priority revision plan</li></ul></article><article class="card reveal"><div class="icon-tile">D</div><h2>Developmental editing</h2><p>Big-picture work on argument, story, sequence, pacing, repetition, gaps, and the overall architecture of the book.</p><ul class="service-list"><li>Chapter-level comments</li><li>Structural recommendations</li><li>Content additions or cuts</li><li>Revision roadmap</li></ul></article><article class="card reveal"><div class="icon-tile">C</div><h2>Line and copy editing</h2><p>Sentence-level refinement for readability, tone, grammar, syntax, word choice, consistency, and flow.</p><ul class="service-list"><li>Tracked changes</li><li>Editorial queries</li><li>Style sheet</li><li>Consistency checks</li></ul></article><article class="card reveal"><div class="icon-tile">P</div><h2>Proofreading</h2><p>A final quality check after layout, focused on remaining errors rather than major rewrites.</p><ul class="service-list"><li>Typos and punctuation</li><li>Formatting consistency</li><li>Headings and navigation</li><li>Final file review</li></ul></article></div></section>
-<section class="section section-soft"><div class="container split"><div><p class="eyebrow">A useful distinction</p><h2>Editing is not one single pass.</h2><p class="lead">Structural issues should be solved before sentence polishing, and sentence polishing should be completed before final proofreading.</p><p>Skipping that sequence often means paying to perfect paragraphs that later need to be rewritten or removed.</p></div><div class="feature-panel reveal"><h3>Recommended order</h3><ol><li>Editorial assessment</li><li>Developmental edit</li><li>Author revision</li><li>Line/copy edit</li><li>Formatting</li><li>Proofread</li></ol></div></div></section>
-<section class="section"><div class="container"><p class="eyebrow">What you receive</p><h2>Clear edits, clear reasoning, and a manageable revision path.</h2><div class="grid-3 cards"><article class="card"><h3>Marked manuscript</h3><p>Tracked changes and comments that distinguish direct corrections from author decisions.</p></article><article class="card"><h3>Editorial letter</h3><p>A concise explanation of major patterns, priorities, and recommended revision order.</p></article><article class="card"><h3>Style sheet</h3><p>A project reference for spelling, capitalization, terminology, numbers, and recurring choices.</p></article></div></div></section>
-<section class="section-tight"><div class="container"><div class="cta-band"><h2>Not sure which edit the manuscript needs?</h2><p>Send a representative sample, approximate word count, genre, and publication goal. We will recommend the most appropriate starting point.</p><a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request an editorial review</a></div></div></section>
+<div class="book-experience book-open-start">
+  <div class="book-stage">
+    <div class="book-scene">
+      <div class="book">
+        <div class="book-shadow" aria-hidden="true"></div>
+
+        <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
+          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
+        </nav>
+
+        <div class="book-board-open" aria-hidden="true"></div>
+
+        <div class="book-block">
+          <div class="paper-left" aria-hidden="true"></div>
+          <div class="paper-right" aria-hidden="true"></div>
+
+          <section class="spread" id="chapter-1" aria-labelledby="editing-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="bookplate-row"><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
+                <p class="eyebrow">Editing</p>
+                <h1 id="editing-title">Make the manuscript clearer, stronger, and more consistent—without losing its voice.</h1>
+                <p class="page-lead">The right editing level depends on where the manuscript is in its development. We begin by identifying the problems that matter most.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">2</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="proof-rules" aria-hidden="true"><span></span><span></span><span></span></div>
+                <nav aria-label="Editing contents">
+                  <ul class="contents-list">
+                    <li><a href="#chapter-2"><span class="contents-no" aria-hidden="true">01</span><span class="contents-title">Compare the levels</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">02</span><span class="contents-title">Editorial assessment</span></a></li>
+                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">03</span><span class="contents-title">Developmental editing</span></a></li>
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">04</span><span class="contents-title">Line and copy editing</span></a></li>
+                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">05</span><span class="contents-title">Proofreading</span></a></li>
+                    <li><a href="#chapter-5"><span class="contents-no" aria-hidden="true">06</span><span class="contents-title">Recommended order</span></a></li>
+                    <li><a href="#chapter-6"><span class="contents-no" aria-hidden="true">07</span><span class="contents-title">What you receive</span></a></li>
+                  </ul>
+                </nav>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">3</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-2" aria-labelledby="compare-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <div class="m-pg">
+                <p class="eyebrow">Which level do you need?</p>
+                <h2 id="compare-title">Compare the editing levels at a glance.</h2>
+                <p class="page-lead">Each level solves a different kind of problem. Matching the level to the manuscript protects both quality and budget.</p>
+                <p class="platform-note-page">Proofreading is the final quality check and is not a substitute for developmental editing, line editing or copy editing where those stages are required.</p>
+                </div>
+                <div class="m-pg">
+                <!-- Replace with approved photography: professional manuscript editing —
+                     manuscript with tasteful editorial annotations, screen and printed
+                     pages, blue/gold editorial environment. Recommended 1600×1200 (4:3),
+                     object-fit: cover. -->
+                <div class="visual-placeholder" role="img" aria-label="Reserved space for a professional manuscript editing photograph">
+                  <svg class="vp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="m10.5 15.5 5-5a1.2 1.2 0 0 1 1.7 1.7l-5 5-2.2.5z"/></svg>
+                  <p class="vp-kicker">Editorial image</p>
+                  <p class="vp-label">Professional manuscript editing</p>
+                  <p class="vp-note">Replace with approved photography</p>
+                </div>
+                </div>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">4</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="m-pg">
+                <table class="compare-table">
+                  <thead>
+                    <tr><th scope="col">Service</th><th scope="col">Best for</th><th scope="col">Main focus</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><th scope="row">Editorial assessment</th><td data-th="Best for">Unsure what the manuscript needs</td><td data-th="Main focus">Diagnosis and recommendations</td></tr>
+                    <tr><th scope="row">Developmental editing</th><td data-th="Best for">Structure or argument needs work</td><td data-th="Main focus">Organisation, content and reader journey</td></tr>
+                    <tr><th scope="row">Line editing</th><td data-th="Best for">Writing needs refinement</td><td data-th="Main focus">Voice, clarity, flow and style</td></tr>
+                  </tbody>
+                </table>
+                </div>
+                <div class="m-pg">
+                <table class="compare-table compare-table-cont" aria-label="Editing levels, continued">
+                  <tbody>
+                    <tr><th scope="row">Copy editing</th><td data-th="Best for">Structure is settled</td><td data-th="Main focus">Grammar, consistency and accuracy</td></tr>
+                    <tr><th scope="row">Proofreading</th><td data-th="Best for">Final formatted manuscript</td><td data-th="Main focus">Final errors and presentation</td></tr>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">5</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-3" aria-labelledby="assess-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">01</span>
+                <h2 id="assess-title">Editorial assessment</h2>
+                <p>A diagnostic review that identifies the manuscript’s strengths, weaknesses, audience fit, and recommended next steps.</p>
+                <ul class="diamond-list">
+                  <li>Structure and chapter logic</li>
+                  <li>Clarity and reader experience</li>
+                  <li>Voice and positioning</li>
+                  <li>Priority revision plan</li>
+                </ul>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">6</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">02</span>
+                <h2>Developmental editing</h2>
+                <p>Big-picture work on argument, story, sequence, pacing, repetition, gaps, and the overall architecture of the book.</p>
+                <ul class="diamond-list">
+                  <li>Chapter-level comments</li>
+                  <li>Structural recommendations</li>
+                  <li>Content additions or cuts</li>
+                  <li>Revision roadmap</li>
+                </ul>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">7</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-4" aria-labelledby="line-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">03</span>
+                <h2 id="line-title">Line and copy editing</h2>
+                <p>Sentence-level refinement for readability, tone, grammar, syntax, word choice, consistency, and flow.</p>
+                <ul class="diamond-list">
+                  <li>Tracked changes</li>
+                  <li>Editorial queries</li>
+                  <li>Style sheet</li>
+                  <li>Consistency checks</li>
+                </ul>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">8</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <span class="ghost-no" aria-hidden="true">04</span>
+                <h2>Proofreading</h2>
+                <p>A final quality check after layout, focused on remaining errors rather than major rewrites.</p>
+                <ul class="diamond-list">
+                  <li>Typos and punctuation</li>
+                  <li>Formatting consistency</li>
+                  <li>Headings and navigation</li>
+                  <li>Final file review</li>
+                </ul>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">9</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-5" aria-labelledby="order-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">A useful distinction</p>
+                <h2 id="order-title">Editing is not one single pass.</h2>
+                <p class="page-lead">Structural issues should be solved before sentence polishing, and sentence polishing should be completed before final proofreading.</p>
+                <p>Skipping that sequence often means paying to perfect paragraphs that later need to be rewritten or removed.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">10</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <h3>Recommended order</h3>
+                <ol class="stage-list" start="1">
+                  <li><span class="stage-no" aria-hidden="true">1</span><div class="stage-body"><h4 class="stage-h">Editorial assessment</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">2</span><div class="stage-body"><h4 class="stage-h">Developmental edit</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">3</span><div class="stage-body"><h4 class="stage-h">Author revision</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">4</span><div class="stage-body"><h4 class="stage-h">Line/copy edit</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">5</span><div class="stage-body"><h4 class="stage-h">Formatting</h4></div></li>
+                  <li><span class="stage-no" aria-hidden="true">6</span><div class="stage-body"><h4 class="stage-h">Proofread</h4></div></li>
+                </ol>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">11</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-6" aria-labelledby="receive-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">What you receive</p>
+                <h2 id="receive-title">Clear edits, clear reasoning, and a manageable revision path.</h2>
+                <article class="type-entry">
+                  <h3>Marked manuscript</h3>
+                  <p>Tracked changes and comments that distinguish direct corrections from author decisions.</p>
+                </article>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">12</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <article class="type-entry">
+                  <h3>Editorial letter</h3>
+                  <p>A concise explanation of major patterns, priorities, and recommended revision order.</p>
+                </article>
+                <article class="type-entry">
+                  <h3>Style sheet</h3>
+                  <p>A project reference for spelling, capitalisation, terminology, numbers, and recurring choices.</p>
+                </article>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">13</span>
+            </div>
+          </section>
+
+          <section class="spread" id="chapter-7" aria-labelledby="editing-cta-title">
+            <div class="page page-left">
+              <div class="page-inner">
+                <p class="eyebrow">Find the right level</p>
+                <h2 id="editing-cta-title">Not sure which edit the manuscript needs?</h2>
+                <p class="page-lead">Send a representative sample, approximate word count, genre, and publication goal. We will recommend the most appropriate starting point.</p>
+              </div>
+              <span class="folio folio-left" aria-hidden="true">14</span>
+            </div>
+            <div class="page page-right">
+              <div class="page-inner">
+                <div class="page-ornament" aria-hidden="true"></div>
+                <div class="page-actions">
+                  <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request an assessment</a>
+                </div>
+                <p class="page-more"><a href="<?php echo esc_url( home_url( '/insights/editing-levels-explained/' ) ); ?>">Read: editing levels explained →</a></p>
+                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+              </div>
+              <span class="folio folio-right" aria-hidden="true">15</span>
+            </div>
+          </section>
+
+          <div class="book-spine-shade" aria-hidden="true"></div>
+          <div class="turn-shade" aria-hidden="true"></div>
+          <div class="book-leaf" aria-hidden="true">
+            <div class="leaf-front"></div>
+            <div class="leaf-back"></div>
+          </div>
+        </div>
+
+        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
 
 <?php
 get_footer();

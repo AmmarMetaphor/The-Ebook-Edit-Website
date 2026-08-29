@@ -1,0 +1,24 @@
+<p class="hidden"><label>Do not fill this out: [text hp-field autocomplete:off]</label></p>
+<div class="m-pg start-form-part">
+  <h2 class="form-title">Let's Talk About Your Book</h2>
+  <p class="form-support">A few details will help us understand your project before we speak.</p>
+  <div class="form-grid">
+    <div class="field"><label for="name">Name *</label>[text* name id:name autocomplete:name]</div>
+    <div class="field"><label for="email">Email *</label>[email* email id:email autocomplete:email]</div>
+    <div class="field"><label for="service">Primary Service *</label>[select* service id:service first_as_label "Choose one" "Book Writing" "Book Editing" "Book Cover Design" "Proofreading" "Book Illustrations" "Children Books" "Book Formatting" "Publishing Support" "Book Marketing" "Editorial Assessment" "Not Sure Yet"]</div>
+    <div class="field"><label for="stage">Project Stage *</label>[select* stage id:stage first_as_label "Choose one" "I only have an idea" "I have notes or recordings" "I have started writing" "I have a manuscript in progress" "I have a complete manuscript" "I am ready to format or publish" "I am not sure yet"]</div>
+    <div class="field"><label for="word-count">Approximate Word Count</label>[select word-count id:word-count first_as_label "Choose one" "Not started yet" "Under 10,000" "10,000 to 25,000" "25,000 to 50,000" "50,000 to 80,000" "80,000+" "Not sure"]</div>
+    <div class="field"><label for="referral">How Did You Hear About Us?</label>[select referral id:referral first_as_label "Choose one" "Google" "Facebook" "Instagram" "Referral" "Advertisement" "Other"]</div>
+  </div>
+</div>
+<div class="m-pg start-form-part">
+  <div class="form-grid">
+    <div class="field"><label for="contact-method">Preferred Contact Method</label>[select contact-method id:contact-method first_as_label "Choose one" "Email" "WhatsApp" "Phone" "No preference"]</div>
+    <div class="field"><label for="timeline">Desired Completion / Timeline</label>[select timeline id:timeline first_as_label "Choose one" "As soon as practical" "Within 1 month" "1 to 3 months" "3 to 6 months" "Flexible" "Not sure"]</div>
+    <div class="field field-full"><label for="message">Tell Us About Your Book</label>[textarea message 40x2 id:message placeholder "Tell us briefly about your idea, manuscript, audience or what support you are looking for."]</div>
+    <div class="field field-full">
+      [submit class:button class:button-gold "Start My Project"]
+      <p class="form-note">By submitting this form, you agree that The Ebook Edit may use the information provided to respond to your enquiry, as described in our <a href="{{home}}/privacy">Privacy Policy</a>. Please do not send confidential manuscript material until a secure method has been agreed.</p>
+    </div>
+  </div>
+</div>

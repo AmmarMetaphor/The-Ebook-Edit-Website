@@ -1,0 +1,12 @@
+<p class="hidden"><label>Do not fill this out: [text hp-field autocomplete:off]</label></p>
+<div class="form-grid">
+  <div class="field"><label for="pj-name">Name *</label>[text* name id:pj-name autocomplete:name]</div>
+  <div class="field"><label for="pj-email">Email *</label>[email* email id:pj-email autocomplete:email]</div>
+  <div class="field"><label for="pj-journey">Where are you in your book journey? *</label>[select* journey id:pj-journey first_as_label "Choose one" "I only have an idea" "I have notes or recordings" "I have a manuscript in progress" "I have a complete manuscript" "I am ready to format or publish" "I am not sure yet"]</div>
+  <div class="field"><label for="pj-support">What support are you looking for?</label>[select support id:pj-support first_as_label "Choose one" "Book Writing" "Editing" "Proofreading" "Formatting" "Publishing Support" "Book Design / Illustration" "Book Marketing" "Not Sure Yet"]</div>
+  <div class="field field-full"><label for="pj-message">Tell us briefly about your book <span class="label-optional">(optional)</span></label>[textarea message 40x3 id:pj-message]</div>
+  <div class="field field-full">
+    [submit class:button class:button-gold "Start My Publishing Journey"]
+    <p class="form-note">Prefer a conversation? <a href="https://wa.me/447348954631?text=Hello%20The%20Ebook%20Edit%2C%20I%20would%20like%20to%20discuss%20an%20ebook%20project." target="_blank" rel="noopener noreferrer">Chat with us on WhatsApp</a>. Your details are used only to respond to your enquiry — see our <a href="{{home}}/privacy">privacy policy</a>.</p>
+  </div>
+</div>

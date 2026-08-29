@@ -1,6 +1,6 @@
 <?php
 /**
- * The Ebook Edit — theme setup, assets, navigation, and contact-form hooks.
+ * The Ebook Edit — theme setup, assets, book boot, and contact-form hooks.
  *
  * @package the-ebook-edit
  */
@@ -9,12 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-require_once get_theme_file_path( 'inc/nav-walker.php' );
+require_once get_theme_file_path( 'inc/seo-data.php' );
 require_once get_theme_file_path( 'inc/seo-meta.php' );
 require_once get_theme_file_path( 'inc/setup.php' );
 
 /**
- * Theme supports and menu locations.
+ * Theme supports.
+ *
+ * No menu location is registered: the book's chapter tabs are the site
+ * navigation and they are part of the page templates, exactly as on the
+ * published static site.
  */
 function teebe_setup() {
 	add_theme_support( 'title-tag' );
@@ -23,21 +27,17 @@ function teebe_setup() {
 		'html5',
 		array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption', 'style', 'script' )
 	);
-
-	register_nav_menus(
-		array(
-			'primary' => __( 'Primary Navigation', 'the-ebook-edit' ),
-			'social'  => __( 'Social Links', 'the-ebook-edit' ),
-		)
-	);
 }
 add_action( 'after_setup_theme', 'teebe_setup' );
 
 /**
- * Stylesheet and script, versioned by file modification time so browsers pick
- * up changes without the manual cache-busting query string the static site used.
+ * The two stylesheets and the book engine, versioned by file modification time
+ * so browsers pick up changes without the manual cache-busting query string
+ * the static site used.
  */
 function teebe_assets() {
+	// style.css carries only the theme header WordPress requires; it is
+	// enqueued first so a child theme can still override from it.
 	wp_enqueue_style(
 		'the-ebook-edit',
 		get_stylesheet_uri(),
@@ -45,217 +45,219 @@ function teebe_assets() {
 		(string) filemtime( get_theme_file_path( 'style.css' ) )
 	);
 
+	wp_enqueue_style(
+		'the-ebook-edit-base',
+		get_theme_file_uri( 'assets/css/styles.css' ),
+		array( 'the-ebook-edit' ),
+		(string) filemtime( get_theme_file_path( 'assets/css/styles.css' ) )
+	);
+
+	wp_enqueue_style(
+		'the-ebook-edit-book',
+		get_theme_file_uri( 'assets/css/book.css' ),
+		array( 'the-ebook-edit-base' ),
+		(string) filemtime( get_theme_file_path( 'assets/css/book.css' ) )
+	);
+
+	// Hand-maintained integration layer: makes Contact Form 7's markup match
+	// the design. Loaded last so it wins over the plugin's own stylesheet.
+	wp_enqueue_style(
+		'the-ebook-edit-wordpress',
+		get_theme_file_uri( 'assets/css/wordpress.css' ),
+		array( 'the-ebook-edit-book' ),
+		(string) filemtime( get_theme_file_path( 'assets/css/wordpress.css' ) )
+	);
+
 	wp_enqueue_script(
-		'the-ebook-edit',
-		get_theme_file_uri( 'assets/js/main.js' ),
+		'the-ebook-edit-book',
+		get_theme_file_uri( 'assets/js/book.js' ),
 		array(),
-		(string) filemtime( get_theme_file_path( 'assets/js/main.js' ) ),
+		(string) filemtime( get_theme_file_path( 'assets/js/book.js' ) ),
 		array(
 			'in_footer' => true,
 			'strategy'  => 'defer',
 		)
 	);
-
-	wp_localize_script(
-		'the-ebook-edit',
-		'theEbookEdit',
-		array( 'thankYouUrl' => esc_url_raw( home_url( '/thank-you/' ) ) )
-	);
 }
 add_action( 'wp_enqueue_scripts', 'teebe_assets' );
 
 /**
- * Primary navigation items, in order, as path => label.
+ * Adds the body classes the book stylesheets key off, so the WordPress page
+ * carries the same classes as its static counterpart.
  *
- * There is deliberately no Home item: the header logo is the link home.
- *
- * @return array<string, string>
+ * @param string[] $classes Body classes.
+ * @return string[]
  */
-function teebe_nav_items() {
-	return array(
+function teebe_body_class( $classes ) {
+	$entry = teebe_seo_entry();
+
+	if ( empty( $entry['body_class'] ) ) {
+		return $classes;
+	}
+
+	foreach ( preg_split( '/\s+/', $entry['body_class'] ) as $class ) {
+		if ( '' !== $class && ! in_array( $class, $classes, true ) ) {
+			$classes[] = $class;
+		}
+	}
+
+	return $classes;
+}
+add_filter( 'body_class', 'teebe_body_class' );
+
+/**
+ * Prints the pre-paint mode check so the correct book state renders on the
+ * first frame with no layout flash.
+ *
+ * This is the same script the static site inlines in <head>. It must run
+ * before paint, which rules out an external file, so it is printed inline and
+ * kept byte-for-byte in step with the static pages.
+ */
+function teebe_boot_script() {
+	$entry = teebe_seo_entry();
+
+	if ( empty( $entry['cinematic'] ) ) {
+		// Article, legal, thank-you and 404 pages always use the flow layout.
+		echo "<script>document.documentElement.classList.add('book-js');</script>\n";
+		return;
+	}
+	?>
+<script>
+  /* Pre-paint mode check so the correct book state renders on the first
+     frame with no layout flash: desktop cinematic, mobile portrait book,
+     or the flow fallback. book.js confirms boot; if it ever fails to load,
+     the timer clears the classes so all content stays reachable. */
+  (function () {
+    var c = document.documentElement.classList;
+    c.add('book-js');
+    try {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reduce && window.matchMedia('(min-width: 1000px) and (min-height: 640px)').matches) {
+        c.add('book-cinematic');
+      } else if (!reduce && window.matchMedia('(max-width: 900px) and (min-width: 360px) and (min-height: 740px)').matches) {
+        c.add('book-mbook');
+      }
+      if (c.contains('book-cinematic') || c.contains('book-mbook')) {
+        window.__bookBoot = window.setTimeout(function () {
+          c.remove('book-cinematic');
+          c.remove('book-mbook');
+        }, 2500);
+      }
+    } catch (e) {}
+  })();
+</script>
+	<?php
+}
+
+/**
+ * Renders the book's chapter tabs.
+ *
+ * The designed pages carry their own copy of this markup, generated from the
+ * static site. This helper exists for index.php and page.php, the fallback
+ * templates WordPress uses for anything an administrator adds later.
+ */
+function teebe_book_tabs() {
+	$tabs = array(
 		'/services/'  => 'Services',
 		'/process/'   => 'Process',
 		'/portfolio/' => 'Portfolio',
 		'/about/'     => 'About',
 		'/insights/'  => 'Insights',
 	);
-}
 
-/**
- * Which navigation item should be marked as the current page.
- *
- * The service detail pages sit outside the primary menu but highlight
- * "Services", and the articles highlight "Insights", matching the original
- * static site. Pages with no menu presence highlight nothing.
- *
- * @return string Site path of the active item, or '' when none is active.
- */
-function teebe_active_nav_path() {
-	if ( is_front_page() ) {
-		return '/';
-	}
+	echo '<nav class="book-tabs" aria-label="' . esc_attr__( 'Primary navigation', 'the-ebook-edit' ) . '">';
 
-	if ( ! is_page() ) {
-		return '';
-	}
-
-	$map = array(
-		'services'                        => '/services/',
-		'writing'                         => '/services/',
-		'editing'                         => '/services/',
-		'publishing'                      => '/services/',
-		'process'                         => '/process/',
-		'portfolio'                       => '/portfolio/',
-		'about'                           => '/about/',
-		'insights'                        => '/insights/',
-		'turn-expertise-into-an-ebook'    => '/insights/',
-		'editing-levels-explained'        => '/insights/',
-		'pre-publishing-checklist'        => '/insights/',
-		'kindle-and-ebook-platform-guide' => '/insights/',
-	);
-
-	$slug = (string) get_post_field( 'post_name', get_queried_object_id() );
-
-	return isset( $map[ $slug ] ) ? $map[ $slug ] : '';
-}
-
-/**
- * Whether a navigation URL points at the currently active section.
- *
- * @param string $url Absolute or relative URL.
- * @return bool
- */
-function teebe_is_current_nav_url( $url ) {
-	$active = teebe_active_nav_path();
-
-	if ( '' === $active ) {
-		return false;
-	}
-
-	$item   = untrailingslashit( (string) wp_parse_url( $url, PHP_URL_PATH ) );
-	$target = untrailingslashit( (string) wp_parse_url( home_url( $active ), PHP_URL_PATH ) );
-
-	return $item === $target;
-}
-
-/**
- * Renders the primary navigation links, using an assigned menu when one exists
- * and the original link set otherwise, so the theme works on activation.
- */
-function teebe_primary_nav() {
-	if ( has_nav_menu( 'primary' ) ) {
-		wp_nav_menu(
-			array(
-				'theme_location' => 'primary',
-				'container'      => false,
-				'items_wrap'     => '%3$s',
-				'depth'          => 1,
-				'walker'         => new Teebe_Nav_Walker(),
-			)
-		);
-
-		return;
-	}
-
-	teebe_default_nav();
-}
-
-/**
- * The navigation link set carried over from the static site.
- */
-function teebe_default_nav() {
-	foreach ( teebe_nav_items() as $path => $label ) {
+	foreach ( $tabs as $path => $label ) {
 		printf(
-			'<a href="%1$s"%2$s>%3$s</a>',
+			'<a class="book-tab" href="%s">%s</a>',
 			esc_url( home_url( $path ) ),
-			teebe_is_current_nav_url( home_url( $path ) ) ? ' aria-current="page"' : '',
 			esc_html( $label )
 		);
 	}
 
 	printf(
-		'<a class="nav-cta" href="%s">Start a project</a>',
-		esc_url( home_url( '/contact/' ) )
+		'<a class="book-tab book-tab-cta" href="%s">%s</a>',
+		esc_url( home_url( '/contact/' ) ),
+		esc_html__( 'Start a project', 'the-ebook-edit' )
 	);
+
+	echo '</nav>';
 }
 
 /**
- * Publishing platforms named in the homepage section, as logo slug => name.
+ * Renders one of the site's two enquiry forms.
  *
- * These are platform names used to describe what the publishing-support service
- * prepares files for. They are not partners, and no affiliation is implied.
+ * The static site posts to Netlify Forms. WordPress has no equivalent, so the
+ * form body is supplied by a Contact Form 7 form whose markup — including the
+ * book page's own classes — is given in DEPLOYMENT.md. The shortcode lives in
+ * the page's post_content, which is the only thing this theme stores there;
+ * all design and copy stay in the templates.
  *
- * @return array<string, string>
+ * When the form has not been configured yet, an on-page notice explains what
+ * to do rather than showing a form that cannot deliver anything.
+ *
+ * @param string $key Form key: 'project-inquiry' or 'publishing-journey'.
  */
-function teebe_platforms() {
-	return array(
-		'amazon-kdp'         => 'Amazon Kindle Direct Publishing',
-		'apple-books'        => 'Apple Books',
-		'kobo-writing-life'  => 'Kobo Writing Life',
-		'google-play-books'  => 'Google Play Books',
-		'barnes-noble-press' => 'Barnes & Noble Press / NOOK',
-		'draft2digital'      => 'Draft2Digital',
-	);
-}
+function teebe_render_enquiry_form( $key = 'project-inquiry' ) {
+	$shortcode = teebe_enquiry_shortcode( $key );
 
-/**
- * URL of an approved platform logo bundled with the theme, or '' when there is
- * none, in which case the template falls back to a text tile.
- *
- * Approved artwork goes in the theme's assets/images/platforms/ folder, named
- * after the slug in teebe_platforms() — for example amazon-kdp.svg.
- *
- * @param string $slug Platform slug.
- * @return string
- */
-function teebe_platform_logo( $slug ) {
-	foreach ( array( 'svg', 'png', 'webp' ) as $extension ) {
-		$relative = 'assets/images/platforms/' . $slug . '.' . $extension;
-
-		if ( file_exists( get_theme_file_path( $relative ) ) ) {
-			return get_theme_file_uri( $relative );
-		}
-	}
-
-	return '';
-}
-
-/**
- * Whether a Social Links menu has been created and assigned.
- *
- * The footer heading and list are only printed when this is true, so an
- * unconfigured site shows no empty block.
- *
- * @return bool
- */
-function teebe_has_social_nav() {
-	return has_nav_menu( 'social' );
-}
-
-/**
- * Renders the footer social links from the Social Links menu.
- *
- * Link labels come from the menu items, so accounts are added in
- * Appearance → Menus without editing the theme. Nothing is hard-coded and no
- * external icon font or script is loaded.
- */
-function teebe_social_nav() {
-	if ( ! teebe_has_social_nav() ) {
+	if ( '' !== $shortcode ) {
+		echo do_shortcode( $shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contact Form 7 escapes its own output.
 		return;
 	}
 
-	wp_nav_menu(
-		array(
-			'theme_location'  => 'social',
-			'container'       => 'div',
-			'container_class' => 'social-links',
-			'menu_class'      => 'social-list',
-			'depth'           => 1,
-			'link_before'     => '<span class="social-label">',
-			'link_after'      => '</span>',
-			'fallback_cb'     => false,
-		)
+	$titles = array(
+		'project-inquiry'    => 'Project Inquiry',
+		'publishing-journey' => 'Publishing Journey',
 	);
+	$title  = isset( $titles[ $key ] ) ? $titles[ $key ] : $titles['project-inquiry'];
+
+	echo '<div class="m-pg"><div class="notice"><p><strong>';
+	esc_html_e( 'Enquiry form not configured yet.', 'the-ebook-edit' );
+	echo '</strong> ';
+	printf(
+		/* translators: %s: Contact Form 7 form title. */
+		esc_html__( 'Install Contact Form 7, create the form named "%s" using the markup in the theme\'s DEPLOYMENT.md, then add its shortcode to this page.', 'the-ebook-edit' ),
+		esc_html( $title )
+	);
+	echo '</p><p>';
+	printf(
+		/* translators: %s: mailto link. */
+		esc_html__( 'In the meantime, enquiries can be sent by email to %s.', 'the-ebook-edit' ),
+		'<a href="mailto:support@theebookedit.com">support@theebookedit.com</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static markup.
+	);
+	echo '</p></div></div>';
+}
+
+/**
+ * The Contact Form 7 shortcode stored on the page that renders a given form.
+ *
+ * @param string $key Form key.
+ * @return string Shortcode, or '' when none is configured.
+ */
+function teebe_enquiry_shortcode( $key ) {
+	$slugs = array(
+		'project-inquiry'    => 'contact',
+		'publishing-journey' => 'home',
+	);
+
+	if ( ! isset( $slugs[ $key ] ) ) {
+		return '';
+	}
+
+	$page = get_page_by_path( $slugs[ $key ], OBJECT, 'page' );
+
+	if ( ! $page ) {
+		return '';
+	}
+
+	$content = trim( (string) $page->post_content );
+
+	if ( false === strpos( $content, '[contact-form-7' ) ) {
+		return '';
+	}
+
+	return $content;
 }
 
 /**
@@ -297,11 +299,11 @@ function teebe_cf7_honeypot_spam( $spam, $submission = null ) {
 }
 add_filter( 'wpcf7_spam', 'teebe_cf7_honeypot_spam', 10, 2 );
 
-// The contact form supplies its own grid markup, which auto-paragraphing breaks.
+// The enquiry forms supply their own grid markup, which auto-paragraphing breaks.
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
 
 /**
- * Reminds an administrator to install the plugin the contact form depends on.
+ * Reminds an administrator to install the plugin the enquiry forms depend on.
  */
 function teebe_cf7_admin_notice() {
 	if ( class_exists( 'WPCF7' ) || ! current_user_can( 'activate_plugins' ) ) {
@@ -309,7 +311,7 @@ function teebe_cf7_admin_notice() {
 	}
 
 	echo '<div class="notice notice-warning is-dismissible"><p>';
-	echo esc_html__( 'The Ebook Edit: install and activate Contact Form 7 to enable the contact form. See DEPLOYMENT.md in the theme folder for the form configuration.', 'the-ebook-edit' );
+	echo esc_html__( 'The Ebook Edit: install and activate Contact Form 7 to enable the enquiry forms. See DEPLOYMENT.md in the theme folder for the form markup and settings.', 'the-ebook-edit' );
 	echo '</p></div>';
 }
 add_action( 'admin_notices', 'teebe_cf7_admin_notice' );
