@@ -143,12 +143,12 @@ function teebe_setup_get_or_create_page( $slug, $args, &$report ) {
 }
 
 /**
- * Whether a legal template still contains its unreviewed starter wording.
+ * Whether a legal template still carries its "needs review" marker.
  *
- * Both page-privacy.php and page-terms.php currently read "has not yet been
- * professionally reviewed" in their on-page notice. Once that notice is
- * replaced with reviewed, finalized copy, setup will publish the page
- * normally instead of leaving it as a draft.
+ * page-privacy.php and page-terms.php both note that the final wording
+ * "requires professional legal review before public launch". Once that note is
+ * removed and the copy has been reviewed, setup publishes the page normally
+ * instead of leaving it as a draft.
  *
  * @param string $template_file Theme-relative template file name.
  * @return bool
@@ -162,28 +162,164 @@ function teebe_setup_is_unreviewed_legal_template( $template_file ) {
 
 	$contents = (string) file_get_contents( $path );
 
-	return false !== stripos( $contents, 'has not yet been professionally reviewed' );
+	return false !== stripos( $contents, 'legal review before public launch' )
+		|| false !== stripos( $contents, 'has not yet been professionally reviewed' );
 }
 
 /**
- * Creates or updates the Contact page's post_content with the Contact Form 7
- * shortcode for the form titled "Project Inquiry", without touching the
- * surrounding theme-designed layout.
+ * The two enquiry forms the website renders, as page slug => configuration.
  *
- * @param int   $contact_page_id Contact page ID.
- * @param array $report          Report array, passed by reference.
+ * 'title' is the Contact Form 7 form title to look for, and 'html_class' is
+ * the class the form element must carry so the book page styles it exactly as
+ * the published site does. The markup for each form is in DEPLOYMENT.md.
+ *
+ * @return array<string, array<string, string>>
  */
-function teebe_setup_connect_contact_form( $contact_page_id, &$report ) {
-	if ( empty( $contact_page_id ) ) {
+function teebe_setup_form_definitions() {
+	return array(
+		'contact' => array(
+			'title'      => 'Project Inquiry',
+			'html_class' => 'start-form',
+			'html_id'    => '',
+			'page'       => 'Contact',
+			'body'       => 'cf7/project-inquiry.txt',
+			'subject'    => 'New project enquiry from the website',
+			'fields'     => array( 'name', 'email', 'service', 'stage', 'word-count', 'referral', 'contact-method', 'timeline', 'message' ),
+		),
+		'home'    => array(
+			'title'      => 'Publishing Journey',
+			'html_class' => 'page-form',
+			'html_id'    => 'enquiry',
+			'page'       => 'Home',
+			'body'       => 'cf7/publishing-journey.txt',
+			'subject'    => 'New publishing journey enquiry from the website',
+			'fields'     => array( 'name', 'email', 'journey', 'support', 'message' ),
+		),
+	);
+}
+
+/**
+ * Creates the two Contact Form 7 forms from the bodies bundled with the theme,
+ * so the WordPress site renders the same forms as the published website.
+ *
+ * A form is created only when no form with that title exists, so running setup
+ * again never duplicates one and never overwrites a form that has been edited.
+ * No mail server settings are written: Contact Form 7 sends through whatever
+ * WordPress is already configured to use, and no credentials are stored here
+ * or anywhere else in the theme.
+ *
+ * @param array $report Report array, passed by reference.
+ */
+function teebe_setup_create_cf7_forms( &$report ) {
+	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
 		return;
 	}
+
+	foreach ( teebe_setup_form_definitions() as $form ) {
+		if ( teebe_setup_find_cf7_form( $form['title'] ) ) {
+			continue;
+		}
+
+		$path = get_theme_file_path( $form['body'] );
+
+		if ( ! file_exists( $path ) ) {
+			/* translators: %s: file name. */
+			$report['warnings'][] = sprintf( __( 'The bundled form body %s is missing from the theme, so the form was not created.', 'the-ebook-edit' ), $form['body'] );
+			continue;
+		}
+
+		$body = str_replace(
+			'{{home}}',
+			untrailingslashit( home_url() ),
+			(string) file_get_contents( $path )
+		);
+
+		$contact_form = WPCF7_ContactForm::get_template( array( 'title' => $form['title'] ) );
+
+		if ( ! $contact_form ) {
+			continue;
+		}
+
+		$contact_form->set_properties(
+			array(
+				'form' => $body,
+				'mail' => teebe_setup_cf7_mail( $form ),
+			)
+		);
+
+		$id = $contact_form->save();
+
+		if ( ! $id ) {
+			/* translators: %s: Contact Form 7 form title. */
+			$report['warnings'][] = sprintf( __( 'Could not create the Contact Form 7 form "%s". Create it by hand using the markup in DEPLOYMENT.md.', 'the-ebook-edit' ), $form['title'] );
+			continue;
+		}
+
+		/* translators: %s: Contact Form 7 form title. */
+		$report['forms'][] = sprintf( __( 'Created the Contact Form 7 form "%s" from the markup bundled with the theme.', 'the-ebook-edit' ), $form['title'] );
+	}
+}
+
+/**
+ * The mail template for one form.
+ *
+ * The From address is on the site's own domain so the message passes SPF and
+ * DMARC checks; the visitor's address goes in Reply-To. Change the recipient
+ * under Contact → Contact Forms → Mail at any time.
+ *
+ * @param array $form Form definition.
+ * @return array<string, mixed>
+ */
+function teebe_setup_cf7_mail( $form ) {
+	$host = wp_parse_url( home_url(), PHP_URL_HOST );
+	$host = $host ? preg_replace( '/^www\./', '', $host ) : 'example.com';
+
+	$lines = array();
+
+	foreach ( $form['fields'] as $field ) {
+		$lines[] = sprintf( '%s: [%s]', ucwords( str_replace( '-', ' ', $field ) ), $field );
+	}
+
+	$body = implode( "\n", $lines ) . "\n\n"
+		. sprintf( '-- Sent from %s', home_url( '/' ) ) . "\n";
+
+	return array(
+		'subject'            => sprintf( '[%s] %s', get_bloginfo( 'name' ), $form['subject'] ),
+		'sender'             => sprintf( '%s <wordpress@%s>', get_bloginfo( 'name' ), $host ),
+		'recipient'          => get_option( 'admin_email' ),
+		'body'               => $body,
+		'additional_headers' => 'Reply-To: [email]',
+		'attachments'        => '',
+		'use_html'           => false,
+		'exclude_blank'      => false,
+	);
+}
+
+/**
+ * Writes a Contact Form 7 shortcode into a page's post_content, which is the
+ * only thing this theme stores there — the design and copy stay in the
+ * templates. Existing content is never overwritten.
+ *
+ * @param int    $page_id Target page ID.
+ * @param string $slug    Target page slug, matching teebe_setup_form_definitions().
+ * @param array  $report  Report array, passed by reference.
+ */
+function teebe_setup_connect_form( $page_id, $slug, &$report ) {
+	$forms = teebe_setup_form_definitions();
+
+	if ( empty( $page_id ) || ! isset( $forms[ $slug ] ) ) {
+		return;
+	}
+
+	$form = $forms[ $slug ];
 
 	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
-		$report['warnings'][] = __( 'Contact Form 7 is not active. Install and activate it, create a form titled "Project Inquiry", then run setup again.', 'the-ebook-edit' );
+		/* translators: %s: Contact Form 7 form title. */
+		$report['warnings'][] = sprintf( __( 'Contact Form 7 is not active, so the "%s" form was not connected. Install and activate it, create the form using the markup in DEPLOYMENT.md, then run setup again.', 'the-ebook-edit' ), $form['title'] );
 		return;
 	}
 
-	$page = get_post( $contact_page_id );
+	$page = get_post( $page_id );
 
 	if ( ! $page ) {
 		return;
@@ -192,19 +328,55 @@ function teebe_setup_connect_contact_form( $contact_page_id, &$report ) {
 	$current_content = trim( (string) $page->post_content );
 
 	if ( false !== strpos( $current_content, '[contact-form-7' ) ) {
-		$report['contact_form'] = __( 'The Contact Form 7 shortcode is already present on the Contact page.', 'the-ebook-edit' );
+		/* translators: 1: page title, 2: Contact Form 7 form title. */
+		$report['forms'][] = sprintf( __( 'The %1$s page already carries a Contact Form 7 shortcode; it was left as-is.', 'the-ebook-edit' ), $form['page'], $form['title'] );
 		return;
 	}
 
 	if ( '' !== $current_content ) {
-		$report['warnings'][] = __( 'The Contact page already has custom content, so the Contact Form 7 shortcode was not added automatically. Add [contact-form-7 ...] to it by hand if needed.', 'the-ebook-edit' );
+		/* translators: %s: page title. */
+		$report['warnings'][] = sprintf( __( 'The %s page already has content of its own, so no shortcode was added automatically. Paste the [contact-form-7 ...] shortcode into it by hand if the form is needed there.', 'the-ebook-edit' ), $form['page'] );
 		return;
 	}
 
-	$form_query = new WP_Query(
+	$form_post = teebe_setup_find_cf7_form( $form['title'] );
+
+	if ( ! $form_post ) {
+		/* translators: %s: Contact Form 7 form title. */
+		$report['warnings'][] = sprintf( __( 'Create the Contact Form 7 form "%s" using the markup in DEPLOYMENT.md, then run setup again.', 'the-ebook-edit' ), $form['title'] );
+		return;
+	}
+
+	$shortcode = sprintf(
+		'[contact-form-7 id="%d" title="%s" html_class="%s"%s]',
+		$form_post->ID,
+		esc_attr( $form_post->post_title ),
+		esc_attr( $form['html_class'] ),
+		'' !== $form['html_id'] ? sprintf( ' html_id="%s"', esc_attr( $form['html_id'] ) ) : ''
+	);
+
+	wp_update_post(
+		array(
+			'ID'           => $page_id,
+			'post_content' => $shortcode,
+		)
+	);
+
+	/* translators: 1: Contact Form 7 form title, 2: page title. */
+	$report['forms'][] = sprintf( __( 'Connected the "%1$s" form to the %2$s page.', 'the-ebook-edit' ), $form['title'], $form['page'] );
+}
+
+/**
+ * Finds a Contact Form 7 form by its exact title.
+ *
+ * @param string $title Form title.
+ * @return WP_Post|null
+ */
+function teebe_setup_find_cf7_form( $title ) {
+	$query = new WP_Query(
 		array(
 			'post_type'              => 'wpcf7_contact_form',
-			'title'                  => 'Project Inquiry',
+			'title'                  => $title,
 			'posts_per_page'         => 1,
 			'post_status'            => 'any',
 			'no_found_rows'          => true,
@@ -213,184 +385,59 @@ function teebe_setup_connect_contact_form( $contact_page_id, &$report ) {
 		)
 	);
 
-	if ( ! $form_query->have_posts() ) {
-		$report['warnings'][] = __( 'Create the Contact Form 7 form "Project Inquiry", then run setup again.', 'the-ebook-edit' );
-		return;
+	if ( ! $query->have_posts() ) {
+		return null;
 	}
 
-	$form_post = $form_query->posts[0];
+	$form_post = $query->posts[0];
 
-	if ( 0 !== strcasecmp( $form_post->post_title, 'Project Inquiry' ) ) {
-		$report['warnings'][] = __( 'Create the Contact Form 7 form "Project Inquiry", then run setup again.', 'the-ebook-edit' );
-		return;
-	}
-
-	$shortcode = sprintf( '[contact-form-7 id="%d" title="%s"]', $form_post->ID, esc_attr( $form_post->post_title ) );
-
-	wp_update_post(
-		array(
-			'ID'           => $contact_page_id,
-			'post_content' => $shortcode,
-		)
-	);
-
-	$report['contact_form'] = __( 'Connected the "Project Inquiry" Contact Form 7 form to the Contact page.', 'the-ebook-edit' );
+	return 0 === strcasecmp( $form_post->post_title, $title ) ? $form_post : null;
 }
 
 /**
- * Moves WordPress's default "Sample Page" to Trash, but only when it is
- * clearly still the untouched default content. Anything an administrator has
- * edited is left alone.
+ * Moves WordPress's default "Sample Page" to Trash.
+ *
+ * This is the only step that removes anything, so it is opt-in: it runs only
+ * when the administrator ticks the box on the setup screen, and even then only
+ * when the page is still the untouched WordPress default — same title, same
+ * starter text. Anything edited, renamed or written by a person is left
+ * exactly where it is, and Trash is reversible either way.
  *
  * @param array $report Report array, passed by reference.
  */
-function teebe_setup_maybe_trash_sample_page( &$report ) {
+function teebe_setup_trash_sample_page( &$report ) {
 	$sample = get_page_by_path( 'sample-page', OBJECT, 'page' );
 
 	if ( ! $sample || 'trash' === $sample->post_status ) {
 		return;
 	}
 
-	if ( 'Sample Page' !== $sample->post_title ) {
-		return;
-	}
-
-	if ( false === strpos( (string) $sample->post_content, 'This is an example page' ) ) {
-		$report['warnings'][] = __( 'A page at "sample-page" exists but does not look like the untouched WordPress default, so it was left in place.', 'the-ebook-edit' );
+	if ( 'Sample Page' !== $sample->post_title
+		|| false === strpos( (string) $sample->post_content, 'This is an example page' ) ) {
+		$report['warnings'][] = __( 'A page at "sample-page" exists but is not the untouched WordPress default, so it was left in place. Delete it yourself from Pages if it is not needed.', 'the-ebook-edit' );
 		return;
 	}
 
 	wp_trash_post( $sample->ID );
-	$report['sample_page'] = __( 'Moved the default WordPress "Sample Page" to Trash.', 'the-ebook-edit' );
-}
-
-/**
- * Creates the "Primary Navigation" menu when it does not already exist, adds
- * any of its items that are missing, and assigns it to the theme's primary
- * menu location. Existing items are matched by the page they point to, so
- * running setup again never duplicates an entry.
- *
- * @param array $ids    Page IDs keyed by slug.
- * @param array $report Report array, passed by reference.
- */
-function teebe_setup_primary_menu( $ids, &$report ) {
-	$menu_name = 'Primary Navigation';
-	$menu      = wp_get_nav_menu_object( $menu_name );
-	$created   = false;
-
-	if ( ! $menu ) {
-		$menu_id = wp_create_nav_menu( $menu_name );
-
-		if ( is_wp_error( $menu_id ) ) {
-			/* translators: %s: error message. */
-			$report['warnings'][] = sprintf( __( 'Could not create the Primary Navigation menu: %s', 'the-ebook-edit' ), $menu_id->get_error_message() );
-			return;
-		}
-
-		$menu    = wp_get_nav_menu_object( $menu_id );
-		$created = true;
-	}
-
-	if ( ! $menu ) {
-		return;
-	}
-
-	$items = array(
-		array(
-			'slug'  => 'services',
-			'label' => 'Services',
-		),
-		array(
-			'slug'  => 'process',
-			'label' => 'Process',
-		),
-		array(
-			'slug'  => 'portfolio',
-			'label' => 'Portfolio',
-		),
-		array(
-			'slug'  => 'about',
-			'label' => 'About',
-		),
-		array(
-			'slug'  => 'insights',
-			'label' => 'Insights',
-		),
-		array(
-			'slug'    => 'contact',
-			'label'   => 'Start a project',
-			'classes' => 'nav-cta',
-		),
-	);
-
-	$existing_object_ids = array();
-	$existing_items       = wp_get_nav_menu_items( $menu->term_id );
-
-	if ( $existing_items ) {
-		foreach ( $existing_items as $existing_item ) {
-			$existing_object_ids[ (int) $existing_item->object_id ] = true;
-		}
-	}
-
-	$added = array();
-
-	foreach ( $items as $position => $item ) {
-		$page_id = isset( $ids[ $item['slug'] ] ) ? (int) $ids[ $item['slug'] ] : 0;
-
-		if ( ! $page_id || isset( $existing_object_ids[ $page_id ] ) ) {
-			continue;
-		}
-
-		$menu_item_args = array(
-			'menu-item-title'     => $item['label'],
-			'menu-item-object-id' => $page_id,
-			'menu-item-object'    => 'page',
-			'menu-item-type'      => 'post_type',
-			'menu-item-status'    => 'publish',
-			'menu-item-position'  => $position + 1,
-		);
-
-		if ( ! empty( $item['classes'] ) ) {
-			$menu_item_args['menu-item-classes'] = $item['classes'];
-		}
-
-		wp_update_nav_menu_item( $menu->term_id, 0, $menu_item_args );
-		$added[] = $item['label'];
-	}
-
-	$locations             = get_theme_mod( 'nav_menu_locations', array() );
-	$locations['primary']  = $menu->term_id;
-	set_theme_mod( 'nav_menu_locations', $locations );
-
-	if ( $created ) {
-		/* translators: %d: number of menu items added. */
-		$report['menu'] = sprintf( __( 'Created the "Primary Navigation" menu with %d item(s) and assigned it to the Primary Navigation location.', 'the-ebook-edit' ), count( $added ) );
-	} elseif ( ! empty( $added ) ) {
-		$report['menu'] = sprintf(
-			/* translators: %s: comma-separated list of menu item labels. */
-			__( 'Added the missing item(s) to the existing "Primary Navigation" menu: %s.', 'the-ebook-edit' ),
-			implode( ', ', $added )
-		);
-	} else {
-		$report['menu'] = __( 'The "Primary Navigation" menu already existed with all its items and was left as-is.', 'the-ebook-edit' );
-	}
+	$report['sample_page'] = __( 'Moved the default WordPress "Sample Page" to Trash. Restore it from Pages → Trash if you need it back.', 'the-ebook-edit' );
 }
 
 /**
  * Runs the full setup routine and returns a report of what happened.
  *
+ * @param bool $trash_sample_page Whether to move an untouched default
+ *                                "Sample Page" to Trash. Opt-in, off by default.
  * @return array<string, mixed>
  */
-function teebe_run_setup() {
+function teebe_run_setup( $trash_sample_page = false ) {
 	$report = array(
-		'created'      => array(),
-		'existing'     => array(),
-		'drafted'      => array(),
-		'warnings'     => array(),
-		'menu'         => '',
-		'homepage'     => '',
-		'contact_form' => '',
-		'sample_page'  => '',
+		'created'     => array(),
+		'existing'    => array(),
+		'drafted'     => array(),
+		'warnings'    => array(),
+		'forms'       => array(),
+		'homepage'    => '',
+		'sample_page' => '',
 	);
 
 	$ids = array();
@@ -447,9 +494,15 @@ function teebe_run_setup() {
 		$report['homepage'] = __( 'Set the static homepage to "Home".', 'the-ebook-edit' );
 	}
 
-	teebe_setup_connect_contact_form( isset( $ids['contact'] ) ? $ids['contact'] : 0, $report );
-	teebe_setup_maybe_trash_sample_page( $report );
-	teebe_setup_primary_menu( $ids, $report );
+	teebe_setup_create_cf7_forms( $report );
+
+	foreach ( array_keys( teebe_setup_form_definitions() ) as $form_slug ) {
+		teebe_setup_connect_form( isset( $ids[ $form_slug ] ) ? $ids[ $form_slug ] : 0, $form_slug, $report );
+	}
+
+	if ( $trash_sample_page ) {
+		teebe_setup_trash_sample_page( $report );
+	}
 
 	flush_rewrite_rules();
 
@@ -469,7 +522,10 @@ function teebe_handle_setup_submit() {
 
 	check_admin_referer( 'teebe_run_setup', 'teebe_setup_nonce' );
 
-	$report = teebe_run_setup();
+	// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Verified above.
+	$trash_sample_page = isset( $_POST['teebe_trash_sample_page'] ) && '1' === $_POST['teebe_trash_sample_page'];
+
+	$report = teebe_run_setup( $trash_sample_page );
 
 	set_transient( 'teebe_setup_report_' . get_current_user_id(), $report, MINUTE_IN_SECONDS * 5 );
 
@@ -495,7 +551,7 @@ function teebe_setup_render_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'The Ebook Edit Setup', 'the-ebook-edit' ); ?></h1>
 		<p>
-			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates converted from the original GitHub website. This setup only creates the WordPress routing records, menus and homepage configuration required for those templates.', 'the-ebook-edit' ); ?>
+			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates, generated from the published website. This setup only creates the WordPress page records and homepage setting those templates need in order to be served at the right addresses. It never writes, edits or deletes page content.', 'the-ebook-edit' ); ?>
 		</p>
 
 		<?php if ( is_array( $report ) ) : ?>
@@ -534,12 +590,9 @@ function teebe_setup_render_page() {
 					<?php if ( ! empty( $report['homepage'] ) ) : ?>
 						<li><?php echo esc_html( $report['homepage'] ); ?></li>
 					<?php endif; ?>
-					<?php if ( ! empty( $report['menu'] ) ) : ?>
-						<li><?php echo esc_html( $report['menu'] ); ?></li>
-					<?php endif; ?>
-					<?php if ( ! empty( $report['contact_form'] ) ) : ?>
-						<li><?php echo esc_html( $report['contact_form'] ); ?></li>
-					<?php endif; ?>
+					<?php foreach ( $report['forms'] as $form_note ) : ?>
+						<li><?php echo esc_html( $form_note ); ?></li>
+					<?php endforeach; ?>
 					<?php if ( ! empty( $report['sample_page'] ) ) : ?>
 						<li><?php echo esc_html( $report['sample_page'] ); ?></li>
 					<?php endif; ?>
@@ -559,11 +612,17 @@ function teebe_setup_render_page() {
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="teebe_run_setup">
 			<?php wp_nonce_field( 'teebe_run_setup', 'teebe_setup_nonce' ); ?>
+			<p>
+				<label>
+					<input type="checkbox" name="teebe_trash_sample_page" value="1">
+					<?php esc_html_e( 'Also move the default WordPress "Sample Page" to Trash (only if it is still the untouched WordPress default).', 'the-ebook-edit' ); ?>
+				</label>
+			</p>
 			<?php submit_button( __( 'Set up The Ebook Edit website', 'the-ebook-edit' ) ); ?>
 		</form>
 
 		<p>
-			<?php esc_html_e( 'Safe to run more than once: existing pages, menus, and settings are detected and left alone, and nothing is duplicated.', 'the-ebook-edit' ); ?>
+			<?php esc_html_e( 'Safe to run more than once: existing pages and settings are detected and left alone, and nothing is duplicated. Nothing you have written is ever deleted or overwritten — the one optional removal is the checkbox above, and it moves the page to Trash, where it can be restored.', 'the-ebook-edit' ); ?>
 		</p>
 	</div>
 	<?php

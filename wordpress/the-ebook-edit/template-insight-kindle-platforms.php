@@ -1,8 +1,6 @@
 <?php
 /**
- * Template Name: Insight — Kindle and Platform Guide
- *
- * Assign to the page with slug "kindle-and-ebook-platform-guide" under Insights.
+ * Template Name: Insight — Kindle and Platforms
  *
  * @package the-ebook-edit
  */
@@ -10,8 +8,27 @@
 get_header();
 ?>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Publishing</p><h1>Publishing an ebook on Kindle and other platforms</h1><p class="lead">A practical look at what Amazon Kindle Direct Publishing (KDP), Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare before you submit.</p><div class="article-meta"><span>10 minute read</span><span>Platforms and distribution</span></div></div></section>
-<section class="section"><div class="container article-grid"><article class="prose">
+<div class="book-experience book-static">
+  <div class="book-stage">
+    <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>" aria-current="page">Insights</a>
+          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
+        </nav>
+    <div class="book-block">
+      <div class="title-page">
+        <p><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
+        <p class="eyebrow">Publishing</p>
+        <h1>Publishing an ebook on Kindle and other platforms</h1>
+        <p class="lead">A practical look at what Amazon Kindle Direct Publishing (KDP), Apple Books, Kobo Writing Life, Google Play Books, Barnes &amp; Noble Press, and Draft2Digital ask for, and how to prepare before you submit.</p>
+        <div class="article-meta"><span>10 minute read</span><span>Updated August 2026</span></div>
+        <div class="page-ornament" aria-hidden="true"></div>
+      </div>
+      <div class="prose-page">
+        <article class="prose">
 
 <p>Every ebook platform wants roughly the same things: a clean, correctly formatted file, accurate metadata, a compliant cover, and a completed account with your rights, tax, and payment details in order. The differences are mostly in file format, submission steps, and store-specific settings. Knowing what to expect before you start makes the upload stage far less stressful.</p>
 
@@ -39,7 +56,7 @@ get_header();
 <p>Editorial and formatting support can prepare the file, metadata, and a checklist tailored to your chosen platform, but it does not replace these account-level decisions.</p>
 
 <h2>Where formatting and editing support fits</h2>
-<p>Most of the platform-specific work above depends on the same foundation: a manuscript that has been properly edited, a file that has been correctly formatted and validated, and metadata that has been written and organized in advance. That preparation is what our <a href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>">publishing support</a> covers — readying the manuscript, files, and materials so that whichever platform you choose, the submission step is straightforward.</p>
+<p>Most of the platform-specific work above depends on the same foundation: a manuscript that has been properly edited, a file that has been correctly formatted and validated, and metadata that has been written and organised in advance. That preparation is what our <a href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>">publishing support</a> covers — readying the manuscript, files, and materials so that whichever platform you choose, the submission step is straightforward.</p>
 
 <h2>A simple platform-readiness checklist</h2>
 <ul>
@@ -54,7 +71,23 @@ get_header();
 
 <p>The Ebook Edit is an independent editorial and formatting service and is not affiliated with, endorsed by, or officially connected to Amazon, Apple, Kobo, Google, Barnes &amp; Noble, or Draft2Digital. All product and platform names are trademarks of their respective owners.</p>
 
-</article><aside class="sidebar"><h3>Preparing for Kindle or another platform?</h3><p>Formatting and publishing support can prepare your files, metadata, and checklist for the platform you choose.</p><a class="button button-primary" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Plan publishing support</a></aside></div></section>
+</article>
+      </div>
+      <div class="insert-page">
+        <div class="assessment-insert">
+          <h3>Preparing for Kindle or another platform?</h3>
+          <p>Formatting and publishing support can prepare your files, metadata, and checklist for the platform you choose.</p>
+          <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Plan publishing support</a>
+        </div>
+      </div>
+      <div class="closing-page">
+        <p class="page-more"><a href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">More insights →</a></p>
+        <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
 
 <?php
 get_footer();

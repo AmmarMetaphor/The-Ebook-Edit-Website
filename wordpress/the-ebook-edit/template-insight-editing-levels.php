@@ -2,16 +2,49 @@
 /**
  * Template Name: Insight — Editing Levels Explained
  *
- * Assign to the page with slug "editing-levels-explained" under Insights.
- *
  * @package the-ebook-edit
  */
 
 get_header();
 ?>
 
-<section class="page-hero"><div class="container"><p class="eyebrow">Editing</p><h1>Developmental editing, copy editing, and proofreading explained</h1><p class="lead">Each stage solves a different kind of problem. Using the right stage at the right time protects both quality and budget.</p><div class="article-meta"><span>7 minute read</span><span>Editorial guide</span></div></div></section>
-<section class="section"><div class="container article-grid"><article class="prose"><p>Authors often ask for “proofreading” when the manuscript still has structural or sentence-level problems. That confusion is understandable: editing terms are not always used consistently. The most useful distinction is the level of the manuscript being changed.</p><h2>Developmental editing: the architecture</h2><p>Developmental editing addresses the book as a whole and the function of its major parts. In nonfiction, that may include the reader promise, argument, chapter order, examples, repetition, gaps, and depth. In fiction, it may include plot, character motivation, point of view, pacing, scene purpose, and continuity.</p><p>A developmental editor may recommend moving, expanding, combining, or deleting sections. The author normally completes substantial revision after this stage.</p><h3>Use developmental editing when:</h3><ul><li>The manuscript feels repetitive or unfocused.</li><li>Readers may not understand why chapters appear in their current order.</li><li>The core argument or story is not yet working.</li><li>Large sections may need rewriting.</li></ul><h2>Line editing: the reading experience</h2><p>Line editing focuses on how the prose communicates. It improves rhythm, clarity, transitions, tone, emphasis, precision, and flow. It may reduce wordiness, strengthen weak verbs, remove ambiguity, and revise awkward sentences while preserving the author’s voice.</p><p>Line editing can be intensive, but it should not be used to hide unresolved structural problems.</p><h2>Copy editing: correctness and consistency</h2><p>Copy editing addresses grammar, punctuation, spelling, usage, syntax, capitalization, numbers, terminology, cross-references, and internal consistency. It also records decisions in a style sheet so the manuscript follows one coherent set of choices.</p><h3>Use copy editing when:</h3><ul><li>The structure and content are stable.</li><li>The author is no longer planning major rewrites.</li><li>The manuscript needs professional sentence-level correction.</li><li>Terminology, spelling, or formatting choices vary.</li></ul><h2>Proofreading: the final check</h2><p>Proofreading happens after the text is edited and the interior is formatted. The proofreader looks for remaining typos, punctuation errors, broken headings, bad page or section breaks, missing text, formatting inconsistencies, and navigation problems.</p><p>Proofreading is not the stage for reorganizing chapters or rewriting pages. Major changes at this point can create new errors and require another proof.</p><h2>Why the order matters</h2><ol><li>Fix the structure.</li><li>Complete the author’s revision.</li><li>Refine and correct the sentences.</li><li>Format the final text.</li><li>Proofread the formatted output.</li></ol><p>Reversing that order wastes effort. A carefully copyedited chapter may later be deleted during developmental revision. A proofread file may become unreliable if major text is inserted afterward.</p><h2>What to ask an editor</h2><ul><li>Which editing level is included?</li><li>Will I receive tracked changes, comments, an editorial letter, or a style sheet?</li><li>How many revision rounds are included?</li><li>What is outside the scope?</li><li>Will the final formatted file also be proofread?</li></ul><p>The best starting point is a representative sample and a clear conversation about the manuscript’s current condition.</p></article><aside class="sidebar"><h3>Which edit do you need?</h3><p>Request an assessment before committing to the wrong stage.</p><a class="button button-primary" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request a review</a></aside></div></section>
+<div class="book-experience book-static">
+  <div class="book-stage">
+    <nav class="book-tabs" aria-label="Primary navigation">
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
+          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>" aria-current="page">Insights</a>
+          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
+        </nav>
+    <div class="book-block">
+      <div class="title-page">
+        <p><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
+        <p class="eyebrow">Editing</p>
+        <h1>Developmental editing, copy editing, and proofreading explained</h1>
+        <p class="lead">Each stage solves a different kind of problem. Using the right stage at the right time protects both quality and budget.</p>
+        <div class="article-meta"><span>7 minute read</span><span>Updated August 2026</span></div>
+        <div class="page-ornament" aria-hidden="true"></div>
+      </div>
+      <div class="prose-page">
+        <article class="prose"><p>Authors often ask for “proofreading” when the manuscript still has structural or sentence-level problems. That confusion is understandable: editing terms are not always used consistently. The most useful distinction is the level of the manuscript being changed.</p><h2>Developmental editing: the architecture</h2><p>Developmental editing addresses the book as a whole and the function of its major parts. In nonfiction, that may include the reader promise, argument, chapter order, examples, repetition, gaps, and depth. In fiction, it may include plot, character motivation, point of view, pacing, scene purpose, and continuity.</p><p>A developmental editor may recommend moving, expanding, combining, or deleting sections. The author normally completes substantial revision after this stage.</p><h3>Use developmental editing when:</h3><ul><li>The manuscript feels repetitive or unfocused.</li><li>Readers may not understand why chapters appear in their current order.</li><li>The core argument or story is not yet working.</li><li>Large sections may need rewriting.</li></ul><h2>Line editing: the reading experience</h2><p>Line editing focuses on how the prose communicates. It improves rhythm, clarity, transitions, tone, emphasis, precision, and flow. It may reduce wordiness, strengthen weak verbs, remove ambiguity, and revise awkward sentences while preserving the author’s voice.</p><p>Line editing can be intensive, but it should not be used to hide unresolved structural problems.</p><h2>Copy editing: correctness and consistency</h2><p>Copy editing addresses grammar, punctuation, spelling, usage, syntax, capitalisation, numbers, terminology, cross-references, and internal consistency. It also records decisions in a style sheet so the manuscript follows one coherent set of choices.</p><h3>Use copy editing when:</h3><ul><li>The structure and content are stable.</li><li>The author is no longer planning major rewrites.</li><li>The manuscript needs professional sentence-level correction.</li><li>Terminology, spelling, or formatting choices vary.</li></ul><h2>Proofreading: the final check</h2><p>Proofreading happens after the text is edited and the interior is formatted. The proofreader looks for remaining typos, punctuation errors, broken headings, bad page or section breaks, missing text, formatting inconsistencies, and navigation problems.</p><p>Proofreading is not the stage for reorganizing chapters or rewriting pages. Major changes at this point can create new errors and require another proof.</p><h2>Why the order matters</h2><ol><li>Fix the structure.</li><li>Complete the author’s revision.</li><li>Refine and correct the sentences.</li><li>Format the final text.</li><li>Proofread the formatted output.</li></ol><p>Reversing that order wastes effort. A carefully copyedited chapter may later be deleted during developmental revision. A proofread file may become unreliable if major text is inserted afterward.</p><h2>What to ask an editor</h2><ul><li>Which editing level is included?</li><li>Will I receive tracked changes, comments, an editorial letter, or a style sheet?</li><li>How many revision rounds are included?</li><li>What is outside the scope?</li><li>Will the final formatted file also be proofread?</li></ul><p>The best starting point is a representative sample and a clear conversation about the manuscript’s current condition.</p></article>
+      </div>
+      <div class="insert-page">
+        <div class="assessment-insert">
+          <h3>Which edit do you need?</h3>
+          <p>Request an assessment before committing to the wrong stage.</p>
+          <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Request an assessment</a>
+        </div>
+      </div>
+      <div class="closing-page">
+        <p class="page-more"><a href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">More insights →</a></p>
+        <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="book-endcap" aria-hidden="true"></div>
+</div>
 
 <?php
 get_footer();

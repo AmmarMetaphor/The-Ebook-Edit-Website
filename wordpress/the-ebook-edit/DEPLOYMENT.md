@@ -1,157 +1,172 @@
-# The Ebook Edit — WordPress setup guide
+# The Ebook Edit — theme reference
 
-> **Steps 3, 4, and 7 below (creating the pages, setting the homepage, and the
-> Primary Navigation menu) are now automated.** Install the theme, set
-> permalinks, then go to **Appearance → The Ebook Edit Setup** and click
-> **Set up The Ebook Edit website**. See `../README-WORDPRESS.md` for the full
-> quick-start. This file remains as background on what that automation does,
-> and for the Contact Form 7 field markup if you want to build the form by
-> hand.
-
-Follow these steps once, in order, on the Namecheap EasyWP site.
+Step-by-step installation is in `wordpress/README-WORDPRESS.md`. This file is
+the reference: what is in the theme, how the pieces fit together, and the
+details you need when something has to be changed by hand.
 
 ---
 
-## 1. Install the theme
+## 1. What is in the theme
 
-**Appearance → Themes → Add New → Upload Theme** → choose `the-ebook-edit.zip` → **Install Now** → **Activate**.
+```
+the-ebook-edit/
+  style.css                 theme header only — the real styles are below
+  functions.php             assets, body classes, the book boot script, form slots
+  header.php  footer.php    the document shell (no navigation bar: the book has tabs)
+  front-page.php            the homepage
+  page-*.php                one template per page of the website
+  template-insight-*.php    the four Insights articles
+  index.php  page.php       fallbacks for anything added later
+  404.php                   not found
+  inc/seo-data.php          page metadata, generated from the website
+  inc/seo-meta.php          prints title, description, canonical, social, JSON-LD
+  inc/setup.php             the Appearance → The Ebook Edit Setup screen
+  cf7/*.txt                 the two Contact Form 7 form bodies
+  assets/css/styles.css     design tokens, typography, buttons, forms  (generated)
+  assets/css/book.css       the book presentation                      (generated)
+  assets/css/wordpress.css  Contact Form 7 integration            (hand-maintained)
+  assets/js/book.js         the book engine                            (generated)
+  assets/images/            logo, icons, portfolio covers, favicon      (generated)
+```
 
-## 2. Set permalinks
+Generated files come from `wordpress/sync-from-static.py`, which reads the HTML
+in the repository root. Do not hand-edit them: change the website and re-run
+the script.
 
-**Settings → Permalinks → Post name → Save Changes.**
+## 2. How a page is rendered
 
-This must be done before creating pages, or the URLs below will not work.
+WordPress's template hierarchy does the routing. A page whose slug is
+`services` is served by `page-services.php`; the homepage by `front-page.php`;
+the four articles by the `template-insight-*.php` file assigned to each of
+them.
 
-## 3. Create the pages
+The design and the words are in those templates, **not** in the WordPress
+editor. Page records exist only so WordPress has a URL to serve. The one thing
+this theme stores in a page's content is a Contact Form 7 shortcode, on the
+Home and Contact pages.
 
-**Pages → Add New** for each row. Leave the body empty (the design lives in the theme) except where noted. The **slug** must match exactly — it is what selects the design and the SEO metadata.
+Every URL comes from `home_url()` and every asset from `get_theme_file_uri()`,
+so the theme carries no hard-coded domain and works unchanged on a staging
+address, a subdirectory install, and the live domain.
 
-| Page title | Slug | Parent | Page template |
+## 3. The book, in four presentations
+
+`assets/js/book.js` drives one experience with four presentations, chosen from
+the viewport and the visitor's motion preference:
+
+| Presentation | When |
+|---|---|
+| Desktop spread, scroll-scrubbed page turns | width ≥ 1000px and height ≥ 640px |
+| Portrait book, one page at a time | width 360–900px and height ≥ 740px |
+| Plain readable column | reduced motion, no JavaScript, or any other size |
+| Static book page (articles, legal, thank-you) | always the plain column |
+
+`functions.php` prints the same pre-paint script the published site uses, so
+the right presentation renders on the first frame with no flash. If the script
+ever fails to load, a timer clears the classes and all content stays reachable.
+
+Nothing hijacks scrolling. Everything animates with transform and opacity only.
+
+## 4. The two enquiry forms
+
+The published site posts to Netlify Forms, which WordPress has no equivalent
+of, so Contact Form 7 renders the forms instead.
+
+| Form title | Page | Form class | Body |
 |---|---|---|---|
-| Home | `home` | — | (default) |
-| Services | `services` | — | (default) |
-| Ebook writing | `writing` | — | (default) |
-| Editing | `editing` | — | (default) |
-| Publishing | `publishing` | — | (default) |
-| Process | `process` | — | (default) |
-| Portfolio | `portfolio` | — | (default) |
-| About | `about` | — | (default) |
-| Insights | `insights` | — | (default) |
-| Contact | `contact` | — | (default) |
-| Privacy | `privacy` | — | (default) |
-| Terms | `terms` | — | (default) |
-| Thank you | `thank-you` | — | (default) |
+| Project Inquiry | Start a Project (`/contact/`) | `start-form` | `cf7/project-inquiry.txt` |
+| Publishing Journey | Home (`/`) | `page-form`, id `enquiry` | `cf7/publishing-journey.txt` |
 
-Then the four articles, each with **Insights** as its parent (set under **Page Attributes → Parent**) and a template chosen from **Page Attributes → Template**:
-
-| Page title | Slug | Parent | Page template |
-|---|---|---|---|
-| How to turn your expertise into an ebook | `turn-expertise-into-an-ebook` | Insights | Insight — Turn Expertise Into an Ebook |
-| Editing levels explained | `editing-levels-explained` | Insights | Insight — Editing Levels Explained |
-| Pre-publishing checklist | `pre-publishing-checklist` | Insights | Insight — Pre-Publishing Checklist |
-| Publishing an ebook on Kindle and other platforms | `kindle-and-ebook-platform-guide` | Insights | Insight — Kindle and Platform Guide |
-
-The articles then live at `/insights/turn-expertise-into-an-ebook/` and so on, matching the old addresses.
-
-## 4. Set the homepage
-
-**Settings → Reading → Your homepage displays → A static page → Homepage: Home.** Leave "Posts page" unset.
-
-## 5. Set the site icon
-
-**Appearance → Customize → Site Identity → Site Icon** → upload `favicon.ico` (in the theme's `assets/images/` folder). Until this is set, the theme falls back to the bundled icon automatically.
-
-## 6. Contact form (Contact Form 7)
-
-### 6a. Install
-
-**Plugins → Add New** → search "Contact Form 7" → **Install** → **Activate**.
-
-### 6b. Create the form
-
-**Contact → Add New**, name it `Project inquiry`, and replace the contents of the **Form** tab with exactly this:
+The setup screen creates both from those files, with every field, label,
+dropdown option and page-splitting wrapper the published site uses, and writes
+the matching shortcode into the page — for example:
 
 ```
-<p class="hidden"><label>Do not fill this out: [text hp-field]</label></p>
-<div class="form-grid">
-  <div class="field"><label for="name">Name *</label>[text* your-name id:name autocomplete:name]</div>
-  <div class="field"><label for="email">Email *</label>[email* your-email id:email autocomplete:email]</div>
-  <div class="field"><label for="service">Primary service *</label>[select* service id:service first_as_label "Choose one" "Ebook writing" "Developmental editing" "Copy editing" "Proofreading" "Formatting" "Publishing support" "End-to-end project" "Not sure yet"]</div>
-  <div class="field"><label for="word-count">Approximate word count</label>[select word-count id:word-count first_as_label "Choose a range" "Idea only / no draft" "Under 10,000 words" "10,000–25,000 words" "25,000–50,000 words" "50,000–80,000 words" "More than 80,000 words"]</div>
-  <div class="field field-full"><label for="timeline">Target timeline</label>[text timeline id:timeline placeholder "For example: launch in November"]</div>
-  <div class="field field-full"><label for="message">Project details *</label>[textarea* message id:message placeholder "Describe the book, intended reader, current stage, desired support, and any important deadline."]</div>
-  <div class="field field-full">[submit class:button class:button-primary "Send project inquiry"]<p class="form-note">By submitting, you agree that The Ebook Edit may use this information to respond to your inquiry. Do not send confidential manuscripts until a suitable file-sharing method has been agreed.</p></div>
-</div>
+[contact-form-7 id="12" title="Project Inquiry" html_class="start-form"]
 ```
 
-The `hp-field` at the top is a spam trap. It is hidden from people by CSS; the theme automatically rejects any submission that fills it in.
+`html_class` matters: it is what makes the form look like part of the book.
 
-### 6c. Mail tab
+**Fields — Project Inquiry:** `name`*, `email`*, `service`*, `stage`*,
+`word-count`, `referral`, `contact-method`, `timeline`, `message`, plus the
+hidden honeypot `hp-field`.
 
-- **To:** `info@theebookedit.com`
-- **From:** `The Ebook Edit <wordpress@yourdomain.com>` — replace `yourdomain.com` with the real site domain. Do **not** put the visitor's address here; some hosts refuse to send mail that claims to come from another domain.
-- **Subject:** `New project inquiry from [your-name]`
-- **Additional headers:** `Reply-To: [your-email]`
-- **Message body:**
+**Fields — Publishing Journey:** `name`*, `email`*, `journey`*, `support`,
+`message`, plus `hp-field`. (* = required.)
+
+`functions.php` registers a `wpcf7_spam` filter that rejects any submission
+where `hp-field` is filled in, which is how the honeypot works without a
+plugin. It also disables Contact Form 7's automatic paragraph wrapping, because
+the forms supply their own grid markup.
+
+To rebuild a form by hand: Contact → Add New, set the title exactly as above,
+paste the contents of the matching `cf7/*.txt` file into the **Form** tab
+(replacing `{{home}}` with your site address), save, and put its shortcode on
+the page with the right `html_class`.
+
+## 5. Mail
+
+Setup gives each form a mail template addressed to your **WordPress
+administrator email**, sent from `wordpress@yourdomain` with the visitor's
+address in Reply-To — the pattern that passes SPF and DMARC checks. Change the
+recipient under **Contact → Contact Forms → *(form)* → Mail**; for example, to
+`support@theebookedit.com`.
+
+WordPress sends through PHP mail by default, which many hosts deliver poorly.
+The usual fix is a free SMTP plugin such as WP Mail SMTP, pointed at a mailbox
+you control.
+
+**Credentials go in that plugin's settings screen on the live site and nowhere
+else.** No password, app password, API key or mailbox secret belongs in this
+repository, in a theme file, in `wp-config.php` committed to version control,
+or in any file that leaves the server.
+
+## 6. Metadata and search engines
+
+`inc/seo-meta.php` prints, per page: the title, meta description, canonical
+URL, Open Graph and Twitter tags, the brand icons, and the JSON-LD the
+published site publishes — all read from `inc/seo-data.php` and all resolved
+against `home_url()`.
+
+* Privacy and Terms carry `noindex, follow`, as on the published site.
+* `robots.txt` points at WordPress's own `/wp-sitemap.xml`.
+* Setting a Site Icon in the Customizer replaces the bundled icons.
+
+## 7. Security headers (optional, host-dependent)
+
+The theme sets no HTTP headers. If your host lets you add them, these are the
+ones the static site uses:
 
 ```
-Name: [your-name]
-Email: [your-email]
-Primary service: [service]
-Approximate word count: [word-count]
-Target timeline: [timeline]
-
-Project details:
-[message]
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+X-Frame-Options: SAMEORIGIN
+Permissions-Policy: geolocation=(), microphone=(), camera=()
 ```
 
-### 6d. Put the form on the page
+Add a Content-Security-Policy only after testing: WordPress and its plugins
+load inline scripts and styles that a strict policy will block.
 
-Save the form and copy the shortcode Contact Form 7 shows at the top (it looks like `[contact-form-7 id="123" title="Project inquiry"]`). Edit the **Contact** page, paste that shortcode as the entire page body, and update. The theme wraps it in the correct panel automatically.
+## 8. What the setup screen changes
 
-After a successful send, visitors are sent to the **Thank you** page automatically — no extra plugin or setting is needed.
+Under Appearance → The Ebook Edit Setup, and only when you click the button:
 
-### 6e. Test it
+* creates missing page records (`get_page_by_path` first, so nothing is ever
+  duplicated);
+* creates the two Contact Form 7 forms if forms with those titles do not
+  already exist;
+* writes a shortcode into the Home and Contact pages **only when their content
+  is empty**;
+* sets Home as the static front page;
+* flushes rewrite rules.
 
-Submit a real inquiry from the live site and confirm the email arrives at `info@theebookedit.com` and the browser lands on `/thank-you/`. If no email arrives, the host is likely blocking PHP mail — install an SMTP plugin (for example WP Mail SMTP) and configure it with the mailbox credentials.
+It never edits or deletes content you have written. The only removal is
+opt-in: a tick-box that moves WordPress's own default "Sample Page" to Trash,
+and only when that page is still the untouched default.
 
-## 7. Menus
+## 9. Still outstanding before launch
 
-The header navigation works immediately with no setup. To make it editable instead, go to **Appearance → Menus**, create a menu named `Primary Navigation`, add Services / Process / Portfolio / About / Insights and then Contact (labelled "Start a project"), and tick the **Primary Navigation** display location.
-
-Do **not** add a Home item — the header logo is the link to the homepage.
-
-To style the "Start a project" item as the gold button: in **Menus**, open **Screen Options** at the top right, tick **CSS Classes**, then type `nav-cta` into that item's CSS Classes box.
-
-Footer social links come from a second menu named `Social Links`, assigned to the **Social Links** location. Add Custom Links only for accounts that really exist. Until that menu is assigned, the footer shows no social heading and no empty space.
-
-Step-by-step instructions for both menus, and for adding approved publishing-platform logos, are in `README-WORDPRESS.md` alongside this theme folder in the project repository.
-
-## 8. Security headers
-
-The old host applied security headers through a file WordPress does not read. Add these to the `.htaccess` file in the WordPress root instead, **above** the `# BEGIN WordPress` line:
-
-```apache
-<IfModule mod_headers.c>
-  Header set X-Frame-Options "DENY"
-  Header set X-Content-Type-Options "nosniff"
-  Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
-</IfModule>
-```
-
-## 9. Search engines
-
-WordPress publishes a sitemap at `/wp-sitemap.xml` on its own, and the theme points `robots.txt` at it. Once the final domain is live, submit `https://yourdomain.com/wp-sitemap.xml` in Google Search Console.
-
-Check that **Settings → Reading → Search engine visibility** is **unticked**, or nothing will be indexed.
-
----
-
-## Still outstanding before launch
-
-These were flagged on the old site and remain unresolved — they are content decisions, not technical ones.
-
-- **Privacy and Terms** are unreviewed placeholder text and are set to `noindex`. Have them reviewed for the real business, and add the registered business address.
-- **Portfolio** entries are labelled "Representative project type" and must stay that way until replaced with real, permissioned client work.
-- The **thank-you page** promises a reply within 24 hours. Confirm that is accurate.
+* Privacy and Terms need professional legal review before publishing. Their
+  current text also names Netlify as the host and form processor.
+* Confirm the enquiry notification address on both forms.
+* Confirm mail delivery from the live host.

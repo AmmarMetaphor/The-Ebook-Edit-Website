@@ -1,206 +1,209 @@
-# The Ebook Edit — WordPress guide
+# The Ebook Edit — WordPress deployment guide
 
-This folder holds the WordPress version of the site.
+This folder holds the WordPress version of the website. It is the **same
+website** as the one in this repository, not a rebuild: the theme's templates
+are generated from the very same HTML files that Netlify publishes, so the two
+stay in step.
 
-**You do not need to re-enter the existing website copy into WordPress Pages.**
-Every page's design and copy — Services, Writing, Editing, Publishing, Process,
-Portfolio, About, Insights and its four articles, Contact, Privacy, Terms, Thank
-You — already lives in the theme's PHP templates, carried over from the
-`the-ebook-edit.netlify.app` GitHub site. The one-click setup below only creates
-the WordPress page *records* (the routing, not the content) so those templates
-answer at the right URLs.
+**You never have to re-type the website into WordPress.** Every page — the
+homepage book, Services, Ebook Writing, Editing, Publishing, Process,
+Portfolio, About, Insights and its four articles, Start a Project, Privacy,
+Terms and Thank You — already lives inside the theme. The setup screen only
+creates the WordPress page *records* so those pages answer at the right web
+addresses.
 
 | What | Where |
 |---|---|
-| Theme source | `wordpress/the-ebook-edit/` |
 | Installable theme file | `wordpress/the-ebook-edit-wordpress-theme.zip` |
-| Background on the manual steps the setup screen now automates | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
-
-## Quick start (recommended)
-
-1. **Install the theme.** Appearance → Themes → Add New → Upload Theme → choose
-   `the-ebook-edit-wordpress-theme.zip` → Install Now → Activate.
-2. **Set permalinks.** Settings → Permalinks → Post name → Save Changes. Do this
-   before running setup, or the URLs below won't work.
-3. **Install and activate Contact Form 7.** Plugins → Add New → search "Contact
-   Form 7" → Install → Activate.
-4. **Create the contact form.** Contact → Add New, title it exactly
-   `Project Inquiry`, build the fields you want (a starting form is in
-   `DEPLOYMENT.md` §6b), and Save. The title must match exactly — that's how
-   setup finds it.
-5. **Run the setup.** Go to **Appearance → The Ebook Edit Setup** and click
-   **Set up The Ebook Edit website**. This one click:
-   - Creates the WordPress page record for every real page — Home, Services,
-     Writing, Editing, Publishing, Process, Portfolio, About, Insights (plus its
-     four articles as child pages), Contact, Privacy, Terms, and Thank You —
-     each with empty content, because the design comes from the matching
-     `page-*.php` template.
-   - Leaves Privacy and Terms as **drafts** if their template still contains
-     unreviewed placeholder legal text (it does, out of the box), and says so
-     on the results screen.
-   - Finds your "Project Inquiry" Contact Form 7 form and drops its shortcode
-     into the Contact page — nothing else on that page is touched.
-   - Sets Home as the static front page (no trip to Settings → Reading needed).
-   - Creates the "Primary Navigation" menu (Services, Process, Portfolio,
-     About, Insights, Start a project → Contact) and assigns it.
-   - Moves WordPress's default "Sample Page" to Trash, but only if it's still
-     the untouched default.
-6. **Read the results report** on the same screen — it lists what was created,
-   what already existed, and anything that needs attention (for example, if
-   Contact Form 7 wasn't found yet).
-7. Run setup again any time — it never creates duplicates, and it never
-   overwrites a page or menu item you've since edited by hand.
-8. **Add real Social Links, if you have them** (see §2 below). Until then the
-   footer simply shows no social section.
-9. **Test every page** at the URLs listed in "What the setup creates" further
-   down, on both mobile and desktop widths.
-10. **Connect `theebookedit.com`** only after the site passes on the staging
-    address.
-
-The rest of this guide covers the two navigation menus in more depth, plus
-optional publishing-platform logos. `DEPLOYMENT.md` is kept as background on
-what the setup screen automates — for example, the exact Contact Form 7 field
-markup if you want to rebuild the form from scratch.
+| Checksum for that file | `wordpress/the-ebook-edit-wordpress-theme.zip.sha256` |
+| Theme source | `wordpress/the-ebook-edit/` |
+| Detailed reference (form fields, mail, security headers) | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
+| Script that regenerates the theme from the website | `wordpress/sync-from-static.py` |
 
 ---
 
-## 1. The primary menu
+## Before you start
 
-The header logo is the link back to the homepage, so the menu deliberately has
-**no Home item**.
+You need three things, all free:
 
-**Appearance → The Ebook Edit Setup** creates and assigns this menu for you (see
-"Quick start" above), so you shouldn't need the steps below on a normal install.
-They're here in case you ever want to build or edit the menu by hand — the
-navigation also works with no menu at all, since the theme has a built-in
-fallback list:
+1. A WordPress site you can log in to as an administrator (EasyWP, or any
+   other host — nothing here is EasyWP-specific, and **no paid EasyWP add-on,
+   including EasyWP Backup, is required**).
+2. The file `the-ebook-edit-wordpress-theme.zip` from this folder. On GitHub,
+   open the file and click **Download raw file**.
+3. About twenty minutes.
 
-1. Go to **Appearance → Menus**.
-2. Next to **Menu Name**, type: `Primary Navigation`
-3. Click **Create Menu**.
-4. Add these items, in this order, using **Pages** (or **Custom Links**) on the left:
-
-   1. Services
-   2. Process
-   3. Portfolio
-   4. About
-   5. Insights
-   6. Start a project → the **Contact** page
-
-   Rename the Contact item to `Start a project`: open the item in the menu editor
-   and type it into **Navigation Label**.
-
-5. **Do not add Home.** The logo already links to the homepage, so a Home item
-   would duplicate it.
-6. Under **Menu Settings → Display location**, tick **Primary Navigation**.
-7. Click **Save Menu**.
-
-### Make "Start a project" the gold button
-
-1. In **Appearance → Menus**, open **Screen Options** (top right).
-2. Tick **CSS Classes**.
-3. Open the **Start a project** item and type `nav-cta` into **CSS Classes**.
-4. **Save Menu**.
-
-### What stays automatic
-
-- The current page is marked for screen readers (`aria-current`), including the
-  service detail pages, which highlight **Services**, and the articles, which
-  highlight **Insights**.
-- The mobile **Menu** button, its open/closed state, and closing with the
-  `Esc` key all keep working with a custom menu.
-- Only the top level of the menu is displayed. Sub-items are ignored.
+**Take a copy of your site first.** If your host offers a free snapshot or
+staging site, use it. If it does not, the free **All-in-One WP Migration**
+plugin (Plugins → Add New → search for it → Install → Activate → All-in-One WP
+Migration → Export → Export to File) makes a downloadable backup at no cost.
+This is worth doing even though nothing in this theme deletes your content.
 
 ---
 
-## 2. The social links menu
+## Install it in seven steps
 
-Social links only appear in the footer once you create this menu. Until then the
-footer shows no social heading and no empty space — nothing is hard-coded.
+### 1. Upload the theme
 
-1. Go to **Appearance → Menus → create a new menu**.
-2. Name it exactly: `Social Links`
-3. Click **Create Menu**.
-4. Open **Custom Links** on the left and add **one entry per account you really
-   have**. For each one:
-   - **URL:** the full address, for example `https://www.linkedin.com/company/your-page`
-   - **Link Text:** the platform name, for example `LinkedIn`
-5. Typical entries: LinkedIn, Instagram, Facebook, YouTube, X.
-6. Under **Menu Settings → Display location**, tick **Social Links**.
-7. Click **Save Menu**.
+Dashboard → **Appearance → Themes → Add New → Upload Theme** → **Choose File**
+→ pick `the-ebook-edit-wordpress-theme.zip` → **Install Now** → **Activate**.
 
-Notes:
+The site will look wrong until step 4 — that is expected.
 
-- Add only accounts that exist. Do not add placeholder or example URLs.
-- Remove an item from the menu to remove it from the footer.
-- If the menu is deleted or unassigned, the footer's social block disappears
-  completely — it never leaves an empty heading or gap behind.
-- The links are text labels in the site's own styling. No icon font, external
-  script, or tracking library is loaded.
+### 2. Set the web address format
 
----
+**Settings → Permalinks** → choose **Post name** → **Save Changes**.
 
-## 3. Publishing platform logos (optional)
+Do this *before* step 4, or the page addresses below will not work.
 
-The homepage has a **Publishing platforms** section listing:
+### 3. Install the form plugin
 
-Amazon Kindle Direct Publishing · Apple Books · Kobo Writing Life ·
-Google Play Books · Barnes & Noble Press / NOOK · Draft2Digital
+**Plugins → Add New**, search for **Contact Form 7**, then **Install Now** →
+**Activate**.
 
-It ships as text tiles, because no approved logo files are included.
+You do not need to create anything in it — step 4 builds both enquiry forms for
+you, using the exact fields the published website uses.
 
-To use real logos later, put approved image files in:
+### 4. Run the setup
 
-```
-wordpress/the-ebook-edit/assets/images/platforms/
-```
+**Appearance → The Ebook Edit Setup** → click **Set up The Ebook Edit
+website**.
 
-Name each file after its platform slug, using `.svg`, `.png`, or `.webp`:
+One click does all of this:
 
-| File name | Tile |
+* Creates the page record for every page of the website, each with empty
+  content, because the design and the words come from the theme.
+* Creates the two Contact Form 7 forms — **Project Inquiry** (the Start a
+  Project page) and **Publishing Journey** (the form on the homepage) — with
+  every field, dropdown option and label from the published site, and connects
+  each one to its page.
+* Sets **Home** as the front page, so you do not need to visit Settings →
+  Reading.
+* Leaves **Privacy Policy** and **Website Terms** as *drafts*, because their
+  wording still needs professional legal review. The results screen says so.
+
+The results screen then lists exactly what was created, what already existed
+and was left alone, and anything that still needs your attention.
+
+**It is safe to press the button again.** Nothing is duplicated, and nothing
+you have written is changed or deleted. The single optional removal is the
+tick-box on that screen, which moves WordPress's own default "Sample Page" to
+Trash — off unless you tick it, and only ever applied to the untouched default
+page.
+
+### 5. Check the pages
+
+Visit each address and confirm it looks like the published site:
+
+| Page | Address |
 |---|---|
-| `amazon-kdp.svg` | Amazon Kindle Direct Publishing |
-| `apple-books.svg` | Apple Books |
-| `kobo-writing-life.svg` | Kobo Writing Life |
-| `google-play-books.svg` | Google Play Books |
-| `barnes-noble-press.svg` | Barnes & Noble Press / NOOK |
-| `draft2digital.svg` | Draft2Digital |
+| Home | `/` |
+| Services | `/services/` |
+| Ebook Writing | `/writing/` |
+| Editing | `/editing/` |
+| Publishing | `/publishing/` |
+| Process | `/process/` |
+| Portfolio | `/portfolio/` |
+| About | `/about/` |
+| Insights | `/insights/` |
+| Insights articles | `/insights/turn-expertise-into-an-ebook/` and the three others |
+| Start a Project | `/contact/` |
+| Thank You | `/thank-you/` |
+| Privacy / Terms | `/privacy/` and `/terms/` (drafts — preview them while logged in) |
 
-The template picks up any file it finds and swaps that tile from text to an image
-automatically — the tile keeps its size, so the layout does not move. Tiles with
-no matching file stay as text, so a partial set is fine. Logos are lazy-loaded and
-each one gets the platform name as its alt text.
+Check one page on a phone as well as on a computer. On a wide screen the book
+opens as a two-page spread; on a phone it becomes a single portrait page you
+scroll through; if a visitor has "reduce motion" switched on, it becomes a
+plain readable column. All three are correct.
 
-**Before adding any logo:** check that platform's current brand or press asset
-guidelines and use only files they publish for this purpose. Do not download or
-recreate a logo from a search result. If in doubt, leave the text tiles in place —
-they are accurate and carry no trademark risk.
+### 6. Test the enquiry forms
 
-The section also carries this note, which should stay: *"Platform names are shown
-to describe compatible publishing-support services. The Ebook Edit is an
-independent editorial service."* The Ebook Edit is not affiliated with, endorsed
-by, or a partner of any of these companies.
+Fill in the Start a Project form on `/contact/` and submit it. You should see
+Contact Form 7's confirmation, and an email should arrive.
 
-The static reference site (`/index.html`) has the same section with a comment
-showing the equivalent `<img>` markup.
+If no email arrives, that is a mail-delivery question, not a theme problem:
+most hosts need an SMTP plugin (WP Mail SMTP is free) pointed at a mailbox you
+control. **Enter those mailbox details in the plugin's own settings screen on
+the live site. Never write a password, app password or API key into this
+repository, into a theme file, or into any file you commit.** See
+`DEPLOYMENT.md` §5 for where to change the address the enquiries are sent to
+(it starts as your WordPress administrator email).
+
+### 7. Point the domain at it
+
+Only once every page above passes, connect `theebookedit.com`. Then, in
+**Settings → Reading**, make sure **Discourage search engines** is *unticked*,
+and re-check that Privacy and Terms are still drafts if their wording has not
+been reviewed yet.
 
 ---
 
-## 4. What the theme does and does not do
+## Before you go live
 
-Does:
+* **Have the legal pages reviewed.** Privacy and Terms are starter wording, not
+  reviewed legal text, and the theme deliberately leaves them unpublished. The
+  privacy page also names **Netlify** as the host and form processor — true of
+  the current published site, and something to update as part of that review if
+  WordPress becomes the live site.
+* **Set the site icon** (Appearance → Customize → Site Identity → Site Icon).
+  Until you do, the theme uses the brand favicon bundled with it.
+* **Check the notification address** on both forms under Contact → Contact
+  Forms → *(form)* → Mail.
 
-- Header, footer, navigation, and every page layout from the original site.
-- Page titles, meta descriptions, canonical URLs, Open Graph and Twitter tags,
-  and structured data, all built from your WordPress site address.
-- `robots.txt` pointing at the sitemap WordPress generates at `/wp-sitemap.xml`.
-- A honeypot spam check for the Contact Form 7 form.
-- Sticky header that stays clear of the WordPress admin toolbar when you are
-  logged in.
+---
 
-Does not:
+## Keeping WordPress and the published site in step
 
-- Send email itself. Contact Form 7 handles the contact form; see `DEPLOYMENT.md`.
-- Include Netlify files (`netlify.toml`, `_headers`). Security headers go in
-  `.htaccess` — see `DEPLOYMENT.md` step 8.
-- Require a page builder, block plugin, or JavaScript framework.
+The theme is generated, not hand-written. When the website in this repository
+changes, run:
+
+```
+python3 wordpress/sync-from-static.py
+```
+
+That regenerates every `page-*.php` template, the page metadata, the two form
+bodies and the stylesheets from the current HTML, then rebuild the ZIP:
+
+```
+cd wordpress && rm -f the-ebook-edit-wordpress-theme.zip \
+  && zip -r -X the-ebook-edit-wordpress-theme.zip the-ebook-edit \
+  && sha256sum the-ebook-edit-wordpress-theme.zip > the-ebook-edit-wordpress-theme.zip.sha256
+```
+
+Two files in the theme are hand-maintained and are **not** overwritten by the
+script: `functions.php` / `header.php` / `footer.php` / `inc/setup.php` (the
+WordPress plumbing) and `assets/css/wordpress.css` (which makes Contact Form
+7's markup match the design). Everything else is regenerated.
+
+To check the result without a WordPress install:
+
+```
+php wordpress/verify-theme.php /tmp/preview
+```
+
+This renders every template to plain HTML files you can open or diff against
+the matching page in the repository root.
+
+---
+
+## What the theme does and does not do
+
+**It does:**
+
+* Reproduce the published website exactly — the same markup, the same
+  stylesheets, the same book engine, the same page metadata and structured
+  data.
+* Derive every address from your WordPress site address, so it works on a
+  staging domain and on the live domain with no edits.
+* Bundle all of its own images, fonts-free CSS and JavaScript, so it needs no
+  external service at page-render time.
+* Work with Contact Form 7 for the two enquiry forms.
+
+**It does not:**
+
+* Store the website's design or words in the WordPress editor. Editing a page
+  in WordPress will not change what visitors see — change the HTML in this
+  repository and re-run the sync script instead.
+* Install or require any paid plugin, paid host feature, or page builder.
+* Send email itself, or store any mail credentials.
+* Delete or rewrite content you have created.
