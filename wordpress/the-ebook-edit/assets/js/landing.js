@@ -18,19 +18,24 @@
         exactly the same places.
 
    The header's navigation links and its mobile menu were removed from
-   this page so the only path is the lead form, so the code that drove
-   them is gone with them. The floating WhatsApp button moved to
-   landing-whatsapp.js, which the thank-you page loads too.
+   this page so the only paths onward are a call to action or the form,
+   so the code that drove them is gone with them. The floating WhatsApp
+   button is now a plain link rendered by PHP and needs no script at all.
    ------------------------------------------------------------------ */
 
 /* ========= configuration supplied by the theme ========= */
 var TEEBE_LANDING = window.teebeLanding || {};
 
-// Service cards bring the visitor to the lead form
+/* Every call to action on this page is a real anchor, so navigation works
+   without JavaScript, with the keyboard, and in Meta's in-app browser.
+   The one exception is the service card: the approved design makes the
+   whole card clickable, and this sends it to the same place its own
+   "Read More" link points to rather than to a different destination. */
 document.querySelectorAll(".service-card").forEach(card => {
   card.addEventListener("click", e => {
     if (e.target.closest("a")) return;
-    document.getElementById("contact").scrollIntoView({behavior:"smooth"});
+    const link = card.querySelector(".service-link");
+    if (link) link.click();
   });
 });
 

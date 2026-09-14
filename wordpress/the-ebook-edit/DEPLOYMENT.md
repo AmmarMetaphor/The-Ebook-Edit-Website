@@ -33,8 +33,6 @@ the-ebook-edit/
   assets/css/landing.css    the landing page's own design system  (hand-maintained)
   assets/js/book.js         the book engine                            (generated)
   assets/js/landing.js      the landing page's own scripts        (hand-maintained)
-  assets/js/landing-whatsapp.js
-                            the floating WhatsApp button          (hand-maintained)
   assets/images/            logo, icons, portfolio covers, favicon      (generated)
   assets/images/landing/    the landing page's own images         (hand-maintained)
 ```
@@ -226,14 +224,31 @@ every browser released since 2020 (Chrome 32+, Firefox 65+, Safari 14+,
 Edge 18+); a visitor on something older would not see these images, which is
 worth knowing but affects a very small share of ad traffic.
 
-**The WhatsApp button** opens `wa.me` with the number already published across
-the website. To change it without editing the theme:
+**Calls to action.** Every conversion button on the landing page — the header,
+the hero, the six carousel buttons, the services buttons and cards, the final
+call to action and the one in the About view — is a real anchor pointing at
+`teebe_landing_cta_href()`, which is the thank-you page. There are two routes
+to the same place and both are intended: a visitor who is ready books straight
+away, and a visitor who would rather describe the book first fills in the form
+and is taken there once Contact Form 7 confirms delivery.
+
+The carousel controls, the legal links, the email links and the WhatsApp button
+are not calls to action and keep their own destinations.
+
+**The WhatsApp button** on both pages is a plain link to
+`teebe_landing_whatsapp_url()` — `https://wa.me/<digits>?text=<message>` —
+opened in a new tab with `rel="noopener noreferrer"`. It needs no JavaScript,
+so it works in Meta's in-app browser and with the keyboard, and there is no
+placeholder or fallback behaviour left. The number is defined in one place and
+both pages use it. To change it without editing the theme:
 
 ```php
 add_filter( 'teebe_landing_whatsapp_number', fn() => '441234567890' );
+add_filter( 'teebe_landing_whatsapp_message', fn() => 'Hello…' );
 ```
 
-Returning an empty string makes the button scroll to the enquiry form instead.
+Returning an empty number renders the button with no destination, which is the
+only case in which it should be removed from the templates.
 
 ## 6. Mail
 

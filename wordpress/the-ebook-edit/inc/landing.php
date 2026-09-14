@@ -64,10 +64,9 @@ function teebe_is_funnel() {
  * book presentation and would fight this design system. Contact Form 7's
  * assets are untouched and still load normally.
  *
- * Both pages share one stylesheet and one WhatsApp script. Only the landing
- * page loads landing.js, which is the carousel and the lead form: the
- * thank-you page has neither, and loading it there would do nothing but cost
- * the visitor a download on the page where they are booking.
+ * Both pages share one stylesheet. Only the landing page loads any script:
+ * landing.js is the carousel and the lead form, and the thank-you page has
+ * neither. Its WhatsApp button is a plain link, so it needs nothing.
  */
 function teebe_landing_assets() {
 	wp_enqueue_style(
@@ -82,26 +81,8 @@ function teebe_landing_assets() {
 		'strategy'  => 'defer',
 	);
 
-	wp_enqueue_script(
-		'the-ebook-edit-landing-whatsapp',
-		get_theme_file_uri( 'assets/js/landing-whatsapp.js' ),
-		array(),
-		(string) filemtime( get_theme_file_path( 'assets/js/landing-whatsapp.js' ) ),
-		$deferred
-	);
-
-	wp_add_inline_script(
-		'the-ebook-edit-landing-whatsapp',
-		'window.teebeLanding = ' . wp_json_encode(
-			array(
-				'whatsappNumber'  => teebe_landing_whatsapp_number(),
-				'whatsappMessage' => teebe_landing_whatsapp_message(),
-				'thankYouUrl'     => teebe_landing_thank_you_url(),
-			)
-		) . ';',
-		'before'
-	);
-
+	// The thank-you page needs no JavaScript of its own: its WhatsApp button
+	// is a plain link and the booking calendar brings its own script.
 	if ( ! teebe_is_landing() ) {
 		return;
 	}
@@ -109,9 +90,17 @@ function teebe_landing_assets() {
 	wp_enqueue_script(
 		'the-ebook-edit-landing',
 		get_theme_file_uri( 'assets/js/landing.js' ),
-		array( 'the-ebook-edit-landing-whatsapp' ),
+		array(),
 		(string) filemtime( get_theme_file_path( 'assets/js/landing.js' ) ),
 		$deferred
+	);
+
+	wp_add_inline_script(
+		'the-ebook-edit-landing',
+		'window.teebeLanding = ' . wp_json_encode(
+			array( 'thankYouUrl' => teebe_landing_thank_you_url() )
+		) . ';',
+		'before'
 	);
 }
 
@@ -135,6 +124,57 @@ function teebe_landing_thank_you_url() {
 }
 
 /**
+ * Where every conversion call to action on the landing page points.
+ *
+ * The landing page has two deliberate routes to the same place: a visitor who
+ * is ready books straight away through any call to action, and a visitor who
+ * would rather tell us about the book first fills in the form and is taken to
+ * the same page once Contact Form 7 confirms the enquiry was delivered.
+ *
+ * If the thank-you destination has been turned off, calls to action fall back
+ * to the enquiry form rather than becoming dead links.
+ *
+ * @return string
+ */
+function teebe_landing_cta_href() {
+	$url = teebe_landing_thank_you_url();
+
+	return '' !== $url ? $url : '#contact';
+}
+
+/**
+ * The floating WhatsApp button's destination: a real wa.me conversation.
+ *
+ * Built from the one configured number and message, so the landing page and
+ * the thank-you page open the same chat and no number is written into a
+ * template or a script. The number is digits only, as wa.me requires — any
+ * plus sign, space, hyphen or bracket a filter introduces is stripped here
+ * rather than producing a link that silently fails.
+ *
+ * Returns '' when no number is configured, which is the only case in which
+ * the button is not rendered at all.
+ *
+ * @return string
+ */
+function teebe_landing_whatsapp_url() {
+	$number = preg_replace( '/\D+/', '', teebe_landing_whatsapp_number() );
+
+	if ( '' === $number ) {
+		return '';
+	}
+
+	$url = 'https://wa.me/' . $number;
+
+	$message = teebe_landing_whatsapp_message();
+
+	if ( '' !== $message ) {
+		$url .= '?text=' . rawurlencode( $message );
+	}
+
+	return $url;
+}
+
+/**
  * The WhatsApp number the floating button opens, digits only, in
  * international format.
  *
@@ -144,8 +184,8 @@ function teebe_landing_thank_you_url() {
  *
  *     add_filter( 'teebe_landing_whatsapp_number', fn() => '441234567890' );
  *
- * Returning an empty string restores the approved fallback: the button shows
- * a short notice and scrolls the visitor to the enquiry form instead.
+ * Returning an empty string removes the button altogether, which is the only
+ * case in which it is not rendered.
  *
  * @return string
  */
@@ -161,22 +201,7 @@ function teebe_landing_whatsapp_number() {
 function teebe_landing_whatsapp_message() {
 	return (string) apply_filters(
 		'teebe_landing_whatsapp_message',
-		__( 'Hello The Ebook Edit, I would like to discuss an ebook project.', 'the-ebook-edit' )
-	);
-}
-
-/**
- * The notice shown if the WhatsApp button is pressed while no number is
- * configured. The approved file carried a note addressed to whoever was
- * setting the prototype up; this is the visitor-facing equivalent, and with
- * a number configured it is never shown at all.
- *
- * @return string
- */
-function teebe_landing_whatsapp_fallback_message() {
-	return (string) apply_filters(
-		'teebe_landing_whatsapp_fallback_message',
-		__( 'WhatsApp is unavailable at the moment — please use the enquiry form.', 'the-ebook-edit' )
+		__( 'Hello, I’m interested in discussing my book project with The Ebook Edit.', 'the-ebook-edit' )
 	);
 }
 
