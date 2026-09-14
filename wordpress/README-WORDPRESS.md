@@ -111,6 +111,9 @@ Visit each address and confirm it looks like the published site:
 | Thank You | `/thank-you/` |
 | Privacy / Terms | `/privacy/` and `/terms/` (drafts — preview them while logged in) |
 
+The Meta Ads landing page is not in this list: it is not part of the website
+and is published separately in step 6b below.
+
 Check one page on a phone as well as on a computer. On a wide screen the book
 opens as a two-page spread; on a phone it becomes a single portrait page you
 scroll through; if a visitor has "reduce motion" switched on, it becomes a
@@ -128,6 +131,27 @@ the live site. Never write a password, app password or API key into this
 repository, into a theme file, or into any file you commit.** See
 `DEPLOYMENT.md` §5 for where to change the address the enquiries are sent to
 (it starts as your WordPress administrator email).
+
+### 6b. Publish the Meta Ads landing page (optional)
+
+The advertising landing page is **not** part of the website and is not created
+by the setup screen, so nothing about your existing pages changes if you never
+publish it. When you want it live:
+
+1. **Pages → Add New.**
+2. Title it **Start Your Book**.
+3. Set the address you want to advertise. In the editor sidebar, open **Page**
+   → **URL** and set the slug to `start-your-book`.
+4. In the sidebar under **Page Attributes → Template**, choose
+   **The Ebook Edit — Meta Ads Landing Page**.
+5. **Publish.**
+6. Open `https://theebookedit.com/start-your-book/`.
+
+Its enquiry form, **Start Your Book**, is created by the setup in step 4 and
+goes to `support@theebookedit.com`. The page finds it on its own — there is no
+shortcode to paste. If you see "Enquiry form not configured yet" on the page,
+Contact Form 7 is missing or the setup has not been run; do steps 3 and 4 and
+reload.
 
 ### 7. Point the domain at it
 
@@ -170,10 +194,18 @@ cd wordpress && rm -f the-ebook-edit-wordpress-theme.zip \
   && sha256sum the-ebook-edit-wordpress-theme.zip > the-ebook-edit-wordpress-theme.zip.sha256
 ```
 
-Two files in the theme are hand-maintained and are **not** overwritten by the
-script: `functions.php` / `header.php` / `footer.php` / `inc/setup.php` (the
-WordPress plumbing) and `assets/css/wordpress.css` (which makes Contact Form
-7's markup match the design). Everything else is regenerated.
+These parts of the theme are hand-maintained and are **not** overwritten by the
+script:
+
+* `functions.php`, `header.php`, `footer.php`, `inc/setup.php` — the WordPress
+  plumbing;
+* `assets/css/wordpress.css` — makes Contact Form 7's markup match the design;
+* `template-landing-meta-ads.php`, `inc/landing.php`, `assets/css/landing.css`,
+  `assets/js/landing.js`, `assets/images/landing/`, `cf7/landing-enquiry.txt` —
+  the Meta Ads landing page, which has no counterpart in this repository's
+  static site and is therefore never regenerated from it.
+
+Everything else is regenerated.
 
 To check the result without a WordPress install:
 
@@ -193,6 +225,9 @@ the matching page in the repository root.
 * Reproduce the published website exactly — the same markup, the same
   stylesheets, the same book engine, the same page metadata and structured
   data.
+* Carry the approved Meta Ads landing page as a page template you can assign
+  to a page of your choosing, with its own design, its own images and its own
+  enquiry form, without touching any existing page.
 * Derive every address from your WordPress site address, so it works on a
   staging domain and on the live domain with no edits.
 * Bundle all of its own images, fonts-free CSS and JavaScript, so it needs no

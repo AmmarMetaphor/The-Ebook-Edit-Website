@@ -12,6 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 require_once get_theme_file_path( 'inc/seo-data.php' );
 require_once get_theme_file_path( 'inc/seo-meta.php' );
 require_once get_theme_file_path( 'inc/setup.php' );
+require_once get_theme_file_path( 'inc/landing.php' );
 
 /**
  * Theme supports.
@@ -36,6 +37,14 @@ add_action( 'after_setup_theme', 'teebe_setup' );
  * the static site used.
  */
 function teebe_assets() {
+	// The Meta Ads landing page carries its own complete design system and
+	// must not load the book stylesheets or the book engine, which would
+	// fight it. See inc/landing.php.
+	if ( teebe_is_landing() ) {
+		teebe_landing_assets();
+		return;
+	}
+
 	// style.css carries only the theme header WordPress requires; it is
 	// enqueued first so a child theme can still override from it.
 	wp_enqueue_style(

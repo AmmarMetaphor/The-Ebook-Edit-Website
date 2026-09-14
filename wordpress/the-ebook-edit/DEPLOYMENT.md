@@ -16,17 +16,23 @@ the-ebook-edit/
   front-page.php            the homepage
   page-*.php                one template per page of the website
   template-insight-*.php    the four Insights articles
+  template-landing-meta-ads.php
+                            the Meta Ads landing page      (hand-maintained)
   index.php  page.php       fallbacks for anything added later
   404.php                   not found
   inc/seo-data.php          page metadata, generated from the website
   inc/seo-meta.php          prints title, description, canonical, social, JSON-LD
   inc/setup.php             the Appearance → The Ebook Edit Setup screen
-  cf7/*.txt                 the two Contact Form 7 form bodies
+  inc/landing.php           the landing page's assets, metadata and form
+  cf7/*.txt                 the three Contact Form 7 form bodies
   assets/css/styles.css     design tokens, typography, buttons, forms  (generated)
   assets/css/book.css       the book presentation                      (generated)
   assets/css/wordpress.css  Contact Form 7 integration            (hand-maintained)
+  assets/css/landing.css    the landing page's own design system  (hand-maintained)
   assets/js/book.js         the book engine                            (generated)
+  assets/js/landing.js      the landing page's own scripts        (hand-maintained)
   assets/images/            logo, icons, portfolio covers, favicon      (generated)
+  assets/images/landing/    the landing page's own images         (hand-maintained)
 ```
 
 Generated files come from `wordpress/sync-from-static.py`, which reads the HTML
@@ -38,7 +44,8 @@ the script.
 WordPress's template hierarchy does the routing. A page whose slug is
 `services` is served by `page-services.php`; the homepage by `front-page.php`;
 the four articles by the `template-insight-*.php` file assigned to each of
-them.
+them. A page can also be pointed at a named template by hand, which is how the
+Meta Ads landing page in §5 is published.
 
 The design and the words are in those templates, **not** in the WordPress
 editor. Page records exist only so WordPress has a URL to serve. The one thing
@@ -67,7 +74,7 @@ ever fails to load, a timer clears the classes and all content stays reachable.
 
 Nothing hijacks scrolling. Everything animates with transform and opacity only.
 
-## 4. The two enquiry forms
+## 4. The three enquiry forms
 
 The published site posts to Netlify Forms, which WordPress has no equivalent
 of, so Contact Form 7 renders the forms instead.
@@ -76,10 +83,12 @@ of, so Contact Form 7 renders the forms instead.
 |---|---|---|---|
 | Project Inquiry | Start a Project (`/contact/`) | `start-form` | `cf7/project-inquiry.txt` |
 | Publishing Journey | Home (`/`) | `page-form`, id `enquiry` | `cf7/publishing-journey.txt` |
+| Start Your Book | the Meta Ads landing page | `lead-form`, id `leadForm` | `cf7/landing-enquiry.txt` |
 
-The setup screen creates both from those files, with every field, label,
-dropdown option and page-splitting wrapper the published site uses, and writes
-the matching shortcode into the page — for example:
+The setup screen creates all three from those files, with every field, label,
+dropdown option and page-splitting wrapper the published site uses. For the two
+that belong to a fixed page it also writes the matching shortcode into that
+page — for example:
 
 ```
 [contact-form-7 id="12" title="Project Inquiry" html_class="start-form"]
@@ -94,6 +103,16 @@ hidden honeypot `hp-field`.
 **Fields — Publishing Journey:** `name`*, `email`*, `journey`*, `support`,
 `message`, plus `hp-field`. (* = required.)
 
+**Fields — Start Your Book:** `full_name`*, `email`*, `mobile_whatsapp`*,
+`book_type`*, `book_stage`*, `expected_budget`*, plus `hp-field`. All six
+visitor-facing fields are required, and the dropdown values are exactly those
+in the approved landing page. This form is addressed to
+`support@theebookedit.com` rather than the WordPress administrator email.
+
+Unlike the other two, its shortcode is not stored on a page. The landing page
+template can be assigned to a page with any slug, so it looks the form up by
+its title and renders it itself — there is nothing to paste.
+
 `functions.php` registers a `wpcf7_spam` filter that rejects any submission
 where `hp-field` is filled in, which is how the honeypot works without a
 plugin. It also disables Contact Form 7's automatic paragraph wrapping, because
@@ -104,7 +123,70 @@ paste the contents of the matching `cf7/*.txt` file into the **Form** tab
 (replacing `{{home}}` with your site address), save, and put its shortcode on
 the page with the right `html_class`.
 
-## 5. Mail
+## 5. The Meta Ads landing page
+
+A separate advertising landing page, added as a page template rather than as
+part of the website. It is not linked from the book, does not appear in the
+chapter tabs, and changes nothing about any existing page.
+
+| | |
+|---|---|
+| Template file | `template-landing-meta-ads.php` |
+| Name shown in WordPress | **The Ebook Edit — Meta Ads Landing Page** |
+| Integration | `inc/landing.php` |
+| Design | `assets/css/landing.css`, `assets/js/landing.js`, `assets/images/landing/` |
+| Images | WebP, ~1.9 MB total (see below) |
+| Form | Contact Form 7, "Start Your Book" → support@theebookedit.com |
+
+**To publish it:** Pages → Add New → title it (for example *Start Your Book*),
+set the slug you want to advertise (for example `start-your-book`), choose the
+template above under **Page Attributes → Template**, and Publish. The page then
+answers at that address, for example `/start-your-book/`.
+
+**Why it does not use header.php and footer.php.** The website's shell opens a
+`<main id="main">` landmark and loads the book stylesheets and the book engine.
+The landing page carries its own complete design system, its own `<header>` and
+`<footer>`, and its own `<main id="landing-view">`. Reusing the shell would
+produce two headers, two main landmarks and two competing stylesheets. The
+template therefore renders its own document — but still calls
+`language_attributes()`, `wp_head()`, `body_class()`, `wp_body_open()` and
+`wp_footer()`, so plugins behave exactly as they do on any other page.
+
+`teebe_assets()` swaps the book assets for the landing page's own on this
+template only, which is why nothing about the rest of the website changes.
+Everything on the page is scoped to the `teebe-landing` body class.
+
+**The page is a single document with four views.** The footer's About Us,
+Privacy Policy and Terms & Conditions links switch to in-page views through
+`#about-us`, `#privacy-policy` and `#terms-and-conditions`. These are the
+landing page's own copies and are separate from the website's `/privacy/` and
+`/terms/` pages, which are unchanged.
+
+**Images.** The approved page carried its artwork as inline base64, 16.8 MB of
+it. The same images are shipped as WebP files in `assets/images/landing/`,
+totalling about 1.9 MB:
+
+* the seven images with transparency — the logo and the six platform logos —
+  are **lossless** WebP, pixel-for-pixel identical to the approved PNGs;
+* the five large book covers and the hero background are lossy WebP at quality
+  88, measured at a mean error of 1-2 levels out of 255, which is not visible;
+* the first book cover is still the approved JPEG, because WebP was no smaller.
+
+Dimensions are unchanged, so the layout is identical. WebP is supported by
+every browser released since 2020 (Chrome 32+, Firefox 65+, Safari 14+,
+Edge 18+); a visitor on something older would not see these images, which is
+worth knowing but affects a very small share of ad traffic.
+
+**The WhatsApp button** opens `wa.me` with the number already published across
+the website. To change it without editing the theme:
+
+```php
+add_filter( 'teebe_landing_whatsapp_number', fn() => '441234567890' );
+```
+
+Returning an empty string makes the button scroll to the enquiry form instead.
+
+## 6. Mail
 
 Setup gives each form a mail template addressed to your **WordPress
 administrator email**, sent from `wordpress@yourdomain` with the visitor's
@@ -121,7 +203,7 @@ else.** No password, app password, API key or mailbox secret belongs in this
 repository, in a theme file, in `wp-config.php` committed to version control,
 or in any file that leaves the server.
 
-## 6. Metadata and search engines
+## 7. Metadata and search engines
 
 `inc/seo-meta.php` prints, per page: the title, meta description, canonical
 URL, Open Graph and Twitter tags, the brand icons, and the JSON-LD the
@@ -132,7 +214,7 @@ against `home_url()`.
 * `robots.txt` points at WordPress's own `/wp-sitemap.xml`.
 * Setting a Site Icon in the Customizer replaces the bundled icons.
 
-## 7. Security headers (optional, host-dependent)
+## 8. Security headers (optional, host-dependent)
 
 The theme sets no HTTP headers. If your host lets you add them, these are the
 ones the static site uses:
@@ -147,13 +229,13 @@ Permissions-Policy: geolocation=(), microphone=(), camera=()
 Add a Content-Security-Policy only after testing: WordPress and its plugins
 load inline scripts and styles that a strict policy will block.
 
-## 8. What the setup screen changes
+## 9. What the setup screen changes
 
 Under Appearance → The Ebook Edit Setup, and only when you click the button:
 
 * creates missing page records (`get_page_by_path` first, so nothing is ever
   duplicated);
-* creates the two Contact Form 7 forms if forms with those titles do not
+* creates the three Contact Form 7 forms if forms with those titles do not
   already exist;
 * writes a shortcode into the Home and Contact pages **only when their content
   is empty**;
@@ -164,9 +246,13 @@ It never edits or deletes content you have written. The only removal is
 opt-in: a tick-box that moves WordPress's own default "Sample Page" to Trash,
 and only when that page is still the untouched default.
 
-## 9. Still outstanding before launch
+## 10. Still outstanding before launch
 
 * Privacy and Terms need professional legal review before publishing. Their
-  current text also names Netlify as the host and form processor.
+  current text also names Netlify as the host and form processor. The Meta Ads
+  landing page carries its own Privacy Policy and Terms views, which are
+  separate wording and need the same review.
+* Nothing outstanding for the landing page's images: they were converted to
+  WebP (see §5).
 * Confirm the enquiry notification address on both forms.
 * Confirm mail delivery from the live host.

@@ -32,6 +32,8 @@ $GLOBALS['teebe_preview'] = array(
 	'slug'     => '',
 	'is_404'   => false,
 	'is_front' => true,
+	'template' => '',
+	'inline'   => array(),
 	'styles'   => array(),
 	'scripts'  => array(),
 	'actions'  => array(),
@@ -181,11 +183,52 @@ function get_page_by_path( $slug, $output = null, $type = 'page' ) {
 function get_post( $id ) {
 	return null; }
 
+/**
+ * The Contact Form 7 form bodies, keyed by the title the shortcode carries.
+ * The website's two forms use their body's file name as the title; the
+ * landing page's form is looked up by its real title, so it is mapped here.
+ *
+ * @param string $title Shortcode title attribute.
+ * @return string Theme-relative path to the form body.
+ */
+function teebe_preview_cf7_body( $title ) {
+	$named = array( 'Start Your Book' => 'cf7/landing-enquiry.txt' );
+
+	return isset( $named[ $title ] ) ? $named[ $title ] : 'cf7/' . $title . '.txt';
+}
+
+/**
+ * Stands in for the plugin so teebe_render_landing_form() takes its real
+ * path instead of the "not configured yet" notice.
+ */
+class WPCF7_ContactForm {}
+
+/**
+ * Just enough of WP_Query for teebe_setup_find_cf7_form() to resolve the
+ * landing page's form by title.
+ */
+class WP_Query {
+	public $posts = array();
+
+	public function __construct( $args = array() ) {
+		if ( isset( $args['post_type'], $args['title'] ) && 'wpcf7_contact_form' === $args['post_type'] ) {
+			$this->posts[] = (object) array(
+				'ID'         => 1,
+				'post_title' => $args['title'],
+			);
+		}
+	}
+
+	public function have_posts() {
+		return (bool) $this->posts;
+	}
+}
+
 function do_shortcode( $content ) {
 	return preg_replace_callback(
-		'/\[contact-form-7 id="\d+" title="([a-z\-]+)" html_class="([a-z\-]+)"(?: html_id="([a-z\-]+)")?\]/',
+		'/\[contact-form-7 id="\d+" title="([^"]+)" html_class="([^"]+)"(?: html_id="([^"]+)")?\]/',
 		function ( $m ) {
-			$body = (string) file_get_contents( get_theme_file_path( 'cf7/' . $m[1] . '.txt' ) );
+			$body = (string) file_get_contents( get_theme_file_path( teebe_preview_cf7_body( $m[1] ) ) );
 			$body = str_replace( '{{home}}', untrailingslashit( home_url() ), $body );
 
 			return sprintf(
@@ -212,7 +255,7 @@ function do_shortcode( $content ) {
  */
 function teebe_preview_cf7_controls( $body ) {
 	return preg_replace_callback(
-		'/\[(textarea|text|email|select|submit)(\*?)([^\]]*)\]/',
+		'/\[(textarea|text|email|tel|select|submit)(\*?)([^\]]*)\]/',
 		function ( $m ) {
 			list( , $kind, $star, $rest ) = $m;
 
@@ -290,11 +333,14 @@ function teebe_preview_cf7_controls( $body ) {
 					$attrs
 				);
 			} else {
+				$type = in_array( $kind, array( 'email', 'tel' ), true ) ? $kind : 'text';
+
 				$control = sprintf(
-					'<input size="40" maxlength="400" class="wpcf7-form-control wpcf7-%s%s" value="" type="%s"%s>',
-					'email' === $kind ? 'email' : 'text',
+					'<input size="40" maxlength="400" class="wpcf7-form-control wpcf7-%s%s" value="" type="%s"%s%s>',
+					$type,
 					$required ? ' wpcf7-validates-as-required' : '',
-					'email' === $kind ? 'email' : 'text',
+					$type,
+					$place ? ' placeholder="' . esc_attr( $place ) . '"' : '',
 					$attrs
 				);
 			}
@@ -308,6 +354,12 @@ function teebe_preview_cf7_controls( $body ) {
 		$body
 	);
 }
+function is_page_template( $template = '' ) {
+	return $GLOBALS['teebe_preview']['template'] === $template; }
+function wp_add_inline_script( $handle, $data, $position = 'after' ) {
+	$GLOBALS['teebe_preview']['inline'][ $handle ][] = $data; }
+function _e( $text, $domain = '' ) {
+	echo $text; }
 function current_user_can( $cap ) {
 	return false; }
 function add_theme_support() {}
@@ -405,6 +457,10 @@ function wp_body_open() {
 
 function wp_footer() {
 	foreach ( $GLOBALS['teebe_preview']['scripts'] as $handle => $src ) {
+		foreach ( $GLOBALS['teebe_preview']['inline'][ $handle ] ?? array() as $inline ) {
+			printf( '<script id="%s-js-before">%s</script>' . "\n", esc_attr( $handle ), $inline );
+		}
+
 		printf( '<script id="%s-js" src="%s" defer></script>' . "\n", esc_attr( $handle ), esc_url( $src ) );
 	}
 }
@@ -444,6 +500,10 @@ $pages = array(
 	'editing-levels-explained'        => array( 'insights/editing-levels-explained.html', 'template-insight-editing-levels.php' ),
 	'pre-publishing-checklist'        => array( 'insights/pre-publishing-checklist.html', 'template-insight-pre-publishing.php' ),
 	'kindle-and-ebook-platform-guide' => array( 'insights/kindle-and-ebook-platform-guide.html', 'template-insight-kindle-platforms.php' ),
+	// The Meta Ads landing page has no static counterpart to compare against:
+	// it is rendered so the template, its assets and its enquiry form can be
+	// checked, and so the output can be inspected in a browser.
+	'start-your-book'                 => array( '', 'template-landing-meta-ads.php' ),
 );
 
 if ( ! is_dir( $out_dir ) ) {
@@ -455,6 +515,14 @@ foreach ( $pages as $key => $page ) {
 	$GLOBALS['teebe_preview']['slug']     = $key;
 	$GLOBALS['teebe_preview']['is_404']   = ( '404' === $key );
 	$GLOBALS['teebe_preview']['is_front'] = ( 'front' === $key );
+	// Only a page assigned a "Template Name" template reports one.
+	$GLOBALS['teebe_preview']['template'] = 0 === strpos( $page[1], 'template-' ) ? $page[1] : '';
+	// Each page resolves its own assets, exactly as a real request would: the
+	// landing page swaps the book stylesheets for its own.
+	$GLOBALS['teebe_preview']['styles']   = array();
+	$GLOBALS['teebe_preview']['scripts']  = array();
+	$GLOBALS['teebe_preview']['inline']   = array();
+	do_action( 'wp_enqueue_scripts' );
 
 	ob_start();
 	require $theme_dir . '/' . $page[1];
