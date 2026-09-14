@@ -22,9 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The page template file this integration applies to.
+ * The page template files this integration applies to: the Meta Ads landing
+ * page, and the thank-you page a delivered enquiry leads to.
  */
-const TEEBE_LANDING_TEMPLATE = 'template-landing-meta-ads.php';
+const TEEBE_LANDING_TEMPLATE    = 'template-landing-meta-ads.php';
+const TEEBE_THANK_YOU_TEMPLATE  = 'template-landing-thank-you.php';
 
 /**
  * Whether the request being rendered is the landing page.
@@ -36,12 +38,36 @@ function teebe_is_landing() {
 }
 
 /**
- * The landing page's own stylesheet and script, in place of the website's.
+ * Whether the request being rendered is the consultation thank-you page.
  *
- * Called from teebe_assets() instead of the book assets, so the landing page
- * loads neither styles.css, book.css, wordpress.css nor book.js. Those carry
- * the book presentation and would fight this page's own design system.
- * Contact Form 7's assets are untouched and still load normally.
+ * @return bool
+ */
+function teebe_is_thank_you() {
+	return is_page() && is_page_template( TEEBE_THANK_YOU_TEMPLATE );
+}
+
+/**
+ * Whether either funnel template is being rendered. Both replace the
+ * website's assets with the landing design; neither uses the book.
+ *
+ * @return bool
+ */
+function teebe_is_funnel() {
+	return teebe_is_landing() || teebe_is_thank_you();
+}
+
+/**
+ * The funnel's own stylesheet and scripts, in place of the website's.
+ *
+ * Called from teebe_assets() instead of the book assets, so neither funnel
+ * page loads styles.css, book.css, wordpress.css or book.js. Those carry the
+ * book presentation and would fight this design system. Contact Form 7's
+ * assets are untouched and still load normally.
+ *
+ * Both pages share one stylesheet and one WhatsApp script. Only the landing
+ * page loads landing.js, which is the carousel and the lead form: the
+ * thank-you page has neither, and loading it there would do nothing but cost
+ * the visitor a download on the page where they are booking.
  */
 function teebe_landing_assets() {
 	wp_enqueue_style(
@@ -51,27 +77,61 @@ function teebe_landing_assets() {
 		(string) filemtime( get_theme_file_path( 'assets/css/landing.css' ) )
 	);
 
+	$deferred = array(
+		'in_footer' => true,
+		'strategy'  => 'defer',
+	);
+
 	wp_enqueue_script(
-		'the-ebook-edit-landing',
-		get_theme_file_uri( 'assets/js/landing.js' ),
+		'the-ebook-edit-landing-whatsapp',
+		get_theme_file_uri( 'assets/js/landing-whatsapp.js' ),
 		array(),
-		(string) filemtime( get_theme_file_path( 'assets/js/landing.js' ) ),
-		array(
-			'in_footer' => true,
-			'strategy'  => 'defer',
-		)
+		(string) filemtime( get_theme_file_path( 'assets/js/landing-whatsapp.js' ) ),
+		$deferred
 	);
 
 	wp_add_inline_script(
-		'the-ebook-edit-landing',
+		'the-ebook-edit-landing-whatsapp',
 		'window.teebeLanding = ' . wp_json_encode(
 			array(
 				'whatsappNumber'  => teebe_landing_whatsapp_number(),
 				'whatsappMessage' => teebe_landing_whatsapp_message(),
+				'thankYouUrl'     => teebe_landing_thank_you_url(),
 			)
 		) . ';',
 		'before'
 	);
+
+	if ( ! teebe_is_landing() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'the-ebook-edit-landing',
+		get_theme_file_uri( 'assets/js/landing.js' ),
+		array( 'the-ebook-edit-landing-whatsapp' ),
+		(string) filemtime( get_theme_file_path( 'assets/js/landing.js' ) ),
+		$deferred
+	);
+}
+
+/**
+ * Where a delivered landing-page enquiry sends the visitor.
+ *
+ * Derived from the site address, so it is correct on a staging domain and on
+ * the live domain without editing the theme, and carries no hard-coded host.
+ * Point it at a different page — if the consultation thank-you template is
+ * published at a slug other than /thank-you/ — with:
+ *
+ *     add_filter( 'teebe_landing_thank_you_url', fn() => home_url( '/book-a-call/' ) );
+ *
+ * Returning an empty string disables the redirect: the visitor then stays on
+ * the landing page and sees Contact Form 7's own confirmation.
+ *
+ * @return string
+ */
+function teebe_landing_thank_you_url() {
+	return (string) apply_filters( 'teebe_landing_thank_you_url', home_url( '/thank-you/' ) );
 }
 
 /**
@@ -131,9 +191,39 @@ function teebe_landing_body_class( $classes ) {
 		$classes[] = 'teebe-landing';
 	}
 
+	if ( teebe_is_thank_you() && ! in_array( 'teebe-thank-you', $classes, true ) ) {
+		$classes[] = 'teebe-thank-you';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'teebe_landing_body_class' );
+
+/**
+ * Keeps the consultation thank-you page out of search results.
+ *
+ * It is the end of an advertising funnel, reachable only by submitting the
+ * landing page's form, and nothing on it is useful to someone arriving from
+ * a search engine. Applied through WordPress's own robots filter rather than
+ * a tag in the template, so it also governs the X-Robots-Tag header a host or
+ * plugin may add.
+ *
+ * Only this template is affected: the website, the landing page and the legal
+ * pages keep whatever directives they already had.
+ *
+ * @param array $robots Robots directives.
+ * @return array
+ */
+function teebe_thank_you_robots( $robots ) {
+	if ( teebe_is_thank_you() ) {
+		$robots['noindex']  = true;
+		$robots['nofollow'] = true;
+		unset( $robots['follow'] );
+	}
+
+	return $robots;
+}
+add_filter( 'wp_robots', 'teebe_thank_you_robots', 20 );
 
 /**
  * The landing page's own browser theme colour, which is darker than the rest
@@ -143,7 +233,7 @@ add_filter( 'body_class', 'teebe_landing_body_class' );
  * @return string
  */
 function teebe_landing_theme_color( $color ) {
-	return teebe_is_landing() ? '#051a43' : $color;
+	return teebe_is_funnel() ? '#051a43' : $color;
 }
 add_filter( 'teebe_theme_color', 'teebe_landing_theme_color' );
 
@@ -157,11 +247,13 @@ add_filter( 'teebe_theme_color', 'teebe_landing_theme_color' );
  * Open Graph tags for a page it has no entry for, so nothing is duplicated.
  */
 function teebe_landing_head_meta() {
-	if ( ! teebe_is_landing() ) {
+	if ( ! teebe_is_funnel() ) {
 		return;
 	}
 
-	$description = __( 'The Ebook Edit — professional ebook writing, editing, formatting and publishing support.', 'the-ebook-edit' );
+	$description = teebe_is_thank_you()
+		? __( 'Choose a time to speak with a consultant from The Ebook Edit about your book.', 'the-ebook-edit' )
+		: __( 'The Ebook Edit — professional ebook writing, editing, formatting and publishing support.', 'the-ebook-edit' );
 	$title       = wp_get_document_title();
 	$url         = get_permalink();
 	$image       = get_theme_file_uri( 'assets/images/brand/the-ebook-edit-og.jpg' );

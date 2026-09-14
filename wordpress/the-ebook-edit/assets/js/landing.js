@@ -10,27 +10,21 @@
         the number already published across theebookedit.com;
 
      2. the lead form no longer fakes its own success. Contact Form 7
-        performs the submission and the approved success panel is shown
-        only when the plugin confirms the mail was actually sent. The
-        approved field-by-field validation is unchanged and still runs
-        in the browser first, so the visitor sees exactly the same
-        messages in exactly the same places.
+        performs the submission, and only when the plugin confirms the
+        mail was actually sent does the visitor move on to the thank-you
+        page where the consultation is booked. The approved
+        field-by-field validation is unchanged and still runs in the
+        browser first, so the visitor sees exactly the same messages in
+        exactly the same places.
+
+   The header's navigation links and its mobile menu were removed from
+   this page so the only path is the lead form, so the code that drove
+   them is gone with them. The floating WhatsApp button moved to
+   landing-whatsapp.js, which the thank-you page loads too.
    ------------------------------------------------------------------ */
 
 /* ========= configuration supplied by the theme ========= */
 var TEEBE_LANDING = window.teebeLanding || {};
-var WHATSAPP_NUMBER = TEEBE_LANDING.whatsappNumber || "";
-var WHATSAPP_MESSAGE = TEEBE_LANDING.whatsappMessage ||
-  "Hello The Ebook Edit, I would like to discuss an ebook project.";
-
-// Mobile menu
-const menuBtn = document.getElementById("menuBtn");
-const nav = document.getElementById("nav");
-menuBtn.addEventListener("click", () => {
-  const open = nav.classList.toggle("open");
-  menuBtn.setAttribute("aria-expanded", String(open));
-});
-nav.querySelectorAll("a").forEach(a => a.addEventListener("click", () => nav.classList.remove("open")));
 
 // Service cards bring the visitor to the lead form
 document.querySelectorAll(".service-card").forEach(card => {
@@ -42,8 +36,8 @@ document.querySelectorAll(".service-card").forEach(card => {
 
 // Lead form: six required fields with readable validation messages.
 // Contact Form 7 delivers the submission; this keeps the approved
-// in-page validation and shows the approved success panel only once the
-// plugin reports that the mail was really sent.
+// in-page validation and, once the plugin reports that the mail was
+// really sent, moves the visitor on to the thank-you page.
 (() => {
   const form = document.getElementById("leadForm");
   // Contact Form 7 is not configured yet: the template renders a notice
@@ -102,9 +96,6 @@ document.querySelectorAll(".service-card").forEach(card => {
     el.addEventListener("change", () => { if (def.valid(el.value, el)) setError(el, ""); });
   });
 
-  const status = form.querySelector(".form-status");
-  const summary = form.querySelector(".form-summary");
-
   /* Capture phase, so this runs before Contact Form 7's own submit
      handler on the same element regardless of which was registered
      first. An invalid form is stopped here and never reaches the
@@ -120,60 +111,34 @@ document.querySelectorAll(".service-card").forEach(card => {
     if (firstInvalid) {
       e.preventDefault();
       e.stopImmediatePropagation();
-      if (status) status.classList.remove("show");
       firstInvalid.focus();
     }
   }, true);
 
-  // A new attempt clears the previous outcome.
-  form.addEventListener("wpcf7submit", () => { if (status) status.classList.remove("show"); });
-
   /* The server rejected something the browser accepted. Its messages are
      printed by the plugin next to each control, so the page's own copies
-     are cleared to avoid showing two messages for one field. */
+     are cleared to avoid showing two messages for one field. None of
+     these outcomes leaves the landing page. */
   ["wpcf7invalid", "wpcf7spam", "wpcf7mailfailed"].forEach(type => {
-    form.addEventListener(type, () => {
-      clearErrors();
-      if (status) status.classList.remove("show");
-    });
+    form.addEventListener(type, clearErrors);
   });
 
-  /* Delivered. This is the only path that reveals the approved success
-     panel, and the summary is rebuilt from what was actually submitted —
-     Contact Form 7 clears the form once the mail has gone. */
-  form.addEventListener("wpcf7mailsent", event => {
-    const sent = (event.detail && event.detail.inputs) || [];
-    const data = {};
-    sent.forEach(input => { data[input.name] = input.value; });
-    clearErrors();
-    if (summary) {
-      summary.replaceChildren(...present.flatMap(def => {
-        const dt = document.createElement("dt"), dd = document.createElement("dd");
-        dt.textContent = def.label; dd.textContent = String(data[def.name] || "").trim();
-        return [dt, dd];
-      }));
-    }
-    if (status) {
-      status.classList.add("show");
-      status.scrollIntoView({behavior: "smooth", block: "nearest"});
-    }
+  /* Delivered — and only delivered. wpcf7mailsent fires once Contact
+     Form 7 has actually sent the mail; wpcf7submit, wpcf7invalid,
+     wpcf7spam and wpcf7mailfailed do not reach this handler, so a
+     rejected, failed or abandoned submission never leaves the page.
+
+     The listener is bound to this form element, so no other Contact
+     Form 7 form on the website can trigger the redirect.
+
+     The URL comes from the theme (home_url('/thank-you/') by default);
+     if it is ever missing, the visitor stays here and Contact Form 7's
+     own confirmation is shown rather than being sent nowhere. */
+  form.addEventListener("wpcf7mailsent", () => {
+    const next = TEEBE_LANDING.thankYouUrl;
+    if (next) window.location.assign(next);
   });
 })();
-
-// WhatsApp — fixed bottom-right
-const whatsapp = document.getElementById("whatsapp");
-const toast = document.getElementById("toast");
-whatsapp.addEventListener("click", e => {
-  if (WHATSAPP_NUMBER) {
-    e.preventDefault();
-    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`, "_blank", "noopener,noreferrer");
-  } else {
-    e.preventDefault();
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2600);
-    setTimeout(() => document.getElementById("contact").scrollIntoView({behavior:"smooth"}), 650);
-  }
-});
 
 (() => {
   const root = document.getElementById('work');

@@ -51,15 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <header>
   <div class="container header-inner">
     <a class="brand" href="#home" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit"></a>
-    <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
-    <nav class="nav" id="nav">
-      <a href="#home">Home</a>
-      <a href="#services">Services</a>
-      <a href="#process">Process</a>
-      <a href="#work">Work</a>
-      <a href="#contact">Contact</a>
-      <a class="btn btn-gold" href="#contact">Get Started →</a>
-    </nav>
+    <a class="btn btn-gold header-cta" href="#contact">Speak with our Consultant</a>
   </div>
 </header>
 
@@ -71,7 +63,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <h1>Let Your Story<br>Become <span>Your<br>Legacy</span></h1>
         <p class="lead">From first idea to final publication, we help shape books that are clear, polished and ready to leave an impression.</p>
         <div class="hero-actions">
-          <a class="btn hero-primary-cta" href="#contact">Start Your Publishing Journey Now</a>
+          <a class="btn hero-primary-cta" href="#contact">Book your Free Consultation</a>
         </div>
     </div>
 

@@ -504,6 +504,8 @@ $pages = array(
 	// it is rendered so the template, its assets and its enquiry form can be
 	// checked, and so the output can be inspected in a browser.
 	'start-your-book'                 => array( '', 'template-landing-meta-ads.php' ),
+	// The consultation thank-you page, likewise with no static counterpart.
+	'consultation-thank-you'          => array( '', 'template-landing-thank-you.php' ),
 );
 
 if ( ! is_dir( $out_dir ) ) {

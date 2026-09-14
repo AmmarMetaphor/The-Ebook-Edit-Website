@@ -33,7 +33,3 @@
 </div>
 [submit class:btn class:btn-gold "Send Message →"]
 <p class="form-note">Your details are used only to respond to your enquiry — see our <a href="#privacy-policy">Privacy Policy</a>.</p>
-<div class="form-status" role="status">
-  <p class="form-status-title">Thank you — we've received your details and will be in touch shortly.</p>
-  <dl class="form-summary"></dl>
-</div>
