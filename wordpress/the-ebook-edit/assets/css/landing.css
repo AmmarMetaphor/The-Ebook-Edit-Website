@@ -743,6 +743,34 @@ footer{padding:26px 0 34px;color:#91a8c6;font-size:.78rem}
   .teebe-landing .header-cta { padding: 0 10px; font-size: .68rem; }
 }
 
+/* --- informational service cards ----------------------------------
+   The six cards in the services grid no longer carry a "Read More"
+   button, so two things that were there only for it are undone here:
+
+     * the pointer cursor, which told the visitor the card was clickable
+       when nothing on it is a link any more;
+     * the 330px floor, which existed so a bottom-aligned button had room
+       beneath the description. Without it the floor left dead space
+       under the last line, so it comes down to the height the content
+       actually needs. The cards are grid items and still stretch to
+       match the tallest in their row, so they stay aligned.
+
+   Everything else — background, gold icon, border, corner ornament,
+   hover lift, padding and the responsive grid — is untouched.
+
+   The height is set only above 760px, because below that the approved
+   stylesheet already drops the card to min-height:auto and this rule
+   would otherwise out-rank it and put the dead space back on phones. */
+.teebe-landing .service-card {
+  cursor: default;
+}
+
+@media (min-width: 761px) {
+  .teebe-landing .service-card {
+    min-height: 258px;
+  }
+}
+
 /* --- consultation thank-you page ----------------------------------
    The page reuses the landing palette, type and panel treatment. These
    are the only rules it adds: the calendar's heading block, the panel

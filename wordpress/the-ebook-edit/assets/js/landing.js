@@ -28,16 +28,8 @@ var TEEBE_LANDING = window.teebeLanding || {};
 
 /* Every call to action on this page is a real anchor, so navigation works
    without JavaScript, with the keyboard, and in Meta's in-app browser.
-   The one exception is the service card: the approved design makes the
-   whole card clickable, and this sends it to the same place its own
-   "Read More" link points to rather than to a different destination. */
-document.querySelectorAll(".service-card").forEach(card => {
-  card.addEventListener("click", e => {
-    if (e.target.closest("a")) return;
-    const link = card.querySelector(".service-link");
-    if (link) link.click();
-  });
-});
+   The service cards in the grid carry no call to action of their own and
+   are purely informational, so nothing here makes them clickable. */
 
 // Lead form: six required fields with readable validation messages.
 // Contact Form 7 delivers the submission; this keeps the approved

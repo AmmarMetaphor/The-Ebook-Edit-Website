@@ -237,42 +237,36 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div class="service-mark">✎</div>
         <h3>Book Editing</h3>
         <p>Improve structure, clarity, consistency and flow while preserving the voice of the book.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Read More →</a>
       </article>
 
       <article class="service-card" data-service="Book Cover Design">
         <div class="service-mark">◈</div>
         <h3>Book Cover Design</h3>
         <p>Create a strong visual first impression with a distinctive, genre aware cover direction.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Read More →</a>
       </article>
 
       <article class="service-card" data-service="Proofreading">
         <div class="service-mark">⌕</div>
         <h3>Proofreading</h3>
         <p>Resolve spelling, grammar, punctuation and formatting issues before publication.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Read More →</a>
       </article>
 
       <article class="service-card" data-service="Book Illustrations">
         <div class="service-mark">✦</div>
         <h3>Book Illustrations</h3>
         <p>Bring ideas and scenes to life with illustration support tailored to the book and its readers.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Read More →</a>
       </article>
 
       <article class="service-card" data-service="Children Books">
         <div class="service-mark">★</div>
         <h3>Children Books</h3>
         <p>Develop engaging, age appropriate content and presentation for younger readers.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Read More →</a>
       </article>
 
       <article class="service-card" data-service="Book Marketing">
         <div class="service-mark">↗</div>
         <h3>Book Marketing</h3>
         <p>Support discoverability through launch planning, promotional content and reader facing campaigns.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Read More →</a>
       </article>
     </div>
   </div>
