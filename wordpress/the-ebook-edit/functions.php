@@ -37,10 +37,11 @@ add_action( 'after_setup_theme', 'teebe_setup' );
  * the static site used.
  */
 function teebe_assets() {
-	// The Meta Ads landing page carries its own complete design system and
-	// must not load the book stylesheets or the book engine, which would
-	// fight it. See inc/landing.php.
-	if ( teebe_is_landing() ) {
+	// The Meta Ads landing page and its consultation thank-you page carry
+	// their own complete design system and must not load the book
+	// stylesheets or the book engine, which would fight it. See
+	// inc/landing.php.
+	if ( teebe_is_funnel() ) {
 		teebe_landing_assets();
 		return;
 	}

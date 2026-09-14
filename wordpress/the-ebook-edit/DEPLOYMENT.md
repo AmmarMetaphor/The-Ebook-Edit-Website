@@ -18,6 +18,8 @@ the-ebook-edit/
   template-insight-*.php    the four Insights articles
   template-landing-meta-ads.php
                             the Meta Ads landing page      (hand-maintained)
+  template-landing-thank-you.php
+                            the consultation thank-you page(hand-maintained)
   index.php  page.php       fallbacks for anything added later
   404.php                   not found
   inc/seo-data.php          page metadata, generated from the website
@@ -135,6 +137,7 @@ chapter tabs, and changes nothing about any existing page.
 | Name shown in WordPress | **The Ebook Edit — Meta Ads Landing Page** |
 | Integration | `inc/landing.php` |
 | Design | `assets/css/landing.css`, `assets/js/landing.js`, `assets/images/landing/` |
+| Thank-you template | `template-landing-thank-you.php` — **The Ebook Edit — Consultation Thank You** |
 | Images | WebP, ~1.9 MB total (see below) |
 | Form | Contact Form 7, "Start Your Book" → support@theebookedit.com |
 
@@ -162,6 +165,50 @@ Privacy Policy and Terms & Conditions links switch to in-page views through
 landing page's own copies and are separate from the website's `/privacy/` and
 `/terms/` pages, which are unchanged.
 
+**The funnel.** The landing page is the first of two pages:
+
+    ad -> landing page -> lead form -> delivered -> thank-you page -> booking
+
+`assets/js/landing.js` listens for Contact Form 7's `wpcf7mailsent` on the
+landing form itself and sends the visitor to the thank-you page. That event
+fires only once the plugin has actually sent the mail, so an invalid, spam,
+failed or abandoned submission keeps the visitor on the landing page with the
+error in front of them. The listener is bound to that one form element, so no
+other Contact Form 7 form on the website can trigger it.
+
+The destination comes from PHP as `window.teebeLanding.thankYouUrl`, built
+from `home_url( '/thank-you/' )`. If the thank-you template is published at a
+different address, point the redirect at it without editing the theme:
+
+```php
+add_filter( 'teebe_landing_thank_you_url', fn() => home_url( '/book-a-call/' ) );
+```
+
+Returning an empty string turns the redirect off; the visitor then stays on
+the landing page and sees Contact Form 7's own confirmation.
+
+**The header** is the logo and one button, "Speak with our Consultant", which
+scrolls to the enquiry form. The landing page carries no navigation links and
+no mobile menu: the only path through it is the form. This is the landing
+template only — the website's own navigation is the book's chapter tabs and is
+untouched.
+
+**The thank-you page** (`template-landing-thank-you.php`, shown in WordPress as
+*The Ebook Edit — Consultation Thank You*) is where a delivered enquiry lands
+and where the consultation is booked, through the HighLevel calendar embedded
+exactly as supplied. It shares this stylesheet and the WhatsApp script with the
+landing page and loads neither the carousel nor the lead form. It is marked
+`noindex, nofollow` through WordPress's own `wp_robots` filter, because it is a
+conversion endpoint rather than a page anyone should find in search; nothing
+else on the site is affected.
+
+Publish it the same way as the landing page: Pages -> Add New, set the slug,
+choose that template, Publish. **Note that the website already has a page at
+`/thank-you/`** (`page-thank-you.php`, created by the setup screen). Either
+assign this template to that existing page — which changes what `/thank-you/`
+shows for the whole site — or publish the consultation thank-you at its own
+slug and point the redirect there with the filter above.
+
 **Images.** The approved page carried its artwork as inline base64, 16.8 MB of
 it. The same images are shipped as WebP files in `assets/images/landing/`,
 totalling about 1.9 MB:
@@ -177,14 +224,31 @@ every browser released since 2020 (Chrome 32+, Firefox 65+, Safari 14+,
 Edge 18+); a visitor on something older would not see these images, which is
 worth knowing but affects a very small share of ad traffic.
 
-**The WhatsApp button** opens `wa.me` with the number already published across
-the website. To change it without editing the theme:
+**Calls to action.** Every conversion button on the landing page — the header,
+the hero, the six carousel buttons, the services buttons and cards, the final
+call to action and the one in the About view — is a real anchor pointing at
+`teebe_landing_cta_href()`, which is the thank-you page. There are two routes
+to the same place and both are intended: a visitor who is ready books straight
+away, and a visitor who would rather describe the book first fills in the form
+and is taken there once Contact Form 7 confirms delivery.
+
+The carousel controls, the legal links, the email links and the WhatsApp button
+are not calls to action and keep their own destinations.
+
+**The WhatsApp button** on both pages is a plain link to
+`teebe_landing_whatsapp_url()` — `https://wa.me/<digits>?text=<message>` —
+opened in a new tab with `rel="noopener noreferrer"`. It needs no JavaScript,
+so it works in Meta's in-app browser and with the keyboard, and there is no
+placeholder or fallback behaviour left. The number is defined in one place and
+both pages use it. To change it without editing the theme:
 
 ```php
 add_filter( 'teebe_landing_whatsapp_number', fn() => '441234567890' );
+add_filter( 'teebe_landing_whatsapp_message', fn() => 'Hello…' );
 ```
 
-Returning an empty string makes the button scroll to the enquiry form instead.
+Returning an empty number renders the button with no destination, which is the
+only case in which it should be removed from the templates.
 
 ## 6. Mail
 

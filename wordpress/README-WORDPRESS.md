@@ -147,6 +147,14 @@ publish it. When you want it live:
 5. **Publish.**
 6. Open `https://theebookedit.com/start-your-book/`.
 
+Then publish its thank-you page the same way: **Pages → Add New**, title it
+**Thank You (Consultation)**, choose the template **The Ebook Edit —
+Consultation Thank You**, and publish it at `/thank-you/`. That is where a
+delivered enquiry sends the visitor to book the call. **The website already has
+its own page at `/thank-you/`** — either assign this template to that page, or
+publish this one at a different address and tell the landing page about it (see
+`DEPLOYMENT.md` §5).
+
 Its enquiry form, **Start Your Book**, is created by the setup in step 4 and
 goes to `support@theebookedit.com`. The page finds it on its own — there is no
 shortcode to paste. If you see "Enquiry form not configured yet" on the page,

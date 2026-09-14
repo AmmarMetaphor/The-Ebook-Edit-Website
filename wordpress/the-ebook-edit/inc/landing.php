@@ -22,9 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The page template file this integration applies to.
+ * The page template files this integration applies to: the Meta Ads landing
+ * page, and the thank-you page a delivered enquiry leads to.
  */
-const TEEBE_LANDING_TEMPLATE = 'template-landing-meta-ads.php';
+const TEEBE_LANDING_TEMPLATE    = 'template-landing-meta-ads.php';
+const TEEBE_THANK_YOU_TEMPLATE  = 'template-landing-thank-you.php';
 
 /**
  * Whether the request being rendered is the landing page.
@@ -36,12 +38,35 @@ function teebe_is_landing() {
 }
 
 /**
- * The landing page's own stylesheet and script, in place of the website's.
+ * Whether the request being rendered is the consultation thank-you page.
  *
- * Called from teebe_assets() instead of the book assets, so the landing page
- * loads neither styles.css, book.css, wordpress.css nor book.js. Those carry
- * the book presentation and would fight this page's own design system.
- * Contact Form 7's assets are untouched and still load normally.
+ * @return bool
+ */
+function teebe_is_thank_you() {
+	return is_page() && is_page_template( TEEBE_THANK_YOU_TEMPLATE );
+}
+
+/**
+ * Whether either funnel template is being rendered. Both replace the
+ * website's assets with the landing design; neither uses the book.
+ *
+ * @return bool
+ */
+function teebe_is_funnel() {
+	return teebe_is_landing() || teebe_is_thank_you();
+}
+
+/**
+ * The funnel's own stylesheet and scripts, in place of the website's.
+ *
+ * Called from teebe_assets() instead of the book assets, so neither funnel
+ * page loads styles.css, book.css, wordpress.css or book.js. Those carry the
+ * book presentation and would fight this design system. Contact Form 7's
+ * assets are untouched and still load normally.
+ *
+ * Both pages share one stylesheet. Only the landing page loads any script:
+ * landing.js is the carousel and the lead form, and the thank-you page has
+ * neither. Its WhatsApp button is a plain link, so it needs nothing.
  */
 function teebe_landing_assets() {
 	wp_enqueue_style(
@@ -51,27 +76,102 @@ function teebe_landing_assets() {
 		(string) filemtime( get_theme_file_path( 'assets/css/landing.css' ) )
 	);
 
+	$deferred = array(
+		'in_footer' => true,
+		'strategy'  => 'defer',
+	);
+
+	// The thank-you page needs no JavaScript of its own: its WhatsApp button
+	// is a plain link and the booking calendar brings its own script.
+	if ( ! teebe_is_landing() ) {
+		return;
+	}
+
 	wp_enqueue_script(
 		'the-ebook-edit-landing',
 		get_theme_file_uri( 'assets/js/landing.js' ),
 		array(),
 		(string) filemtime( get_theme_file_path( 'assets/js/landing.js' ) ),
-		array(
-			'in_footer' => true,
-			'strategy'  => 'defer',
-		)
+		$deferred
 	);
 
 	wp_add_inline_script(
 		'the-ebook-edit-landing',
 		'window.teebeLanding = ' . wp_json_encode(
-			array(
-				'whatsappNumber'  => teebe_landing_whatsapp_number(),
-				'whatsappMessage' => teebe_landing_whatsapp_message(),
-			)
+			array( 'thankYouUrl' => teebe_landing_thank_you_url() )
 		) . ';',
 		'before'
 	);
+}
+
+/**
+ * Where a delivered landing-page enquiry sends the visitor.
+ *
+ * Derived from the site address, so it is correct on a staging domain and on
+ * the live domain without editing the theme, and carries no hard-coded host.
+ * Point it at a different page — if the consultation thank-you template is
+ * published at a slug other than /thank-you/ — with:
+ *
+ *     add_filter( 'teebe_landing_thank_you_url', fn() => home_url( '/book-a-call/' ) );
+ *
+ * Returning an empty string disables the redirect: the visitor then stays on
+ * the landing page and sees Contact Form 7's own confirmation.
+ *
+ * @return string
+ */
+function teebe_landing_thank_you_url() {
+	return (string) apply_filters( 'teebe_landing_thank_you_url', home_url( '/thank-you/' ) );
+}
+
+/**
+ * Where every conversion call to action on the landing page points.
+ *
+ * The landing page has two deliberate routes to the same place: a visitor who
+ * is ready books straight away through any call to action, and a visitor who
+ * would rather tell us about the book first fills in the form and is taken to
+ * the same page once Contact Form 7 confirms the enquiry was delivered.
+ *
+ * If the thank-you destination has been turned off, calls to action fall back
+ * to the enquiry form rather than becoming dead links.
+ *
+ * @return string
+ */
+function teebe_landing_cta_href() {
+	$url = teebe_landing_thank_you_url();
+
+	return '' !== $url ? $url : '#contact';
+}
+
+/**
+ * The floating WhatsApp button's destination: a real wa.me conversation.
+ *
+ * Built from the one configured number and message, so the landing page and
+ * the thank-you page open the same chat and no number is written into a
+ * template or a script. The number is digits only, as wa.me requires — any
+ * plus sign, space, hyphen or bracket a filter introduces is stripped here
+ * rather than producing a link that silently fails.
+ *
+ * Returns '' when no number is configured, which is the only case in which
+ * the button is not rendered at all.
+ *
+ * @return string
+ */
+function teebe_landing_whatsapp_url() {
+	$number = preg_replace( '/\D+/', '', teebe_landing_whatsapp_number() );
+
+	if ( '' === $number ) {
+		return '';
+	}
+
+	$url = 'https://wa.me/' . $number;
+
+	$message = teebe_landing_whatsapp_message();
+
+	if ( '' !== $message ) {
+		$url .= '?text=' . rawurlencode( $message );
+	}
+
+	return $url;
 }
 
 /**
@@ -84,8 +184,8 @@ function teebe_landing_assets() {
  *
  *     add_filter( 'teebe_landing_whatsapp_number', fn() => '441234567890' );
  *
- * Returning an empty string restores the approved fallback: the button shows
- * a short notice and scrolls the visitor to the enquiry form instead.
+ * Returning an empty string removes the button altogether, which is the only
+ * case in which it is not rendered.
  *
  * @return string
  */
@@ -101,22 +201,7 @@ function teebe_landing_whatsapp_number() {
 function teebe_landing_whatsapp_message() {
 	return (string) apply_filters(
 		'teebe_landing_whatsapp_message',
-		__( 'Hello The Ebook Edit, I would like to discuss an ebook project.', 'the-ebook-edit' )
-	);
-}
-
-/**
- * The notice shown if the WhatsApp button is pressed while no number is
- * configured. The approved file carried a note addressed to whoever was
- * setting the prototype up; this is the visitor-facing equivalent, and with
- * a number configured it is never shown at all.
- *
- * @return string
- */
-function teebe_landing_whatsapp_fallback_message() {
-	return (string) apply_filters(
-		'teebe_landing_whatsapp_fallback_message',
-		__( 'WhatsApp is unavailable at the moment — please use the enquiry form.', 'the-ebook-edit' )
+		__( 'Hello, I’m interested in discussing my book project with The Ebook Edit.', 'the-ebook-edit' )
 	);
 }
 
@@ -131,9 +216,39 @@ function teebe_landing_body_class( $classes ) {
 		$classes[] = 'teebe-landing';
 	}
 
+	if ( teebe_is_thank_you() && ! in_array( 'teebe-thank-you', $classes, true ) ) {
+		$classes[] = 'teebe-thank-you';
+	}
+
 	return $classes;
 }
 add_filter( 'body_class', 'teebe_landing_body_class' );
+
+/**
+ * Keeps the consultation thank-you page out of search results.
+ *
+ * It is the end of an advertising funnel, reachable only by submitting the
+ * landing page's form, and nothing on it is useful to someone arriving from
+ * a search engine. Applied through WordPress's own robots filter rather than
+ * a tag in the template, so it also governs the X-Robots-Tag header a host or
+ * plugin may add.
+ *
+ * Only this template is affected: the website, the landing page and the legal
+ * pages keep whatever directives they already had.
+ *
+ * @param array $robots Robots directives.
+ * @return array
+ */
+function teebe_thank_you_robots( $robots ) {
+	if ( teebe_is_thank_you() ) {
+		$robots['noindex']  = true;
+		$robots['nofollow'] = true;
+		unset( $robots['follow'] );
+	}
+
+	return $robots;
+}
+add_filter( 'wp_robots', 'teebe_thank_you_robots', 20 );
 
 /**
  * The landing page's own browser theme colour, which is darker than the rest
@@ -143,7 +258,7 @@ add_filter( 'body_class', 'teebe_landing_body_class' );
  * @return string
  */
 function teebe_landing_theme_color( $color ) {
-	return teebe_is_landing() ? '#051a43' : $color;
+	return teebe_is_funnel() ? '#051a43' : $color;
 }
 add_filter( 'teebe_theme_color', 'teebe_landing_theme_color' );
 
@@ -157,11 +272,13 @@ add_filter( 'teebe_theme_color', 'teebe_landing_theme_color' );
  * Open Graph tags for a page it has no entry for, so nothing is duplicated.
  */
 function teebe_landing_head_meta() {
-	if ( ! teebe_is_landing() ) {
+	if ( ! teebe_is_funnel() ) {
 		return;
 	}
 
-	$description = __( 'The Ebook Edit — professional ebook writing, editing, formatting and publishing support.', 'the-ebook-edit' );
+	$description = teebe_is_thank_you()
+		? __( 'Choose a time to speak with a consultant from The Ebook Edit about your book.', 'the-ebook-edit' )
+		: __( 'The Ebook Edit — professional ebook writing, editing, formatting and publishing support.', 'the-ebook-edit' );
 	$title       = wp_get_document_title();
 	$url         = get_permalink();
 	$image       = get_theme_file_uri( 'assets/images/brand/the-ebook-edit-og.jpg' );
