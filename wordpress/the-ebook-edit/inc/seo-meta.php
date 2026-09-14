@@ -123,7 +123,12 @@ function teebe_head_meta() {
 	$entry = teebe_seo_entry();
 	$image = get_theme_file_uri( 'assets/images/brand/the-ebook-edit-og.jpg' );
 
-	echo '<meta name="theme-color" content="#0047b9">' . "\n";
+	// Filterable so a template with its own palette — the Meta Ads landing
+	// page — can set its own without a second, conflicting tag.
+	printf(
+		'<meta name="theme-color" content="%s">' . "\n",
+		esc_attr( apply_filters( 'teebe_theme_color', '#0047b9' ) )
+	);
 
 	if ( ! $entry ) {
 		$canonical = wp_get_canonical_url();

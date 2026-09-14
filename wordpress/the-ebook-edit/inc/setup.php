@@ -199,7 +199,27 @@ function teebe_setup_form_definitions() {
 }
 
 /**
- * Creates the two Contact Form 7 forms from the bodies bundled with the theme,
+ * Every form the setup routine creates.
+ *
+ * The two in teebe_setup_form_definitions() belong to a fixed page and have
+ * their shortcode written into it. The Meta Ads landing page's form is found
+ * by title by the template itself, because that template can be assigned to a
+ * page with any slug, so it is created here but never connected to a page.
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function teebe_setup_all_form_definitions() {
+	$forms = array_values( teebe_setup_form_definitions() );
+
+	if ( function_exists( 'teebe_landing_form_definition' ) ) {
+		$forms[] = teebe_landing_form_definition();
+	}
+
+	return $forms;
+}
+
+/**
+ * Creates the Contact Form 7 forms from the bodies bundled with the theme,
  * so the WordPress site renders the same forms as the published website.
  *
  * A form is created only when no form with that title exists, so running setup
@@ -215,7 +235,7 @@ function teebe_setup_create_cf7_forms( &$report ) {
 		return;
 	}
 
-	foreach ( teebe_setup_form_definitions() as $form ) {
+	foreach ( teebe_setup_all_form_definitions() as $form ) {
 		if ( teebe_setup_find_cf7_form( $form['title'] ) ) {
 			continue;
 		}
@@ -267,6 +287,10 @@ function teebe_setup_create_cf7_forms( &$report ) {
  * DMARC checks; the visitor's address goes in Reply-To. Change the recipient
  * under Contact → Contact Forms → Mail at any time.
  *
+ * A form's 'fields' may be a plain list of tag names, in which case the label
+ * is derived from the name, or a map of label => tag name where the derived
+ * label would read poorly.
+ *
  * @param array $form Form definition.
  * @return array<string, mixed>
  */
@@ -276,8 +300,12 @@ function teebe_setup_cf7_mail( $form ) {
 
 	$lines = array();
 
-	foreach ( $form['fields'] as $field ) {
-		$lines[] = sprintf( '%s: [%s]', ucwords( str_replace( '-', ' ', $field ) ), $field );
+	foreach ( $form['fields'] as $label => $field ) {
+		if ( ! is_string( $label ) ) {
+			$label = ucwords( str_replace( array( '-', '_' ), ' ', $field ) );
+		}
+
+		$lines[] = sprintf( '%s: [%s]', $label, $field );
 	}
 
 	$body = implode( "\n", $lines ) . "\n\n"
@@ -286,7 +314,7 @@ function teebe_setup_cf7_mail( $form ) {
 	return array(
 		'subject'            => sprintf( '[%s] %s', get_bloginfo( 'name' ), $form['subject'] ),
 		'sender'             => sprintf( '%s <wordpress@%s>', get_bloginfo( 'name' ), $host ),
-		'recipient'          => get_option( 'admin_email' ),
+		'recipient'          => empty( $form['recipient'] ) ? get_option( 'admin_email' ) : $form['recipient'],
 		'body'               => $body,
 		'additional_headers' => 'Reply-To: [email]',
 		'attachments'        => '',
@@ -552,6 +580,17 @@ function teebe_setup_render_page() {
 		<h1><?php esc_html_e( 'The Ebook Edit Setup', 'the-ebook-edit' ); ?></h1>
 		<p>
 			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates, generated from the published website. This setup only creates the WordPress page records and homepage setting those templates need in order to be served at the right addresses. It never writes, edits or deletes page content.', 'the-ebook-edit' ); ?>
+		</p>
+
+		<p>
+			<?php
+			printf(
+				/* translators: 1: page template name, 2: Contact Form 7 form title. */
+				esc_html__( 'The Meta Ads landing page is not created here, because it is not part of the website. To publish it, add a page yourself under Pages → Add New, give it the address you want to advertise, and choose "%1$s" under Page Attributes → Template. Setup does create its enquiry form, "%2$s", which that template finds on its own — there is no shortcode to paste.', 'the-ebook-edit' ),
+				esc_html__( 'The Ebook Edit — Meta Ads Landing Page', 'the-ebook-edit' ),
+				'Start Your Book'
+			);
+			?>
 		</p>
 
 		<?php if ( is_array( $report ) ) : ?>

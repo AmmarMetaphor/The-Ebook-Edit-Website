@@ -17,6 +17,15 @@ What it does per page:
 Everything else in the theme (functions.php, header.php, footer.php, the setup
 utility) is hand-maintained and is not touched by this script.
 
+The Meta Ads landing page is hand-maintained too, and deliberately so: it has
+no counterpart among the static pages, so there is nothing here to generate it
+from. Its files — template-landing-meta-ads.php, inc/landing.php,
+assets/css/landing.css, assets/js/landing.js, assets/images/landing/ and
+cf7/landing-enquiry.txt — are left alone by every step below. Note in
+particular that the asset step replaces assets/images/brand and
+assets/images/portfolio wholesale, which is why the landing page's images live
+in their own directory.
+
 Usage:  python3 wordpress/sync-from-static.py
 """
 
