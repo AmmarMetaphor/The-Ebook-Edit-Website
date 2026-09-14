@@ -12,7 +12,7 @@
 
    The one edit made while porting: the hero's background image was an
    inline base64 data URI in the approved file and is now a real file at
-   assets/images/landing/hero-bg.png, referenced relative to this
+   assets/images/landing/hero-bg.webp, referenced relative to this
    stylesheet. The pixels are unchanged.
    ------------------------------------------------------------------ */
 
@@ -118,7 +118,7 @@ header{
   isolation:isolate;
   background:
     linear-gradient(90deg,rgba(2,16,42,.86) 0%,rgba(3,24,58,.60) 48%,rgba(3,24,58,.50) 100%),
-    url("../images/landing/hero-bg.png") center center/cover no-repeat;
+    url("../images/landing/hero-bg.webp") center center/cover no-repeat;
 }
 .hero::before{
   content:"";

@@ -135,6 +135,7 @@ chapter tabs, and changes nothing about any existing page.
 | Name shown in WordPress | **The Ebook Edit — Meta Ads Landing Page** |
 | Integration | `inc/landing.php` |
 | Design | `assets/css/landing.css`, `assets/js/landing.js`, `assets/images/landing/` |
+| Images | WebP, ~1.9 MB total (see below) |
 | Form | Contact Form 7, "Start Your Book" → support@theebookedit.com |
 
 **To publish it:** Pages → Add New → title it (for example *Start Your Book*),
@@ -160,6 +161,21 @@ Privacy Policy and Terms & Conditions links switch to in-page views through
 `#about-us`, `#privacy-policy` and `#terms-and-conditions`. These are the
 landing page's own copies and are separate from the website's `/privacy/` and
 `/terms/` pages, which are unchanged.
+
+**Images.** The approved page carried its artwork as inline base64, 16.8 MB of
+it. The same images are shipped as WebP files in `assets/images/landing/`,
+totalling about 1.9 MB:
+
+* the seven images with transparency — the logo and the six platform logos —
+  are **lossless** WebP, pixel-for-pixel identical to the approved PNGs;
+* the five large book covers and the hero background are lossy WebP at quality
+  88, measured at a mean error of 1-2 levels out of 255, which is not visible;
+* the first book cover is still the approved JPEG, because WebP was no smaller.
+
+Dimensions are unchanged, so the layout is identical. WebP is supported by
+every browser released since 2020 (Chrome 32+, Firefox 65+, Safari 14+,
+Edge 18+); a visitor on something older would not see these images, which is
+worth knowing but affects a very small share of ad traffic.
 
 **The WhatsApp button** opens `wa.me` with the number already published across
 the website. To change it without editing the theme:
@@ -236,9 +252,7 @@ and only when that page is still the untouched default.
   current text also names Netlify as the host and form processor. The Meta Ads
   landing page carries its own Privacy Policy and Terms views, which are
   separate wording and need the same review.
-* The landing page's six book covers total about 16 MB. They are the approved
-  artwork and are shipped unchanged; converting them to WebP would cut that by
-  roughly 90% with no visible difference and is worth doing before spending on
-  ads.
+* Nothing outstanding for the landing page's images: they were converted to
+  WebP (see §5).
 * Confirm the enquiry notification address on both forms.
 * Confirm mail delivery from the live host.

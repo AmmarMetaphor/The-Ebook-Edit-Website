@@ -50,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <header>
   <div class="container header-inner">
-    <a class="brand" href="#home" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/the-ebook-edit-logo.png' ) ); ?>" alt="The Ebook Edit"></a>
+    <a class="brand" href="#home" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit"></a>
     <button class="menu-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
     <nav class="nav" id="nav">
       <a href="#home">Home</a>
@@ -98,32 +98,32 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="platform-marquee">
     <div class="platform-track">
       <div class="platform-group">
-        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.png' ) ); ?>" alt="AbeBooks"></div>
-        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.png' ) ); ?>" alt="Penguin Random House"></div>
-        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.png' ) ); ?>" alt="Scribd"></div>
-        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.png' ) ); ?>" alt="Rakuten Kobo"></div>
-        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.png' ) ); ?>" alt="Barnes & Noble"></div>
-        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.png' ) ); ?>" alt="Amazon"></div>
-        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.png' ) ); ?>" alt="AbeBooks"></div>
-        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.png' ) ); ?>" alt="Penguin Random House"></div>
-        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.png' ) ); ?>" alt="Scribd"></div>
-        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.png' ) ); ?>" alt="Rakuten Kobo"></div>
-        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.png' ) ); ?>" alt="Barnes & Noble"></div>
-        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.png' ) ); ?>" alt="Amazon"></div>
+        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.webp' ) ); ?>" alt="AbeBooks"></div>
+        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.webp' ) ); ?>" alt="Penguin Random House"></div>
+        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.webp' ) ); ?>" alt="Scribd"></div>
+        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.webp' ) ); ?>" alt="Rakuten Kobo"></div>
+        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.webp' ) ); ?>" alt="Barnes & Noble"></div>
+        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.webp' ) ); ?>" alt="Amazon"></div>
+        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.webp' ) ); ?>" alt="AbeBooks"></div>
+        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.webp' ) ); ?>" alt="Penguin Random House"></div>
+        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.webp' ) ); ?>" alt="Scribd"></div>
+        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.webp' ) ); ?>" alt="Rakuten Kobo"></div>
+        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.webp' ) ); ?>" alt="Barnes & Noble"></div>
+        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.webp' ) ); ?>" alt="Amazon"></div>
       </div>
       <div class="platform-group" aria-hidden="true">
-        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.png' ) ); ?>" alt="AbeBooks"></div>
-        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.png' ) ); ?>" alt="Penguin Random House"></div>
-        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.png' ) ); ?>" alt="Scribd"></div>
-        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.png' ) ); ?>" alt="Rakuten Kobo"></div>
-        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.png' ) ); ?>" alt="Barnes & Noble"></div>
-        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.png' ) ); ?>" alt="Amazon"></div>
-        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.png' ) ); ?>" alt="AbeBooks"></div>
-        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.png' ) ); ?>" alt="Penguin Random House"></div>
-        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.png' ) ); ?>" alt="Scribd"></div>
-        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.png' ) ); ?>" alt="Rakuten Kobo"></div>
-        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.png' ) ); ?>" alt="Barnes & Noble"></div>
-        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.png' ) ); ?>" alt="Amazon"></div>
+        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.webp' ) ); ?>" alt="AbeBooks"></div>
+        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.webp' ) ); ?>" alt="Penguin Random House"></div>
+        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.webp' ) ); ?>" alt="Scribd"></div>
+        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.webp' ) ); ?>" alt="Rakuten Kobo"></div>
+        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.webp' ) ); ?>" alt="Barnes & Noble"></div>
+        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.webp' ) ); ?>" alt="Amazon"></div>
+        <div class="platform-logo" aria-label="AbeBooks"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-abebooks.webp' ) ); ?>" alt="AbeBooks"></div>
+        <div class="platform-logo" aria-label="Penguin Random House"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-penguin-random-house.webp' ) ); ?>" alt="Penguin Random House"></div>
+        <div class="platform-logo" aria-label="Scribd"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-scribd.webp' ) ); ?>" alt="Scribd"></div>
+        <div class="platform-logo" aria-label="Rakuten Kobo"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-rakuten-kobo.webp' ) ); ?>" alt="Rakuten Kobo"></div>
+        <div class="platform-logo" aria-label="Barnes & Noble"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-barnes-noble.webp' ) ); ?>" alt="Barnes & Noble"></div>
+        <div class="platform-logo" aria-label="Amazon"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/platform-amazon.webp' ) ); ?>" alt="Amazon"></div>
       </div>
     </div>
   </div>
@@ -149,7 +149,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="2 of 6: Mila and the Gentle Dino" aria-hidden="true" inert>
-    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-2-mila-and-the-gentle-dino.png' ) ); ?>" alt="Mila and the Gentle Dino book cover" width="1024" height="1536"></div>
+    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-2-mila-and-the-gentle-dino.webp' ) ); ?>" alt="Mila and the Gentle Dino book cover" width="1024" height="1536"></div>
     <div class="featured-copy">
       <div class="eyebrow">Work we're proud of</div>
       <h2>Mila and the Gentle Dino</h2>
@@ -160,7 +160,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="3 of 6: The Ghost of Blackthorn Palace" aria-hidden="true" inert>
-    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-3-the-ghost-of-blackthorn-palace.png' ) ); ?>" alt="The Ghost of Blackthorn Palace book cover" width="1024" height="1536"></div>
+    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-3-the-ghost-of-blackthorn-palace.webp' ) ); ?>" alt="The Ghost of Blackthorn Palace book cover" width="1024" height="1536"></div>
     <div class="featured-copy">
       <div class="eyebrow">Work we're proud of</div>
       <h2>The Ghost of Blackthorn Palace</h2>
@@ -171,7 +171,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="4 of 6: The Inner Compass" aria-hidden="true" inert>
-    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-4-the-inner-compass.png' ) ); ?>" alt="The Inner Compass book cover" width="1024" height="1536"></div>
+    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-4-the-inner-compass.webp' ) ); ?>" alt="The Inner Compass book cover" width="1024" height="1536"></div>
     <div class="featured-copy">
       <div class="eyebrow">Work we're proud of</div>
       <h2>The Inner Compass</h2>
@@ -182,7 +182,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="5 of 6: Rising Through the Storm" aria-hidden="true" inert>
-    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-5-rising-through-the-storm.png' ) ); ?>" alt="Rising Through the Storm book cover" width="1024" height="1536"></div>
+    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-5-rising-through-the-storm.webp' ) ); ?>" alt="Rising Through the Storm book cover" width="1024" height="1536"></div>
     <div class="featured-copy">
       <div class="eyebrow">Work we're proud of</div>
       <h2>Rising Through the Storm</h2>
@@ -193,7 +193,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="6 of 6: The Other Side of Maybe" aria-hidden="true" inert>
-    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-6-the-other-side-of-maybe.png' ) ); ?>" alt="The Other Side of Maybe book cover" width="1024" height="1536"></div>
+    <div class="book-stage"><div class="book-pedestal"></div><img class="featured-book" src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/book-6-the-other-side-of-maybe.webp' ) ); ?>" alt="The Other Side of Maybe book cover" width="1024" height="1536"></div>
     <div class="featured-copy">
       <div class="eyebrow">Work we're proud of</div>
       <h2>The Other Side of Maybe</h2>
@@ -530,7 +530,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <footer>
   <div class="container footer-inner">
-    <img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/the-ebook-edit-logo.png' ) ); ?>" alt="The Ebook Edit">
+    <img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit">
     <div class="footer-note">
       support@theebookedit.com · Professional ebook writing, editing, formatting and publishing support.<br>
       Platform logos shown for publishing platform reference; trademarks belong to their respective owners.
