@@ -228,7 +228,6 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div class="service-mark">▤</div>
         <h3>Book Publishing</h3>
         <p>Prepare your book for release with professional formatting, publishing guidance and platform ready support for digital and print destinations.</p>
-        <a class="service-link" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Discuss Publishing →</a>
       </article>
     </div>
 
@@ -337,7 +336,7 @@ if ( ! defined( 'ABSPATH' ) ) {
   <div class="container">
     <h2>Publish a Book Readers Love.<br><span>Build Momentum That Sells.</span></h2>
     <p>From writing and editing to design, publishing and marketing, we help prepare your book to connect with readers and compete in the marketplace.</p>
-    <a class="btn btn-blue" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Get Started Today →</a>
+    <a class="btn btn-blue" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Get Started</a>
   </div>
 </section>
 </main>
