@@ -2,9 +2,13 @@
 /**
  * Template Name: The Ebook Edit — Consultation Thank You
  *
- * Where a visitor lands after the Meta Ads landing page's enquiry form has
- * really been delivered: the second step of that funnel, and the page on
- * which the consultation is actually booked.
+ * The second step of the Meta Ads funnel, and the page on which the
+ * consultation is booked. Two kinds of visitor arrive here and the copy has
+ * to be true for both: someone whose enquiry Contact Form 7 has just
+ * delivered, and someone who came straight from a consultation call to
+ * action without filling anything in. It therefore claims nothing about what
+ * the visitor has already sent us, and the calendar is offered rather than
+ * assumed — a third visitor may have booked already and returned.
  *
  * It follows the architecture template-landing-meta-ads.php established, for
  * the same reasons: it renders its own document rather than calling
@@ -57,16 +61,16 @@ if ( ! defined( 'ABSPATH' ) ) {
   <section class="ip-hero">
     <div class="container">
       <div class="eyebrow">Thank you</div>
-      <h1 class="ip-title" tabindex="-1">Your Consultation Is One Step Away.</h1>
-      <p class="ip-intro">We’ve received your book details. Choose a convenient time below to speak with our consultant.</p>
+      <h1 class="ip-title" tabindex="-1">You’re One Step Closer to Your Book.</h1>
+      <p class="ip-intro">Thanks for taking the next step with The Ebook Edit. Whether you’ve shared your book details or booked a consultation directly, we look forward to learning more about your project and helping you identify the right next step.</p>
     </div>
   </section>
 
   <section class="ip-body">
     <div class="container">
       <div class="ty-calendar-head">
-        <h2>Book Your Free Consultation</h2>
-        <p>Select a date and time that works for you.</p>
+        <h2>Haven’t booked your consultation yet?</h2>
+        <p>Choose a convenient time below to speak with our book consultant.</p>
       </div>
 
       <div class="ip-panel ty-calendar">
@@ -80,6 +84,8 @@ if ( ! defined( 'ABSPATH' ) ) {
         ?>
         <iframe src="https://api.leadconnectorhq.com/widget/booking/XQxrNiP8LHrC16L5qr2t" allow="payment" style="width: 100%;border:none;overflow: hidden;" scrolling="no" id="XQxrNiP8LHrC16L5qr2t_1789374415925"></iframe><br><script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
       </div>
+
+      <p class="ty-booked">If your consultation is already scheduled, you’re all set. We look forward to speaking with you.</p>
 
       <p class="ty-fallback">Having trouble viewing the calendar? <a href="https://api.leadconnectorhq.com/widget/booking/XQxrNiP8LHrC16L5qr2t" target="_blank" rel="noopener noreferrer">Open the booking calendar</a>.</p>
     </div>
