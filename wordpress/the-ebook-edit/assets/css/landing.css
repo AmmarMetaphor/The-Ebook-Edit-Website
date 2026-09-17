@@ -794,6 +794,19 @@ footer{padding:26px 0 34px;color:#91a8c6;font-size:.78rem}
    Nothing is injected into the booking iframe. Only its box is set:
    full width, and a minimum height so the panel is still filled if the
    widget's own resizing script is blocked. */
+/* The intro block is centred to match the booking heading and the calendar
+   below it, so the page reads as one centred column. Scoped to this page on
+   purpose: .ip-hero, .ip-title and .ip-intro are shared with the landing
+   page's About, Privacy and Terms views, which stay left aligned. */
+.teebe-thank-you .ip-hero .container {
+  text-align: center;
+}
+.teebe-thank-you .ip-title,
+.teebe-thank-you .ip-intro {
+  max-width: 850px;
+  margin-inline: auto;
+}
+
 .teebe-thank-you .ty-calendar-head {
   text-align: center;
   max-width: 720px;
@@ -803,6 +816,23 @@ footer{padding:26px 0 34px;color:#91a8c6;font-size:.78rem}
   font-size: clamp(1.9rem, 3.2vw, 2.9rem);
   line-height: 1.08;
   color: #fff;
+}
+
+/* "Haven't booked your consultation yet?" is meant to read as one line on a
+   desktop screen. At the largest size it needs about 680px and the block
+   above allows 720px, which holds for Georgia but leaves only 6% of slack —
+   enough for a wider fallback face to push it onto a second line. From
+   1024px up the block is given room to spare and the heading is told not to
+   wrap, so the intended single line does not depend on which serif the
+   visitor happens to have. Below that the heading wraps normally, which is
+   correct on a phone. */
+@media (min-width: 1024px) {
+  .teebe-thank-you .ty-calendar-head {
+    max-width: 900px;
+  }
+  .teebe-thank-you .ty-calendar-head h2 {
+    white-space: nowrap;
+  }
 }
 .teebe-thank-you .ty-calendar-head p {
   margin-top: 12px;
