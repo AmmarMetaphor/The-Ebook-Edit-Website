@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <header>
   <div class="container header-inner">
     <a class="brand" href="#home" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/landing/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit"></a>
-    <a class="btn btn-gold header-cta" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Speak with our Consultant</a>
+    <a class="btn btn-gold header-cta" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Speak with Our Expert</a>
   </div>
 </header>
 
@@ -137,7 +137,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div><strong>Presentation</strong><span>Reader ready finish</span></div>
         <div><strong>Publishing</strong><span>Platform preparation</span></div>
       </div>
-      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Project →</a>
+      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="2 of 6: Mila and the Gentle Dino" aria-hidden="true" inert>
@@ -148,7 +148,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <p class="book-genre">Children’s fiction</p>
       <p class="short">Mila and the Gentle Dino is a heartwarming story about an unexpected friendship between a curious young girl and a kind-hearted dinosaur who others are afraid to understand. As Mila spends time with her new friend, she discovers that being different does not mean being frightening, and that kindness begins with listening, understanding, and seeing the world through someone else’s eyes.</p><p class="short">Their friendship introduces children to empathy in a simple way: listening to others, noticing how they feel, including those who seem different, and choosing kindness before making assumptions.</p>
       <p class="book-tagline"><em>A gentle story about friendship, empathy and seeing beyond first impressions.</em></p>
-      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Project →</a>
+      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="3 of 6: The Ghost of Blackthorn Palace" aria-hidden="true" inert>
@@ -159,7 +159,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <p class="book-genre">Gothic fiction</p>
       <p class="short">The Ghost of Blackthorn Palace follows a young woman drawn to an abandoned estate where locals refuse to set foot after dark. Inside, she begins seeing the ghost of a girl who died in the palace decades ago, but the spirit is not simply haunting the halls. She is trying to reveal what happened to her.</p><p class="short">As buried family secrets surface and the palace grows increasingly hostile, one question becomes impossible to ignore: is the ghost asking for help, or waiting for someone to take her place?</p>
       <p class="book-tagline"><em>Some stories are haunted by ghosts. Others by the truth they refuse to bury.</em></p>
-      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Project →</a>
+      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="4 of 6: The Inner Compass" aria-hidden="true" inert>
@@ -170,7 +170,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <p class="book-genre">Personal development</p>
       <p class="short">The Inner Compass is a practical guide for anyone who feels successful on the outside but uncertain about what comes next. Through reflection, mindset shifts, and purposeful action, life coach Sophia Bennett helps readers cut through distraction, rebuild confidence, and make decisions that align with the life they genuinely want to create.</p>
       <p class="book-tagline"><em>Find clarity when success no longer tells you what comes next.</em></p>
-      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Project →</a>
+      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="5 of 6: Rising Through the Storm" aria-hidden="true" inert>
@@ -181,7 +181,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <p class="book-genre">Memoir / Autobiography</p>
       <p class="short">Rising Through the Storm is the story of Daniel Mercer, a man shaped by failure, loss, responsibility, and the relentless pressure to keep moving forward. Looking back on the choices that tested him most, he reflects on the moments that changed his direction, the people who influenced his journey, and the lessons that only hardship could teach. It is an honest account of resilience, reinvention, and the belief that even after the hardest seasons, a better chapter can still be written.</p>
       <p class="book-tagline"><em>A story of resilience, reinvention and finding the strength to begin again.</em></p>
-      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Project →</a>
+      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
     </div>
   </div>
 <div class="featured-grid book-slide book-slide-new" role="group" aria-roledescription="slide" aria-label="6 of 6: The Other Side of Maybe" aria-hidden="true" inert>
@@ -192,7 +192,7 @@ if ( ! defined( 'ABSPATH' ) ) {
       <p class="book-genre">Contemporary fiction</p>
       <p class="short">When a young woman leaves behind the life she knows for a fresh start in an unfamiliar city, she expects distance to make everything simpler. Instead, she finds new friendships, difficult choices, and truths that force her to question the future she thought she wanted. The Other Side of Maybe is a story about courage, belonging, and what can happen when starting over changes more than just your surroundings.</p>
       <p class="book-tagline"><em>Sometimes starting over changes more than where you live.</em></p>
-      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Project →</a>
+      <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
     </div>
   </div></div>
     <div class="book-controls" aria-label="Book carousel controls">
@@ -221,7 +221,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         <div class="eyebrow">Our Services</div>
         <h2>Write, Refine, Design & Publish Your Book With Us.</h2>
         <p>Focused book services from manuscript development to publishing and promotion — built around the stage your project is in now.</p>
-        <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start a Project →</a>
+        <a class="btn btn-ghost" href="<?php echo esc_url( teebe_landing_cta_href() ); ?>">Start Your Book →</a>
       </div>
 
       <article class="service-feature" data-service="Book Publishing">

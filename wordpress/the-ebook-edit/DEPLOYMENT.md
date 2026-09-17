@@ -187,7 +187,7 @@ add_filter( 'teebe_landing_thank_you_url', fn() => home_url( '/book-a-call/' ) )
 Returning an empty string turns the redirect off; the visitor then stays on
 the landing page and sees Contact Form 7's own confirmation.
 
-**The header** is the logo and one button, "Speak with our Consultant", which
+**The header** is the logo and one button, "Speak with Our Expert", which
 scrolls to the enquiry form. The landing page carries no navigation links and
 no mobile menu: the only path through it is the form. This is the landing
 template only — the website's own navigation is the book's chapter tabs and is
