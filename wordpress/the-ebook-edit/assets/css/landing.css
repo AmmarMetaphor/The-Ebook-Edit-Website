@@ -1,7 +1,7 @@
 /* The Ebook Edit — Meta Ads landing page.
    ------------------------------------------------------------------
-   Everything from the opening comment below to the "Contact Form 7
-   integration" block at the end of this file is the approved landing
+   Everything from the opening comment below to the "approved HighLevel
+   lead forms" block at the end of this file is the approved landing
    page's own stylesheet, copied verbatim from the approved HTML. Do not
    restyle it: it is the visual source of truth for /start-your-book/.
 
@@ -885,122 +885,39 @@ footer{padding:26px 0 34px;color:#91a8c6;font-size:.78rem}
   .teebe-thank-you .ty-calendar iframe { min-height: 620px; border-radius: 12px; }
 }
 
-/* ==================================================================
-   Contact Form 7 integration — the only block below that is not part
-   of the approved stylesheet.
+/* ------------------------------------------------------------------
+   The approved HighLevel lead forms.
 
-   The approved page shipped a prototype <form> with no backend. The
-   live page renders the same six fields through Contact Form 7 so the
-   enquiry is actually delivered. CF7's markup differs from the
-   prototype's in five ways, and these rules make those differences
-   invisible so the rendered page matches the approved design:
+   The theme renders the supplied embed inside the approved card and styles
+   only the wrapper around it. The iframe's own height:100% needs a height
+   to resolve against, and HighLevel sets the real one a moment after the
+   page paints, so the wrapper and the iframe are floored at the form's
+   declared data-height until then. assets/js/ghl-forms.js lifts the floor
+   once the real height arrives, so a shorter form leaves no dead space and
+   a taller one — a narrow screen stacks the fields — is never clipped.
 
-     1. every control is wrapped in a .wpcf7-form-control-wrap span,
-     2. the submit control is an <input type="submit">, not a <button>,
-     3. server-side validation prints its own .wpcf7-not-valid-tip,
-     4. the plugin's response output would duplicate the approved
-        success panel,
-     5. the plugin's spinner occupies layout space at rest.
-
-   Every selector is scoped to .teebe-landing (the body class this
-   template adds) so the rules cannot reach the rest of the website,
-   and so they win over the plugin's own stylesheet whatever order the
-   two are printed in. Nothing here changes the approved design.
-   ================================================================== */
-
-/* 1. The control wrapper is a block containing an inline control, which
-   would otherwise add a baseline gap under every field. */
-.teebe-landing .wpcf7-form-control-wrap {
-  display: grid;
+   Nothing here sets overflow:hidden on the wrapper or its parents: the
+   iframe must be free to grow.
+   ------------------------------------------------------------------ */
+.teebe-landing .ghl-form-wrap{
+  width:100%;
+  max-width:100%;
+  /* A definite height, so the iframe's own height:100% resolves to the
+     form's declared size instead of collapsing to a stub before
+     HighLevel's script runs. */
+  height:var(--teebe-ghl-height,699px);
 }
-
-/* The bundled honeypot field is never shown to a visitor. */
-.teebe-landing .lead-card .hidden {
-  display: none;
+.teebe-landing .ghl-form-wrap iframe{
+  display:block;
+  width:100%;
+  max-width:100%;
+  border:none;
+  border-radius:8px;
 }
-
-/* 2. The submit control. The approved page uses
-   <button class="btn btn-gold">; CF7 renders an <input type="submit">
-   carrying the same classes, so the .btn and .btn-gold rules above
-   already style it. These lines restore what a <button> would get and
-   strip the native control chrome iOS Safari would otherwise paint. */
-.teebe-landing .lead-card input.wpcf7-submit {
-  -webkit-appearance: none;
-  appearance: none;
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-family: inherit;
-}
-
-/* 3. Server-side validation messages, styled exactly like the approved
-   .field-error so a message from the server is indistinguishable from
-   one raised in the browser. */
-.teebe-landing .lead-card .wpcf7-not-valid-tip {
-  margin: 0;
-  color: #ffc9c9;
-  font-size: .8rem;
-  line-height: 1.35;
-  font-weight: 600;
-}
-.teebe-landing .lead-card input.wpcf7-not-valid,
-.teebe-landing .lead-card select.wpcf7-not-valid {
-  border-color: rgba(255, 120, 120, .75);
-}
-.teebe-landing .lead-card input.wpcf7-not-valid:focus,
-.teebe-landing .lead-card select.wpcf7-not-valid:focus {
-  box-shadow: 0 0 0 3px rgba(255, 120, 120, .16);
-}
-
-/* 4. The plugin's own response output. A delivered enquiry now moves the
-   visitor to the thank-you page, so the approved inline success panel
-   is gone and this is what remains if that redirect is ever blocked or
-   turned off: the visitor still gets a clear confirmation rather than a
-   form that appears to have done nothing. Failures and spam rejections
-   keep the visitor on the landing page and are shown in red. */
-.teebe-landing .lead-card form .wpcf7-response-output {
-  margin: 12px 0 0;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 120, 120, .45);
-  border-radius: 8px;
-  background: rgba(190, 62, 62, .13);
-  color: #ffc9c9;
-  font-size: .8rem;
-  line-height: 1.45;
-  position: relative;
-  z-index: 2;
-}
-.teebe-landing .lead-card form.sent .wpcf7-response-output {
-  border-color: rgba(62, 190, 115, .45);
-  background: rgba(62, 190, 115, .13);
-  color: #bff3d0;
-}
-
-/* 5. The spinner is only visibility:hidden at rest, so it still occupies
-   an inline box beside the submit button. Take it out of flow until a
-   submission is actually in progress. */
-.teebe-landing .wpcf7-spinner {
-  display: none;
-}
-.teebe-landing form.submitting .wpcf7-spinner {
-  display: inline-block;
-  visibility: visible;
-  margin: 10px auto 0;
-}
-
-/* CF7's screen-reader response list, in case the plugin's own stylesheet
-   is disabled on the site. */
-.teebe-landing .screen-reader-response {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .teebe-landing .lead-card input.wpcf7-submit:hover {
-    transform: none;
-  }
+/* HighLevel has written the real height onto the iframe. The wrapper stops
+   dictating one and simply follows it, so a shorter form leaves no dead
+   space and a taller one is never cut off. */
+.teebe-landing .ghl-form-wrap.is-sized{
+  height:auto;
+  min-height:0;
 }

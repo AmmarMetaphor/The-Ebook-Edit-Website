@@ -1,8 +1,8 @@
 # The Ebook Edit — WordPress deployment guide
 
 This folder holds the WordPress version of the website: the approved design,
-the Meta Ads landing funnel, the enquiry forms, campaign attribution and the
-site's analytics, all in one installable theme.
+the Meta Ads landing funnel, the HighLevel enquiry forms and booking calendar,
+and the site's analytics, all in one installable theme.
 
 **You never have to re-type the website into WordPress.** Every page — Home,
 Services, Book Writing, Book Editing, Book Publishing, Process, Portfolio,
@@ -16,7 +16,7 @@ so those pages answer at the right web addresses.
 | Installable theme file | `wordpress/the-ebook-edit-wordpress-theme.zip` |
 | Checksum for that file | `wordpress/the-ebook-edit-wordpress-theme.zip.sha256` |
 | Theme source | `wordpress/the-ebook-edit/` |
-| Detailed reference (form fields, mail, security headers) | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
+| Detailed reference (forms, analytics, security headers) | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
 | Script that regenerates the Insights templates | `wordpress/sync-from-static.py` |
 | Offline renderer for checking the theme | `wordpress/verify-theme.php` |
 
@@ -56,13 +56,14 @@ The site will look wrong until step 4 — that is expected.
 
 Do this *before* step 4, or the page addresses below will not work.
 
-### 3. Install the form plugin
+### 3. No form plugin needed
 
-**Plugins → Add New**, search for **Contact Form 7**, then **Install Now** →
-**Activate**.
+There is nothing to install here. The three enquiry forms and the consultation
+calendar are **HighLevel** embeds, built into the theme's templates — no
+Contact Form 7, no form builder, no shortcode to paste.
 
-You do not need to create anything in it — step 4 builds both enquiry forms for
-you, using the exact fields the published website uses.
+If Contact Form 7 is already installed for something else, leave it: the theme
+neither uses it nor interferes with it.
 
 ### 4. Run the setup
 
@@ -73,14 +74,8 @@ One click does all of this:
 
 * Creates the page record for every page of the website, each with empty
   content, because the design and the words come from the theme.
-* Creates the two Contact Form 7 forms — **Project Inquiry** (the Start a
-  Project page) and **Publishing Journey** (the form on the homepage) — with
-  every field, dropdown option and label from the published site, and connects
-  each one to its page.
 * Sets **Home** as the front page, so you do not need to visit Settings →
   Reading.
-* Leaves **Privacy Policy** and **Website Terms** as *drafts*, because their
-  wording still needs professional legal review. The results screen says so.
 
 The results screen then lists exactly what was created, what already existed
 and was left alone, and anything that still needs your attention.
@@ -126,20 +121,16 @@ on it becomes a plain readable column. All three are correct.
 
 ### 6. Test the enquiry forms
 
-Fill in the form on `/contact/` and submit it, then do the same on the
-homepage. Each should take you to `/thank-you/` **only after** the enquiry is
-actually delivered, and an email should arrive at
-`support@theebookedit.com`.
+The three enquiry forms are **HighLevel forms**. There is nothing to install
+or configure in WordPress for them: open `/`, `/contact/` and the landing
+page and check that each form appears inside its card, that every field is
+usable, and that the Submit button is reachable on a phone as well as a
+computer.
 
-Try an incomplete form too: it should stay where it is and show the message
-under the field, and it must **not** reach the Thank You page.
-
-If no email arrives, that is a mail-delivery question, not a theme problem:
-most hosts need an SMTP plugin (WP Mail SMTP is free) pointed at a mailbox you
-control. **Enter those mailbox details in the plugin's own settings screen on
-the live site. Never write a password, app password or API key into this
-repository, into a theme file, or into any file you commit.** See
-`DEPLOYMENT.md` §9.
+Submit one for real. HighLevel should record the enquiry and send you to
+`/thank-you/`. If it does not land there, the form's **redirect** is not set
+in HighLevel yet — see "Before you go live" below; the theme cannot do it for
+you.
 
 ### 6b. Publish the Meta Ads landing page (optional)
 
@@ -161,11 +152,8 @@ action on it both go to `/thank-you/`, the website's own Thank You page, which
 carries the booking calendar. That is deliberate — there is one Thank You
 experience for the whole site.
 
-Its enquiry form, **Start Your Book**, is created by the setup in step 4 and
-goes to `support@theebookedit.com`. The page finds it on its own — there is no
-shortcode to paste. If you see "Enquiry form not configured yet" on the page,
-Contact Form 7 is missing or the setup has not been run; do steps 3 and 4 and
-reload.
+Its enquiry form is the HighLevel **Landing Page Lead Form**, embedded by the
+template. There is nothing to create and no shortcode to paste.
 
 ### 7. Point the domain at it
 
@@ -186,7 +174,8 @@ theme. `DEPLOYMENT.md` §13 has the same list with the exact steps.
   as **Marketing** — it is advertising technology, not measurement, and the
   theme asks for the two consents separately. The theme then honours the
   visitor's choice automatically. Until then all three load on every visit.
-  (`DEPLOYMENT.md` §5.)
+  The HighLevel forms and calendar carry their own consent attributes and
+  defer to whichever provider is present. (`DEPLOYMENT.md` §5.)
 * **HighLevel post-booking redirect.** In the calendar settings, set the
   redirect after a confirmed booking to
   `https://theebookedit.com/thank-you/?conversion=appointment_booked`.
@@ -196,7 +185,15 @@ theme. `DEPLOYMENT.md` §13 has the same list with the exact steps.
   calendar's meeting location and turn on the 24-hour and 1-hour reminders.
   The meeting link is private and is deliberately not in this repository.
   (`DEPLOYMENT.md` §6.)
-* **Mail delivery.** Configure SMTP and send a test through all three forms.
+* **HighLevel form redirects.** Each of the three forms must redirect, after
+  a successful submission, to `https://theebookedit.com/thank-you/?conversion=lead&source=…`
+  (`home`, `contact` or `landing`). Without it, an enquiry is still captured
+  by HighLevel but is never counted as a conversion. (`DEPLOYMENT.md` §4.)
+* **HighLevel campaign capture.** Confirm each form records the UTM and click
+  parameters from the page URL, so you can still tell which campaign produced
+  a lead. (`DEPLOYMENT.md` §8.)
+* **Enquiry notifications.** The theme sends no email. Set up whatever
+  notification you want in HighLevel and send a test through all three forms.
 * **Have the legal pages reviewed.** The Privacy Policy and Terms are the
   approved copy from the design, and the Privacy Policy now names the
   analytics actually in use. A solicitor should still read both before launch.
@@ -231,9 +228,10 @@ book assets. Everything else is hand-maintained and is **not** overwritten:
   `footer.php`, `inc/site.php`, `assets/css/site.css`, `assets/js/site.js`;
 * the Meta Ads landing page — `template-landing-meta-ads.php`,
   `inc/landing.php`, `assets/css/landing.css`, `assets/js/landing.js`;
-* analytics and attribution — `inc/analytics.php`, `inc/attribution.php`,
-  `assets/js/analytics.js`, `assets/js/attribution.js`;
-* the WordPress plumbing — `functions.php`, `inc/setup.php`, `cf7/*.txt`;
+* analytics — `inc/analytics.php`, `assets/js/analytics.js`;
+* the HighLevel forms — `assets/js/ghl-forms.js`, and their definitions in
+  `inc/site.php`;
+* the WordPress plumbing — `functions.php`, `inc/setup.php`;
 * the approved artwork in `assets/images/landing/`.
 
 To check the result without a WordPress install:
@@ -257,14 +255,14 @@ diff against the previous release to see exactly what a change did.
   to a page of your choosing, with its own design and its own enquiry form,
   without touching any existing page.
 * Measure the funnel with Google Analytics 4, Microsoft Clarity and the Meta
-  Pixel, and record which campaign produced each enquiry — without sending
-  anything personal to any of them.
+  Pixel — counting a captured enquiry and a confirmed booking once each,
+  without sending anything personal to any of them.
 * Derive every address from your WordPress site address, so it works on a
   staging domain and on the live domain with no edits.
 * Bundle all of its own images, fonts-free CSS and JavaScript, so it needs no
   external service at page-render time.
-* Work with Contact Form 7 for all three enquiry forms, and with Flamingo and
-  WP Mail SMTP when they are installed.
+* Embed the three approved HighLevel lead forms and the HighLevel booking
+  calendar, loading their shared library once per page.
 
 **It does not:**
 
@@ -272,5 +270,6 @@ diff against the previous release to see exactly what a change did.
   in WordPress will not change what visitors see — edit the template instead.
 * Install or require any paid plugin, paid host feature, or page builder.
 * Send email itself, or store any mail credentials, API key or meeting link.
+* Require a form plugin. The enquiry forms are HighLevel's.
 * Add a cookie banner, or override one you already have.
 * Delete or rewrite content you have created.

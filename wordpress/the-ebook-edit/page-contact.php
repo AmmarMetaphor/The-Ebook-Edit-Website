@@ -2,9 +2,10 @@
 /**
  * Contact — /contact/.
  *
- * The enquiry form is Contact Form 7. A service-specific call to action
- * may arrive here as ?service=Book+Editing; inc/site.php sanitises that
- * and passes it to the form as its service context.
+ * The enquiry form is the approved HighLevel "Contact Page Enquiry"
+ * embed, rendered inside the approved card by teebe_render_ghl_form() in
+ * inc/site.php. The company panel, the office address and the contact
+ * links beside it are unchanged.
  *
  * Ported from the approved design; hand-maintained from here.
  * wordpress/sync-from-static.py does not generate this file.

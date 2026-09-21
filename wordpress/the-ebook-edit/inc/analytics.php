@@ -22,10 +22,10 @@
  * but refuses marketing gets exactly that.
  *
  * Nothing personal is ever sent to any of them. Every event parameter in
- * this file is a page path, a route name, a form name, a call-to-action
- * label or a location within the layout. Names, email addresses, telephone
- * numbers and anything a visitor typed stay in the Contact Form 7
- * submission and its notification email. No Advanced Matching is
+ * this file is a page path, a route name, a call-to-action label, the name
+ * of the page a lead came from, or a location within the layout. Names,
+ * email addresses, telephone numbers and anything a visitor typed stay in
+ * HighLevel, which is where the lead itself lives. No Advanced Matching is
  * configured.
  *
  * @package the-ebook-edit
@@ -264,26 +264,51 @@ src="https://www.facebook.com/tr?id=<?php echo rawurlencode( $pixel ); ?>&ev=Pag
 add_action( 'wp_body_open', 'teebe_analytics_body_open', 1 );
 
 /**
- * Whether HighLevel has returned the visitor here after a confirmed booking.
+ * Which conversion, if any, HighLevel has returned the visitor here with.
  *
- * The calendar is a cross-origin frame and is never inspected. The only
- * signal that an appointment exists is HighLevel's own post-booking
- * redirect, which carries ?conversion=appointment_booked. The parameter is
- * never trusted as input: it is unslashed, sanitised and then compared
- * against the one value that means anything.
+ * Both the lead forms and the booking calendar are cross-origin frames and
+ * neither is ever inspected. The only signal either one produces is
+ * HighLevel's own post-submission redirect back to the Thank You page:
  *
- * @return bool
+ *   ?conversion=lead&source=home|contact|landing   a captured enquiry
+ *   ?conversion=appointment_booked                 a confirmed appointment
+ *
+ * The parameters are never trusted as input. Each is unslashed, sanitised
+ * and then compared against the short list of values that mean anything;
+ * anything else is discarded.
+ *
+ * @return string 'lead', 'appointment_booked', or '' for an ordinary visit.
  */
-function teebe_analytics_booking_confirmed() {
+function teebe_analytics_conversion() {
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check of a public redirect parameter.
 	if ( empty( $_GET['conversion'] ) || ! is_string( $_GET['conversion'] ) ) {
-		return false;
+		return '';
 	}
 
 	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check of a public redirect parameter.
 	$conversion = sanitize_key( wp_unslash( $_GET['conversion'] ) );
 
-	return 'appointment_booked' === $conversion;
+	return in_array( $conversion, array( 'lead', 'appointment_booked' ), true ) ? $conversion : '';
+}
+
+/**
+ * Which form produced the lead, as HighLevel's redirect reports it.
+ *
+ * Non-personal metadata: the name of a page, nothing a visitor typed. Only
+ * the three forms the theme embeds are accepted.
+ *
+ * @return string 'home', 'contact', 'landing', or '' when absent or unknown.
+ */
+function teebe_analytics_conversion_source() {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check of a public redirect parameter.
+	if ( empty( $_GET['source'] ) || ! is_string( $_GET['source'] ) ) {
+		return '';
+	}
+
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only check of a public redirect parameter.
+	$source = sanitize_key( wp_unslash( $_GET['source'] ) );
+
+	return in_array( $source, array( 'home', 'contact', 'landing' ), true ) ? $source : '';
 }
 
 /**
@@ -325,29 +350,15 @@ function teebe_analytics_config() {
 		$route = 'landing-page';
 	}
 
-	/*
-	 * Which lead form is which, so generate_lead and form_start can name the
-	 * form without reading anything a visitor entered. Keyed by the form's
-	 * HTML id, which the theme sets when it renders the Contact Form 7
-	 * shortcode.
-	 */
-	$forms = teebe_is_landing()
-		? array( 'leadForm' => 'landing_page_form' )
-		: array(
-			'leadForm'    => 'home_page_form',
-			'contactForm' => 'contact_page_form',
-		);
-
 	return array(
-		'route'            => $route,
-		'pagePath'         => teebe_analytics_page_path(),
-		'leadOrigin'       => '' !== $route ? $route : 'other',
-		'forms'            => $forms,
-		'thankYouUrl'      => teebe_site_thank_you_url(),
-		'bookingPath'      => wp_parse_url( home_url( '/book-consultation/' ), PHP_URL_PATH ),
-		'isBookingPage'    => 'book-consultation' === $route,
-		'isThankYouPage'   => 'thank-you' === $route,
-		'bookingConfirmed' => teebe_analytics_booking_confirmed(),
+		'route'           => $route,
+		'pagePath'        => teebe_analytics_page_path(),
+		'thankYouUrl'     => teebe_site_thank_you_url(),
+		'bookingPath'     => wp_parse_url( home_url( '/book-consultation/' ), PHP_URL_PATH ),
+		'isBookingPage'   => 'book-consultation' === $route,
+		'isThankYouPage'  => 'thank-you' === $route,
+		'conversion'      => teebe_analytics_conversion(),
+		'conversionSource' => teebe_analytics_conversion_source(),
 	);
 }
 

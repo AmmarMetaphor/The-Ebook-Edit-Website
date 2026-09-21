@@ -13,8 +13,13 @@
   configured.
 
   If a tag fails to load, is blocked, or is refused by a consent manager,
-  every helper is a no-op that still runs its callback, so a form
-  submission or a link behaves exactly as it would without it.
+  every helper is a no-op that still runs its callback, so a link or a form
+  behaves exactly as it would without it.
+
+  The three lead forms and the booking calendar are HighLevel's, in
+  cross-origin frames. Nothing here reads into them, listens for their
+  submit, or guesses when one succeeded: HighLevel's redirect back to the
+  Thank You page is the only conversion signal the site uses.
 
   The Meta Pixel's base code already sends one PageView per page load, and
   every page here is a real WordPress URL, so nothing in this file sends a
@@ -34,11 +39,10 @@
     {
       route: "",
       pagePath: "/",
-      leadOrigin: "other",
-      forms: {},
       isBookingPage: false,
       isThankYouPage: false,
-      bookingConfirmed: false
+      conversion: "",
+      conversionSource: ""
     },
     window.teebeAnalytics || {}
   );
@@ -110,19 +114,6 @@
   window.teebeMetaTrack = (name, params) => meta(true, name, params);
   window.teebeMetaTrackCustom = (name, params) => meta(false, name, params);
 
-  /*
-    A delivered enquiry, recorded for both services and then handed on.
-
-    The order is the one the brief specifies: Google Analytics first, the
-    Meta Pixel second, the redirect last. Both calls queue synchronously;
-    `done` waits only for Google's acknowledgement, and no longer than the
-    timeout in track(), so the visitor is never held up by measurement.
-  */
-  window.teebeTrackLead = (params, done) => {
-    track("generate_lead", params, done);
-    meta(true, "Lead", {});
-  };
-
   const ready = fn => {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", fn, { once: true });
@@ -164,28 +155,13 @@
 
   const label = el => (el.textContent || "").replace(/\s+/g, " ").trim().slice(0, 100);
 
-  /* ---- A. form_start: the first real interaction with a lead form ---- */
+  /* ---- A + B. form_start and generate_lead ----
 
-  const started = new WeakSet();
-
-  const formName = form => CFG.forms[form.id] || form.id || "lead_form";
-
-  const onFormInteraction = event => {
-    const form = event.target && event.target.closest ? event.target.closest("form.lead-form") : null;
-    if (!form || started.has(form)) return;
-    // Focus alone is not intent; a keystroke or a chosen option is.
-    if (event.type === "focusin") return;
-    started.add(form);
-    track("form_start", { form_name: formName(form) });
-  };
-
-  document.addEventListener("input", onFormInteraction, true);
-  document.addEventListener("change", onFormInteraction, true);
-
-  /* ---- B. generate_lead is fired by the presentation that owns the form,
-       on a genuine wpcf7mailsent and before its redirect, so that a lead is
-       never recorded for an invalid, spam, aborted or failed submission.
-       See assets/js/site.js and assets/js/landing.js. ---- */
+     Both are gone from this file. The lead forms are HighLevel's now, in
+     cross-origin frames, so there is no keystroke to notice and no
+     submission to confirm from here. A captured enquiry reaches the site
+     as HighLevel's redirect to /thank-you/?conversion=lead, which section
+     G below records — once. ---- */
 
   /* ---- C. consultation_cta_click ---- */
 
@@ -259,57 +235,103 @@
     ready(() => track("consultation_booking_view", { route: CFG.route }));
   }
 
-  /* ---- G. appointment_booked, and Meta's Schedule ----
+  /* ---- G. the two conversions HighLevel reports ----
 
-     A booking exists only when HighLevel says so. The calendar is a
-     cross-origin frame and is never inspected; the single signal is
-     HighLevel's own post-booking redirect back to the Thank You page
-     carrying ?conversion=appointment_booked.
+     Both the lead forms and the booking calendar are cross-origin frames,
+     and neither is ever inspected. The one signal either produces is
+     HighLevel's own redirect back to the Thank You page:
 
-     The session guard means a refresh, a back-navigation or a restored tab
-     cannot count the same appointment twice, and the parameter is removed
-     from the address bar afterwards without reloading the page.
+       ?conversion=lead&source=home|contact|landing   an enquiry captured
+       ?conversion=appointment_booked                 an appointment confirmed
+
+     They are different things and are never conflated: a captured enquiry
+     is a lead, a confirmed appointment is a booking, and clicking a call to
+     action is neither. A plain visit to the Thank You page — which several
+     journeys pass through — records nothing at all.
+
+     Each is guarded per browsing session, so a refresh, a back-navigation
+     or a restored tab cannot count the same conversion twice. The guard for
+     a lead includes the source, so someone who genuinely enquires from two
+     different forms in one session is counted twice and someone who
+     reloads is not. The parameters are then removed from the address bar
+     without reloading the page.
   */
+
+  const CONVERSIONS = {
+    lead: {
+      key: () => "teebe.lead." + (source() || "unknown"),
+      fire: () => {
+        const params = { route: CFG.route };
+        const from = source();
+        if (from) params.lead_source = from;
+        track("generate_lead", params);
+        meta(true, "Lead", params);
+      }
+    },
+    appointment_booked: {
+      key: () => "teebe.appointment_booked",
+      fire: () => {
+        track("appointment_booked", { route: CFG.route });
+        meta(true, "Schedule", { route: CFG.route });
+      }
+    }
+  };
+
+  // Only the three forms the theme embeds; anything else in the parameter
+  // is discarded rather than reported.
+  const SOURCES = ["home", "contact", "landing"];
+
+  const param = name => {
+    try {
+      return new URLSearchParams(window.location.search).get(name) || "";
+    } catch (e) {
+      return "";
+    }
+  };
+
+  // PHP has already sanitised both, but a page cache may serve
+  // /thank-you/ without ever having seen the query string, so the address
+  // bar is read here too — and checked just as strictly.
+  const conversion = () => {
+    const value = CFG.conversion || param("conversion");
+    return Object.prototype.hasOwnProperty.call(CONVERSIONS, value) ? value : "";
+  };
+  const source = () => {
+    const value = CFG.conversionSource || param("source");
+    return SOURCES.indexOf(value) === -1 ? "" : value;
+  };
 
   if (CFG.isThankYouPage) {
     ready(() => {
-      let confirmed = CFG.bookingConfirmed === true;
+      const kind = conversion();
+      if (!kind) return;
 
-      if (!confirmed) {
-        // Read it here too: a page cache may serve /thank-you/ without
-        // having seen the query string.
-        try {
-          confirmed = new URLSearchParams(window.location.search).get("conversion") === "appointment_booked";
-        } catch (e) {
-          confirmed = false;
-        }
-      }
-
-      if (!confirmed) return;
-
+      const entry = CONVERSIONS[kind];
+      const guard = entry.key();
       let alreadyCounted = false;
+
       try {
-        alreadyCounted = window.sessionStorage.getItem("teebe.appointment_booked") === "1";
+        alreadyCounted = window.sessionStorage.getItem(guard) === "1";
       } catch (e) {
         alreadyCounted = false;
       }
 
       if (!alreadyCounted) {
         try {
-          window.sessionStorage.setItem("teebe.appointment_booked", "1");
+          window.sessionStorage.setItem(guard, "1");
         } catch (e) {
-          /* Storage unavailable; the parameter is still cleared below. */
+          /* Storage unavailable; the parameters are still cleared below. */
         }
-        track("appointment_booked", { route: CFG.route });
-        meta(true, "Schedule", { route: CFG.route });
+        entry.fire();
       }
 
       try {
         const url = new URL(window.location.href);
         url.searchParams.delete("conversion");
+        url.searchParams.delete("source");
         window.history.replaceState(null, "", url.pathname + url.search + url.hash);
       } catch (e) {
-        /* Leaving the parameter in the address bar is harmless. */
+        /* Leaving the parameters in the address bar is harmless. */
       }
     });
   }
