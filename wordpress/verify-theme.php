@@ -38,7 +38,6 @@ $GLOBALS['teebe_preview'] = array(
 	'scripts'  => array(),
 	'actions'  => array(),
 	'filters'  => array(),
-	'cf7_tags' => array(),
 );
 
 /* ---------------------------------------------------------------- plumbing */
@@ -156,210 +155,11 @@ function get_post_field( $field, $id = 0 ) {
 	return $GLOBALS['teebe_preview']['slug']; }
 function get_page_by_path( $slug, $output = null, $type = 'page' ) {
 	return null; }
-
 function get_post( $id ) {
 	return null; }
-
-/**
- * The Contact Form 7 form bodies, keyed by the title the shortcode carries.
- * Every template finds its form by title, so the map is the same one the
- * theme's setup routine uses.
- *
- * @param string $title Shortcode title attribute.
- * @return string Theme-relative path to the form body.
- */
-function teebe_preview_cf7_body( $title ) {
-	$named = array(
-		'Start Your Book'      => 'cf7/landing-enquiry.txt',
-		'Home Page Enquiry'    => 'cf7/site-home-enquiry.txt',
-		'Contact Page Enquiry' => 'cf7/site-contact-enquiry.txt',
-	);
-
-	return isset( $named[ $title ] ) ? $named[ $title ] : 'cf7/' . $title . '.txt';
-}
-
-/**
- * Stands in for the plugin so teebe_render_landing_form() takes its real
- * path instead of the "not configured yet" notice.
- */
-class WPCF7_ContactForm {}
-
-/**
- * Just enough of WP_Query for teebe_setup_find_cf7_form() to resolve the
- * landing page's form by title.
- */
-class WP_Query {
-	public $posts = array();
-
-	public function __construct( $args = array() ) {
-		if ( isset( $args['post_type'], $args['title'] ) && 'wpcf7_contact_form' === $args['post_type'] ) {
-			$this->posts[] = (object) array(
-				'ID'         => 1,
-				'post_title' => $args['title'],
-			);
-		}
-	}
-
-	public function have_posts() {
-		return (bool) $this->posts;
-	}
-}
-
 function do_shortcode( $content ) {
-	return preg_replace_callback(
-		'/\[contact-form-7 id="\d+" title="([^"]+)" html_class="([^"]+)"(?: html_id="([^"]+)")?\]/',
-		function ( $m ) {
-			$body = (string) file_get_contents( get_theme_file_path( teebe_preview_cf7_body( $m[1] ) ) );
-			$body = str_replace( '{{home}}', untrailingslashit( home_url() ), $body );
+	return $content; }
 
-			return sprintf(
-				"<div class=\"wpcf7\"><form class=\"%s wpcf7-form init\"%s>\n"
-					. "<div class=\"screen-reader-response\"><p role=\"status\" aria-live=\"polite\" aria-atomic=\"true\"></p><ul></ul></div>\n"
-					. "%s%s"
-					. "<div class=\"wpcf7-response-output\" aria-hidden=\"true\"></div>\n"
-					. "</form></div>",
-				$m[2],
-				isset( $m[3] ) && '' !== $m[3] ? ' id="' . $m[3] . '"' : '',
-				teebe_preview_cf7_hidden_fields(),
-				teebe_preview_cf7_controls( $body )
-			);
-		},
-		$content
-	);
-}
-
-/**
- * The hidden fields Contact Form 7 renders from wpcf7_form_hidden_fields,
- * which is how the theme adds its attribution fields.
- *
- * @return string
- */
-function teebe_preview_cf7_hidden_fields() {
-	$out = '';
-
-	foreach ( (array) apply_filters( 'wpcf7_form_hidden_fields', array() ) as $name => $value ) {
-		$out .= sprintf(
-			'<input type="hidden" name="%s" value="%s">',
-			esc_attr( $name ),
-			esc_attr( $value )
-		);
-	}
-
-	return '' !== $out ? '<div style="display:none">' . $out . "</div>\n" : '';
-}
-
-/**
- * Renders Contact Form 7 tags the way the plugin does, so the preview shows
- * the real controls and the viewport checks measure the real layout.
- *
- * @param string $body Form body containing CF7 tags.
- * @return string
- */
-function teebe_preview_cf7_controls( $body ) {
-	foreach ( $GLOBALS['teebe_preview']['cf7_tags'] ?? array() as $tag => $callback ) {
-		$body = str_replace( '[' . $tag . ']', (string) call_user_func( $callback ), $body );
-	}
-
-	return preg_replace_callback(
-		'/\[(textarea|text|email|tel|select|submit)(\*?)([^\]]*)\]/',
-		function ( $m ) {
-			list( , $kind, $star, $rest ) = $m;
-
-			preg_match_all( '/"([^"]*)"/', $rest, $quoted );
-			$values = $quoted[1];
-			$bare   = preg_replace( '/"[^"]*"/', '', $rest );
-			$words  = preg_split( '/\s+/', trim( $bare ), -1, PREG_SPLIT_NO_EMPTY );
-
-			if ( 'submit' === $kind ) {
-				$classes = array( 'wpcf7-form-control', 'wpcf7-submit' );
-
-				foreach ( $words as $word ) {
-					if ( 0 === strpos( $word, 'class:' ) ) {
-						$classes[] = substr( $word, 6 );
-					}
-				}
-
-				return sprintf(
-					'<input class="%s" type="submit" value="%s"><span class="wpcf7-spinner"></span>',
-					esc_attr( implode( ' ', $classes ) ),
-					esc_attr( $values ? $values[0] : 'Send' )
-				);
-			}
-
-			$name  = array_shift( $words );
-			$id    = '';
-			$auto  = '';
-			$rows  = 2;
-			$place = '';
-
-			foreach ( $words as $word ) {
-				if ( 0 === strpos( $word, 'id:' ) ) {
-					$id = substr( $word, 3 );
-				} elseif ( 0 === strpos( $word, 'autocomplete:' ) ) {
-					$auto = substr( $word, 13 );
-				} elseif ( preg_match( '/^\d+x(\d+)$/', $word, $size ) ) {
-					$rows = (int) $size[1];
-				} elseif ( 'placeholder' === $word && $values ) {
-					$place = array_shift( $values );
-				}
-			}
-
-			$required = '*' === $star;
-			$attrs    = sprintf(
-				' name="%s"%s%s aria-invalid="false"%s',
-				esc_attr( $name ),
-				$id ? ' id="' . esc_attr( $id ) . '"' : '',
-				$auto ? ' autocomplete="' . esc_attr( $auto ) . '"' : '',
-				$required ? ' aria-required="true"' : ''
-			);
-
-			if ( 'select' === $kind ) {
-				$options = '';
-
-				foreach ( $values as $index => $value ) {
-					$options .= sprintf(
-						'<option value="%s">%s</option>',
-						esc_attr( 0 === $index ? '' : $value ),
-						esc_html( $value )
-					);
-				}
-
-				$control = sprintf(
-					'<select class="wpcf7-form-control wpcf7-select%s"%s>%s</select>',
-					$required ? ' wpcf7-validates-as-required' : '',
-					$attrs,
-					$options
-				);
-			} elseif ( 'textarea' === $kind ) {
-				$control = sprintf(
-					'<textarea cols="40" rows="%d" maxlength="2000" class="wpcf7-form-control wpcf7-textarea%s"%s%s></textarea>',
-					$rows,
-					$required ? ' wpcf7-validates-as-required' : '',
-					$place ? ' placeholder="' . esc_attr( $place ) . '"' : '',
-					$attrs
-				);
-			} else {
-				$type = in_array( $kind, array( 'email', 'tel' ), true ) ? $kind : 'text';
-
-				$control = sprintf(
-					'<input size="40" maxlength="400" class="wpcf7-form-control wpcf7-%s%s" value="" type="%s"%s%s>',
-					$type,
-					$required ? ' wpcf7-validates-as-required' : '',
-					$type,
-					$place ? ' placeholder="' . esc_attr( $place ) . '"' : '',
-					$attrs
-				);
-			}
-
-			return sprintf(
-				'<span class="wpcf7-form-control-wrap" data-name="%s">%s</span>',
-				esc_attr( $name ),
-				$control
-			);
-		},
-		$body
-	);
-}
 function is_page_template( $template = '' ) {
 	return $GLOBALS['teebe_preview']['template'] === $template; }
 function get_page_template_slug( $id = 0 ) {
@@ -380,8 +180,6 @@ function wp_unslash( $value ) {
 	return is_string( $value ) ? stripslashes( $value ) : $value; }
 function esc_js( $text ) {
 	return addslashes( (string) $text ); }
-function wpcf7_add_form_tag( $tag, $callback, $features = array() ) {
-	$GLOBALS['teebe_preview']['cf7_tags'][ $tag ] = $callback; }
 function wp_add_inline_script( $handle, $data, $position = 'after' ) {
 	$GLOBALS['teebe_preview']['inline'][ $handle ][] = $data; }
 function _e( $text, $domain = '' ) {
@@ -425,8 +223,6 @@ function get_option( $name, $default = false ) {
 function get_post_status( $id ) {
 	return 'draft'; }
 function flush_rewrite_rules() {}
-function class_exists_wpcf7() {
-	return false; }
 
 function body_class() {
 	$classes = apply_filters( 'body_class', array() );
@@ -462,17 +258,6 @@ function wp_head() {
 	do_action( 'wp_head' );
 	wp_robots();
 
-	// Contact Form 7 enqueues its own stylesheet before the theme's. The rules
-	// that affect layout are reproduced here so the theme's integration layer
-	// is tested against them rather than against nothing.
-	echo "<style id=\"contact-form-7-css\">\n"
-		. ".wpcf7 .screen-reader-response{position:absolute;overflow:hidden;clip:rect(1px,1px,1px,1px);height:1px;width:1px;margin:0;padding:0;border:0}\n"
-		. ".wpcf7 form .wpcf7-response-output{margin:2em .5em 1em;padding:.2em 1em;border:2px solid #00a0d2}\n"
-		. ".wpcf7 form.init .wpcf7-response-output,.wpcf7 form.resetting .wpcf7-response-output,.wpcf7 form.submitting .wpcf7-response-output{display:none}\n"
-		. ".wpcf7-not-valid-tip{color:#dc3232;font-size:1em;font-weight:400;display:block}\n"
-		. ".wpcf7-spinner{visibility:hidden;display:inline-block;background-color:#23282d;opacity:.75;width:24px;height:24px;border:0;border-radius:100%;padding:0;margin:0 24px;position:relative}\n"
-		. "</style>\n";
-
 	foreach ( $GLOBALS['teebe_preview']['styles'] as $handle => $src ) {
 		printf( '<link rel="stylesheet" id="%s-css" href="%s" media="all">' . "\n", esc_attr( $handle ), esc_url( $src ) );
 	}
@@ -506,7 +291,6 @@ function get_footer( $name = '' ) {
 
 require $theme_dir . '/functions.php';
 do_action( 'after_setup_theme' );
-do_action( 'wpcf7_init' );
 do_action( 'wp_enqueue_scripts' );
 
 $pages = array(
@@ -555,8 +339,10 @@ foreach ( $pages as $key => $page ) {
 	$GLOBALS['teebe_preview']['styles']   = array();
 	$GLOBALS['teebe_preview']['scripts']  = array();
 	$GLOBALS['teebe_preview']['inline']   = array();
-	// wp_head runs once per document; each rendered page is a new document.
-	$GLOBALS['teebe_analytics_printed']   = false;
+	// wp_head and wp_body_open each run once per document; every rendered
+	// page here is a new document.
+	$GLOBALS['teebe_analytics_printed']          = false;
+	$GLOBALS['teebe_analytics_noscript_printed'] = false;
 	do_action( 'wp_enqueue_scripts' );
 
 	ob_start();

@@ -8,9 +8,15 @@
  * nothing about what the visitor has already done, and the calendar is
  * offered rather than assumed.
  *
- * inc/site.php marks it noindex, follow. inc/analytics.php fires
- * appointment_booked here, once, only when HighLevel returns a confirmed
- * booking as ?conversion=appointment_booked — never on a plain visit.
+ * inc/site.php marks it noindex, follow. It is also where both
+ * conversions are recorded, because HighLevel's redirect back here is the
+ * only signal its cross-origin forms and calendar produce:
+ *
+ *   ?conversion=lead&source=…      a captured enquiry
+ *   ?conversion=appointment_booked  a confirmed appointment
+ *
+ * Each fires once per browsing session, and a plain visit fires neither.
+ * See inc/analytics.php and assets/js/analytics.js.
  *
  * Ported from the approved design; hand-maintained from here.
  * wordpress/sync-from-static.py does not generate this file.

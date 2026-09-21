@@ -6,16 +6,13 @@
    because the approved file was a standalone prototype:
 
      1. the WhatsApp number is no longer a blank constant to fill in by
-        hand — it comes from PHP in window.teebeLanding, defaulting to
-        the number already published across theebookedit.com;
+        hand — PHP renders the wa.me link, using the number already
+        published across theebookedit.com;
 
-     2. the lead form no longer fakes its own success. Contact Form 7
-        performs the submission, and only when the plugin confirms the
-        mail was actually sent does the visitor move on to the thank-you
-        page where the consultation is booked. The approved
-        field-by-field validation is unchanged and still runs in the
-        browser first, so the visitor sees exactly the same messages in
-        exactly the same places.
+     2. the lead form is not here at all. HighLevel renders it,
+        validates it, stores the lead and performs the redirect, inside
+        its own cross-origin frame. Nothing in this file reads into that
+        frame or tries to guess when a submission succeeded.
 
    The header's navigation links and its mobile menu were removed from
    this page so the only paths onward are a call to action or the form,
@@ -23,133 +20,10 @@
    button is now a plain link rendered by PHP and needs no script at all.
    ------------------------------------------------------------------ */
 
-/* ========= configuration supplied by the theme ========= */
-var TEEBE_LANDING = window.teebeLanding || {};
-
 /* Every call to action on this page is a real anchor, so navigation works
    without JavaScript, with the keyboard, and in Meta's in-app browser.
    The service cards in the grid carry no call to action of their own and
    are purely informational, so nothing here makes them clickable. */
-
-// Lead form: six required fields with readable validation messages.
-// Contact Form 7 delivers the submission; this keeps the approved
-// in-page validation and, once the plugin reports that the mail was
-// really sent, moves the visitor on to the thank-you page.
-(() => {
-  const form = document.getElementById("leadForm");
-  // Contact Form 7 is not configured yet: the template renders a notice
-  // instead of the form, and there is nothing to wire up.
-  if (!form) return;
-
-  const FIELDS = [
-    {name:"full_name", label:"Name", message:"Please enter your full name.",
-     valid: v => v.trim().length >= 2},
-    {name:"email", label:"Email", message:"Please enter a valid email address.",
-     valid: (v, el) => v.trim() !== "" && el.checkValidity()},
-    {name:"mobile_whatsapp", label:"Mobile / WhatsApp", message:"Please enter your Mobile / WhatsApp number.",
-     // International-friendly: allows + spaces ( ) - . and requires 7–15 digits.
-     valid: v => /^[+()\s.\-\d]+$/.test(v.trim()) && (v.match(/\d/g) || []).length >= 7 && (v.match(/\d/g) || []).length <= 15},
-    {name:"book_type", label:"Book Type", message:"Please select the type of book you want to create.",
-     valid: v => v !== ""},
-    {name:"book_stage", label:"Book Stage", message:"Please select how far along you are with your book.",
-     valid: v => v !== ""},
-    {name:"expected_budget", label:"Expected Budget", message:"Please select your expected budget.",
-     valid: v => v !== ""}
-  ];
-  const present = FIELDS.filter(def => form.elements[def.name]);
-  if (!present.length) return;
-
-  const wrap = el => el.closest(".field");
-  const setError = (el, msg) => {
-    const f = wrap(el);
-    if (!f) return;
-    const out = f.querySelector(".field-error");
-    f.classList.toggle("is-invalid", !!msg);
-    el.setAttribute("aria-invalid", msg ? "true" : "false");
-    if (out) out.textContent = msg || "";
-  };
-  const clearErrors = () => present.forEach(def => setError(form.elements[def.name], ""));
-
-  /* Contact Form 7 builds the controls from the form body bundled with
-     the theme, which cannot carry arbitrary attributes. These are the
-     attributes the approved markup had; restoring them here keeps both
-     the behaviour and the approved styling (the greyed placeholder
-     comes from a :required:invalid rule) exactly as approved.
-
-     noValidate is set for the same reason the approved form carried it:
-     the browser's own bubbles would otherwise pre-empt the page's own
-     validation messages. */
-  form.noValidate = true;
-  present.forEach(def => {
-    const el = form.elements[def.name];
-    el.required = true;
-    el.setAttribute("aria-describedby", "err-" + def.name);
-    if (el.tagName === "SELECT") {
-      const placeholder = el.querySelector('option[value=""]');
-      if (placeholder) placeholder.disabled = true;
-    }
-    if (def.name === "mobile_whatsapp") el.setAttribute("inputmode", "tel");
-    el.addEventListener("input", () => { if (wrap(el).classList.contains("is-invalid") && def.valid(el.value, el)) setError(el, ""); });
-    el.addEventListener("change", () => { if (def.valid(el.value, el)) setError(el, ""); });
-  });
-
-  /* Capture phase, so this runs before Contact Form 7's own submit
-     handler on the same element regardless of which was registered
-     first. An invalid form is stopped here and never reaches the
-     plugin. */
-  form.addEventListener("submit", e => {
-    let firstInvalid = null;
-    present.forEach(def => {
-      const el = form.elements[def.name];
-      const ok = def.valid(el.value, el);
-      setError(el, ok ? "" : def.message);
-      if (!ok && !firstInvalid) firstInvalid = el;
-    });
-    if (firstInvalid) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      firstInvalid.focus();
-    }
-  }, true);
-
-  /* The server rejected something the browser accepted. Its messages are
-     printed by the plugin next to each control, so the page's own copies
-     are cleared to avoid showing two messages for one field. None of
-     these outcomes leaves the landing page. */
-  ["wpcf7invalid", "wpcf7spam", "wpcf7mailfailed"].forEach(type => {
-    form.addEventListener(type, clearErrors);
-  });
-
-  /* Delivered — and only delivered. wpcf7mailsent fires once Contact
-     Form 7 has actually sent the mail; wpcf7submit, wpcf7invalid,
-     wpcf7spam and wpcf7mailfailed do not reach this handler, so a
-     rejected, failed or abandoned submission is never recorded as a
-     lead and never leaves the page.
-
-     The listener is bound to this form element, so no other Contact
-     Form 7 form on the website can trigger the redirect.
-
-     generate_lead is sent first and carries nothing personal: only which
-     form it was and which page it was on. The redirect waits for the
-     event to be acknowledged so the conversion is not lost to the
-     navigation, and never waits longer than a second for it.
-
-     The URL comes from the theme (home_url('/thank-you/') by default);
-     if it is ever missing, the visitor stays here and Contact Form 7's
-     own confirmation is shown rather than being sent nowhere. */
-  form.addEventListener("wpcf7mailsent", () => {
-    const next = TEEBE_LANDING.thankYouUrl;
-    const go = () => { if (next) window.location.assign(next); };
-    if (typeof window.teebeTrack === "function") {
-      window.teebeTrack("generate_lead", {
-        form_name: (window.teebeAnalytics && window.teebeAnalytics.forms && window.teebeAnalytics.forms[form.id]) || "landing_page_form",
-        lead_origin: (window.teebeAnalytics && window.teebeAnalytics.leadOrigin) || "landing-page"
-      }, go);
-    } else {
-      go();
-    }
-  });
-})();
 
 (() => {
   const root = document.getElementById('work');

@@ -1352,51 +1352,39 @@ dialog.book-dialog::backdrop{background:rgba(2,12,32,.75);backdrop-filter:blur(4
   outline-offset:2px;
 }
 
-/* Contact Form 7 integration. The plugin builds the controls from the form
-   bodies in cf7/, which reproduce the approved markup, so the approved rules
-   above style them. These are the few things the approved prototype had no
-   equivalent of. */
+/* ------------------------------------------------------------------
+   The approved HighLevel lead forms.
 
-/* The honeypot. Contact Form 7 has no hidden-field tag, so the form body
-   wraps a real control in this; it must never be seen or focused. */
-.teebe-site .lead-form .hidden{display:none}
+   The theme renders the supplied embed inside the approved card and styles
+   only the wrapper around it. The iframe's own height:100% needs a height
+   to resolve against, and HighLevel sets the real one a moment after the
+   page paints, so the wrapper and the iframe are floored at the form's
+   declared data-height until then. assets/js/ghl-forms.js lifts the floor
+   once the real height arrives, so a shorter form leaves no dead space and
+   a taller one — a narrow screen stacks the fields — is never clipped.
 
-/* Contact Form 7's own live-region output, which sits inside the form. */
-.teebe-site .lead-form .wpcf7-response-output{
-  margin:14px 0 0;
-  padding:12px 14px;
-  border-radius:12px;
-  border:1px solid rgba(243,179,34,.45);
-  color:var(--ink);
-  font-size:.95rem;
+   Nothing here sets overflow:hidden on the wrapper or its parents: the
+   iframe must be free to grow.
+   ------------------------------------------------------------------ */
+.teebe-site .ghl-form-wrap{
+  width:100%;
+  max-width:100%;
+  /* A definite height, so the iframe's own height:100% resolves to the
+     form's declared size instead of collapsing to a stub before
+     HighLevel's script runs. */
+  height:var(--teebe-ghl-height,699px);
 }
-.teebe-site .lead-form .wpcf7-not-valid-tip{
+.teebe-site .ghl-form-wrap iframe{
   display:block;
-  margin-top:6px;
-  color:#ffb4b4;
-  font-size:.9rem;
+  width:100%;
+  max-width:100%;
+  border:none;
+  border-radius:8px;
 }
-.teebe-site .lead-form .wpcf7-spinner{display:none}
-
-/* Shown in place of a form when Contact Form 7 has not been set up yet, so
-   an unconfigured site explains itself instead of showing nothing. */
-.teebe-site .form-status{
-  margin-top:10px;
-  padding:16px 18px;
-  border-radius:14px;
-  border:1px solid rgba(243,179,34,.45);
-  background:rgba(243,179,34,.08);
-  color:var(--ink);
-}
-.teebe-site .form-status-title{margin:0 0 6px;font-weight:800}
-.teebe-site .form-note{margin:6px 0 0;font-size:.92rem;color:var(--muted)}
-.teebe-site .form-note a{color:var(--gold-soft)}
-
-/* Contact Form 7 marks the form while it is posting. The approved design has
-   no spinner, so the button itself says the submission is in flight and
-   cannot be pressed twice. */
-.teebe-site .lead-form.submitting button[type="submit"],
-.teebe-site .lead-form button[type="submit"]:disabled{
-  opacity:.65;
-  pointer-events:none;
+/* HighLevel has written the real height onto the iframe. The wrapper stops
+   dictating one and simply follows it, so a shorter form leaves no dead
+   space and a taller one is never cut off. */
+.teebe-site .ghl-form-wrap.is-sized{
+  height:auto;
+  min-height:0;
 }

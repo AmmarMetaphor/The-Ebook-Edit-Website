@@ -159,8 +159,8 @@ function teebe_site_image( $key ) {
  * The website's stylesheet and script.
  *
  * Called from teebe_assets() in place of the book assets. The website design
- * is complete in one stylesheet; Contact Form 7's own assets are untouched
- * and still load normally.
+ * is complete in one stylesheet. The HighLevel embed library is enqueued
+ * separately, by teebe_ghl_form_assets(), on the pages that carry a form.
  */
 function teebe_site_assets() {
 	wp_enqueue_style(
@@ -179,16 +179,6 @@ function teebe_site_assets() {
 			'in_footer' => true,
 			'strategy'  => 'defer',
 		)
-	);
-
-	wp_add_inline_script(
-		'the-ebook-edit-site',
-		'window.teebeSite = ' . wp_json_encode(
-			array(
-				'thankYouUrl' => teebe_site_thank_you_url(),
-			)
-		) . ';',
-		'before'
 	);
 }
 
@@ -285,186 +275,157 @@ function teebe_render_booking_calendar() {
 }
 
 /**
- * The website's two lead forms, as form key => Contact Form 7 configuration.
+ * The three approved HighLevel lead forms, as form key => configuration.
  *
- * Both collect the same six required fields. The Contact form additionally
- * carries the service the visitor arrived from, when a contextual call to
- * action supplied one. The Meta Ads landing page keeps its own third form —
- * see inc/landing.php — so a lead can be attributed to the page it came from
- * without reading anything personal.
+ * HighLevel owns the lead now: the fields, the validation, the storage and
+ * the post-submission redirect all live in the form itself. WordPress
+ * renders the approved embed inside the approved card and does nothing else.
+ * Nothing here reads into the cross-origin frame, and no field is recreated
+ * around it.
  *
- * No mail server settings are written here or anywhere else in the theme:
- * Contact Form 7 sends through whatever WordPress is configured to use, and
- * no credentials belong in this repository.
+ * 'height' is the form's own declared data-height. It is what the card
+ * reserves while the HighLevel script starts up, so the page does not jump.
  *
  * @return array<string, array<string, mixed>>
  */
-function teebe_site_form_definitions() {
-	$fields = array(
-		'Full Name'         => 'full_name',
-		'Email'             => 'email',
-		'Mobile / WhatsApp' => 'mobile_whatsapp',
-		'Book Type'         => 'book_type',
-		'Book Stage'        => 'book_stage',
-		'Expected Budget'   => 'expected_budget',
-	);
-
+function teebe_ghl_forms() {
 	return array(
 		'home'    => array(
-			'title'      => 'Home Page Enquiry',
-			'html_class' => 'lead-form',
-			'html_id'    => 'leadForm',
-			'page'       => 'Home',
-			'body'       => 'cf7/site-home-enquiry.txt',
-			'subject'    => 'New book enquiry from the homepage',
-			'recipient'  => 'support@theebookedit.com',
-			'fields'     => $fields,
+			'id'     => 'bZam6l0zBSf4yrcD6XSY',
+			'name'   => 'Homepage Lead Form',
+			'height' => 699,
 		),
-		/*
-		 * The Contact form's service_interest is not listed here. It is a
-		 * hidden input rather than a Contact Form 7 tag, so a
-		 * [service_interest] line in the mail template would depend on the
-		 * plugin resolving a tag it never registered. inc/attribution.php
-		 * puts it at the top of the Marketing Attribution block instead,
-		 * and only when the visitor actually arrived from a service call to
-		 * action.
-		 */
 		'contact' => array(
-			'title'      => 'Contact Page Enquiry',
-			'html_class' => 'lead-form',
-			'html_id'    => 'contactForm',
-			'page'       => 'Contact',
-			'body'       => 'cf7/site-contact-enquiry.txt',
-			'subject'    => 'New book enquiry from the contact page',
-			'recipient'  => 'support@theebookedit.com',
-			'fields'     => $fields,
+			'id'     => 'vC0z1TGPPq8K7al5gSS4',
+			'name'   => 'Contact Page Enquiry',
+			'height' => 697,
+		),
+		'landing' => array(
+			'id'     => 'jKHEEoy6GmtlAxv4fy1p',
+			'name'   => 'Landing Page Lead Form',
+			'height' => 699,
 		),
 	);
 }
 
 /**
- * Renders one of the website's two lead forms.
+ * The HighLevel embed library, which drives both the forms and the booking
+ * calendar.
  *
- * The form is found by its title rather than by a shortcode pasted into the
- * page, so the page records carry no content and an administrator cannot
- * break the design by editing them. When the form has not been created yet,
- * an on-page notice explains what to do rather than showing a form that
- * cannot deliver anything.
- *
- * @param string $key Form key: 'home' or 'contact'.
+ * @return string
  */
-function teebe_render_site_form( $key ) {
-	$forms = teebe_site_form_definitions();
+function teebe_ghl_embed_script_url() {
+	return 'https://link.msgsndr.com/js/form_embed.js';
+}
+
+/**
+ * Which HighLevel form, if any, the page being rendered carries.
+ *
+ * @return string Form key, or '' when the page has no form.
+ */
+function teebe_page_ghl_form_key() {
+	if ( teebe_is_landing() ) {
+		return 'landing';
+	}
+
+	$route = teebe_site_route();
+
+	return in_array( $route, array( 'home', 'contact' ), true ) ? $route : '';
+}
+
+/**
+ * The embed library and the one small script that sizes the card around a
+ * form, loaded only on the three pages that carry one.
+ *
+ * The booking calendar brings its own copy of the library inside the approved
+ * embed, and no page carries both a form and the calendar, so every page ends
+ * up with exactly one copy however it is reached. The library is never
+ * versioned, bundled or hosted locally: HighLevel serves it.
+ */
+function teebe_ghl_form_assets() {
+	if ( '' === teebe_page_ghl_form_key() ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'teebe-ghl-form-embed',
+		teebe_ghl_embed_script_url(),
+		array(),
+		null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- A third-party URL; adding ?ver would change it.
+		array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		)
+	);
+
+	wp_enqueue_script(
+		'the-ebook-edit-ghl-forms',
+		get_theme_file_uri( 'assets/js/ghl-forms.js' ),
+		array(),
+		(string) filemtime( get_theme_file_path( 'assets/js/ghl-forms.js' ) ),
+		array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		)
+	);
+}
+
+/**
+ * Renders one of the approved HighLevel lead forms.
+ *
+ * The iframe is exactly as supplied — src, id, every data attribute, the
+ * cookie-consent attributes and the accessible title are all unchanged. Only
+ * the wrapper around it belongs to the theme, and it exists to reserve the
+ * form's declared height so the approved card does not collapse or jump
+ * while HighLevel starts up.
+ *
+ * Submission, validation, storage and the post-submission redirect are
+ * HighLevel's. WordPress learns that a lead was captured only when HighLevel
+ * returns the visitor to /thank-you/?conversion=lead — see inc/analytics.php.
+ *
+ * @param string $key Form key: 'home', 'contact' or 'landing'.
+ */
+function teebe_render_ghl_form( $key ) {
+	$forms = teebe_ghl_forms();
 
 	if ( ! isset( $forms[ $key ] ) ) {
 		return;
 	}
 
 	$form = $forms[ $key ];
-
-	if ( class_exists( 'WPCF7_ContactForm' ) && function_exists( 'teebe_setup_find_cf7_form' ) ) {
-		$form_post = teebe_setup_find_cf7_form( $form['title'] );
-
-		if ( $form_post ) {
-			echo do_shortcode( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contact Form 7 escapes its own output.
-				sprintf(
-					'[contact-form-7 id="%d" title="%s" html_class="%s" html_id="%s"]',
-					(int) $form_post->ID,
-					esc_attr( $form_post->post_title ),
-					esc_attr( $form['html_class'] ),
-					esc_attr( $form['html_id'] )
-				)
-			);
-			return;
-		}
-	}
-
-	echo '<div class="form-status show"><p class="form-status-title">';
-	esc_html_e( 'Enquiry form not configured yet.', 'the-ebook-edit' );
-	echo '</p><p class="form-note">';
-	printf(
-		/* translators: %s: Contact Form 7 form title. */
-		esc_html__( 'Install Contact Form 7, then run Appearance → The Ebook Edit Setup to create the "%s" form. Until then, enquiries can be sent by email.', 'the-ebook-edit' ),
-		esc_html( $form['title'] )
-	);
-	echo '</p><p class="form-note"><a href="mailto:support@theebookedit.com">support@theebookedit.com</a></p></div>';
+	?>
+	<div class="ghl-form-wrap" style="--teebe-ghl-height:<?php echo (int) $form['height']; ?>px">
+<iframe
+    src="https://api.leadconnectorhq.com/widget/form/<?php echo esc_attr( $form['id'] ); ?>"
+    style="width:100%;height:100%;border:none;border-radius:8px"
+    id="inline-<?php echo esc_attr( $form['id'] ); ?>"
+    data-layout="{'id':'INLINE'}"
+    data-trigger-type="alwaysShow"
+    data-trigger-value=""
+    data-activation-type="alwaysActivated"
+    data-activation-value=""
+    data-deactivation-type="neverDeactivate"
+    data-deactivation-value=""
+    data-form-name="<?php echo esc_attr( $form['name'] ); ?>"
+    data-height="<?php echo (int) $form['height']; ?>"
+    data-layout-iframe-id="inline-<?php echo esc_attr( $form['id'] ); ?>"
+    data-form-id="<?php echo esc_attr( $form['id'] ); ?>"
+    data-cookie-consent="true"
+    data-cookie-consent-provider="auto"
+    title="<?php echo esc_attr( $form['name'] ); ?>"
+>
+</iframe>
+	</div>
+	<?php
 }
 
 /**
- * The service a contextual call to action sent the visitor to Contact with.
+ * Renders the lead form belonging to one of the website's pages.
  *
- * Arrives as ?service=Book+Editing. Query parameters are never trusted: the
- * value is unslashed, stripped of tags, trimmed and length-limited before it
- * is shown or stored, and it is only accepted when it matches one of the
- * services the website actually offers.
- *
- * @return string Empty when no recognised service was supplied.
+ * @param string $key Form key: 'home' or 'contact'.
  */
-function teebe_site_service_context() {
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display of a public link parameter.
-	if ( empty( $_GET['service'] ) || ! is_string( $_GET['service'] ) ) {
-		return '';
-	}
-
-	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only display of a public link parameter.
-	$value = sanitize_text_field( wp_unslash( $_GET['service'] ) );
-
-	$allowed = array(
-		'Book Writing',
-		'Book Editing',
-		'Book Publishing',
-		'Book Cover Design',
-		'Book Illustrations',
-		'Book Formatting',
-		'Book Marketing',
-		'Children Books',
-		'Proofreading',
-	);
-
-	foreach ( $allowed as $service ) {
-		if ( 0 === strcasecmp( $service, $value ) ) {
-			return $service;
-		}
-	}
-
-	return '';
-}
-
-/**
- * Registers the Contact form's service-context block as a Contact Form 7 tag.
- *
- * The block is part of the approved form design, and its hidden input has to
- * post with the rest of the form, so it is a form tag rather than markup
- * printed around the shortcode. inc/attribution.php puts the posted value
- * into the submission data and the notification email.
- */
-function teebe_site_register_cf7_tags() {
-	if ( ! function_exists( 'wpcf7_add_form_tag' ) ) {
-		return;
-	}
-
-	wpcf7_add_form_tag( 'teebe_service_context', 'teebe_site_cf7_service_context' );
-}
-add_action( 'wpcf7_init', 'teebe_site_register_cf7_tags' );
-
-/**
- * Renders the service-context block.
- *
- * @return string
- */
-function teebe_site_cf7_service_context() {
-	$service = teebe_site_service_context();
-
-	return sprintf(
-		'<div class="service-context" id="serviceContext"%s><span>%s</span> <strong id="serviceContextName">%s</strong>'
-		. '<button type="button" id="serviceContextClear" aria-label="%s">✕</button></div>'
-		. '<input type="hidden" name="service_interest" id="service_interest" value="%s">',
-		'' === $service ? ' hidden' : '',
-		esc_html__( 'Enquiry about:', 'the-ebook-edit' ),
-		esc_html( $service ),
-		esc_attr__( 'Remove service context', 'the-ebook-edit' ),
-		esc_attr( $service )
-	);
+function teebe_render_site_form( $key ) {
+	teebe_render_ghl_form( $key );
 }
 
 /**

@@ -143,167 +143,6 @@ function teebe_setup_get_or_create_page( $slug, $args, &$report ) {
 }
 
 /**
- * Every Contact Form 7 form the setup routine creates.
- *
- * Three: the website's homepage and contact forms, from inc/site.php, and
- * the Meta Ads landing page's, from inc/landing.php. Each template finds its
- * own by title, so no shortcode is written into any page and a form can be
- * moved or restyled without editing page content.
- *
- * Keeping the landing page's form separate from the website's is deliberate:
- * it is what lets a lead be attributed to the page it came from without
- * reading anything a visitor typed.
- *
- * @return array<int, array<string, mixed>>
- */
-function teebe_setup_all_form_definitions() {
-	$forms = array();
-
-	if ( function_exists( 'teebe_site_form_definitions' ) ) {
-		$forms = array_values( teebe_site_form_definitions() );
-	}
-
-	if ( function_exists( 'teebe_landing_form_definition' ) ) {
-		$forms[] = teebe_landing_form_definition();
-	}
-
-	return $forms;
-}
-
-/**
- * Creates the Contact Form 7 forms from the bodies bundled with the theme,
- * so the WordPress site renders the same forms as the published website.
- *
- * A form is created only when no form with that title exists, so running setup
- * again never duplicates one and never overwrites a form that has been edited.
- * No mail server settings are written: Contact Form 7 sends through whatever
- * WordPress is already configured to use, and no credentials are stored here
- * or anywhere else in the theme.
- *
- * @param array $report Report array, passed by reference.
- */
-function teebe_setup_create_cf7_forms( &$report ) {
-	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
-		return;
-	}
-
-	foreach ( teebe_setup_all_form_definitions() as $form ) {
-		if ( teebe_setup_find_cf7_form( $form['title'] ) ) {
-			continue;
-		}
-
-		$path = get_theme_file_path( $form['body'] );
-
-		if ( ! file_exists( $path ) ) {
-			/* translators: %s: file name. */
-			$report['warnings'][] = sprintf( __( 'The bundled form body %s is missing from the theme, so the form was not created.', 'the-ebook-edit' ), $form['body'] );
-			continue;
-		}
-
-		$body = str_replace(
-			'{{home}}',
-			untrailingslashit( home_url() ),
-			(string) file_get_contents( $path )
-		);
-
-		$contact_form = WPCF7_ContactForm::get_template( array( 'title' => $form['title'] ) );
-
-		if ( ! $contact_form ) {
-			continue;
-		}
-
-		$contact_form->set_properties(
-			array(
-				'form' => $body,
-				'mail' => teebe_setup_cf7_mail( $form ),
-			)
-		);
-
-		$id = $contact_form->save();
-
-		if ( ! $id ) {
-			/* translators: %s: Contact Form 7 form title. */
-			$report['warnings'][] = sprintf( __( 'Could not create the Contact Form 7 form "%s". Create it by hand using the markup in DEPLOYMENT.md.', 'the-ebook-edit' ), $form['title'] );
-			continue;
-		}
-
-		/* translators: %s: Contact Form 7 form title. */
-		$report['forms'][] = sprintf( __( 'Created the Contact Form 7 form "%s" from the markup bundled with the theme.', 'the-ebook-edit' ), $form['title'] );
-	}
-}
-
-/**
- * The mail template for one form.
- *
- * The From address is on the site's own domain so the message passes SPF and
- * DMARC checks; the visitor's address goes in Reply-To. Change the recipient
- * under Contact → Contact Forms → Mail at any time.
- *
- * A form's 'fields' may be a plain list of tag names, in which case the label
- * is derived from the name, or a map of label => tag name where the derived
- * label would read poorly.
- *
- * @param array $form Form definition.
- * @return array<string, mixed>
- */
-function teebe_setup_cf7_mail( $form ) {
-	$host = wp_parse_url( home_url(), PHP_URL_HOST );
-	$host = $host ? preg_replace( '/^www\./', '', $host ) : 'example.com';
-
-	$lines = array();
-
-	foreach ( $form['fields'] as $label => $field ) {
-		if ( ! is_string( $label ) ) {
-			$label = ucwords( str_replace( array( '-', '_' ), ' ', $field ) );
-		}
-
-		$lines[] = sprintf( '%s: [%s]', $label, $field );
-	}
-
-	$body = implode( "\n", $lines ) . "\n\n"
-		. sprintf( '-- Sent from %s', home_url( '/' ) ) . "\n";
-
-	return array(
-		'subject'            => sprintf( '[%s] %s', get_bloginfo( 'name' ), $form['subject'] ),
-		'sender'             => sprintf( '%s <wordpress@%s>', get_bloginfo( 'name' ), $host ),
-		'recipient'          => empty( $form['recipient'] ) ? get_option( 'admin_email' ) : $form['recipient'],
-		'body'               => $body,
-		'additional_headers' => 'Reply-To: [email]',
-		'attachments'        => '',
-		'use_html'           => false,
-		'exclude_blank'      => false,
-	);
-}
-
-/**
- * Finds a Contact Form 7 form by its exact title.
- *
- * @param string $title Form title.
- * @return WP_Post|null
- */
-function teebe_setup_find_cf7_form( $title ) {
-	$query = new WP_Query(
-		array(
-			'post_type'              => 'wpcf7_contact_form',
-			'title'                  => $title,
-			'posts_per_page'         => 1,
-			'post_status'            => 'any',
-			'no_found_rows'          => true,
-			'update_post_meta_cache' => false,
-			'update_post_term_cache' => false,
-		)
-	);
-
-	if ( ! $query->have_posts() ) {
-		return null;
-	}
-
-	$form_post = $query->posts[0];
-
-	return 0 === strcasecmp( $form_post->post_title, $title ) ? $form_post : null;
-}
-
-/**
  * Moves WordPress's default "Sample Page" to Trash.
  *
  * This is the only step that removes anything, so it is opt-in: it runs only
@@ -343,7 +182,6 @@ function teebe_run_setup( $trash_sample_page = false ) {
 		'created'     => array(),
 		'existing'    => array(),
 		'warnings'    => array(),
-		'forms'       => array(),
 		'homepage'    => '',
 		'sample_page' => '',
 	);
@@ -372,8 +210,6 @@ function teebe_run_setup( $trash_sample_page = false ) {
 		update_option( 'page_for_posts', 0 );
 		$report['homepage'] = __( 'Set the static homepage to "Home".', 'the-ebook-edit' );
 	}
-
-	teebe_setup_create_cf7_forms( $report );
 
 	if ( $trash_sample_page ) {
 		teebe_setup_trash_sample_page( $report );
@@ -426,26 +262,25 @@ function teebe_setup_render_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'The Ebook Edit Setup', 'the-ebook-edit' ); ?></h1>
 		<p>
-			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates. This setup only creates the WordPress page records, the homepage setting and the Contact Form 7 enquiry forms those templates need in order to work. It never writes, edits or deletes page content.', 'the-ebook-edit' ); ?>
+			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates. This setup only creates the WordPress page records and the homepage setting those templates need in order to be served at the right addresses. It never writes, edits or deletes page content.', 'the-ebook-edit' ); ?>
 		</p>
 
 		<p>
 			<?php
 			printf(
-				/* translators: 1: page template name, 2: Contact Form 7 form title. */
-				esc_html__( 'The Meta Ads landing page is not created here, because it is not part of the website. To publish it, add a page yourself under Pages → Add New, give it the address you want to advertise, and choose "%1$s" under Page Attributes → Template. Setup does create its enquiry form, "%2$s", which that template finds on its own — there is no shortcode to paste.', 'the-ebook-edit' ),
-				esc_html__( 'The Ebook Edit — Meta Ads Landing Page', 'the-ebook-edit' ),
-				'Start Your Book'
+				/* translators: %s: page template name. */
+				esc_html__( 'The Meta Ads landing page is not created here, because it is not part of the website. To publish it, add a page yourself under Pages → Add New, give it the address you want to advertise, and choose "%s" under Page Attributes → Template.', 'the-ebook-edit' ),
+				esc_html__( 'The Ebook Edit — Meta Ads Landing Page', 'the-ebook-edit' )
 			);
 			?>
 		</p>
 
 		<p>
-			<?php esc_html_e( 'All three enquiry forms are found by title, so no shortcode is stored in any page. Mail delivery is a WordPress setting, not a theme setting: install and configure an SMTP plugin such as WP Mail SMTP so Contact Form 7 can actually send. No mail server credentials are stored in this theme.', 'the-ebook-edit' ); ?>
+			<?php esc_html_e( 'The three enquiry forms are HighLevel forms, embedded by the theme. There is nothing to create here and no plugin to install for them: the fields, the validation, the lead storage and the redirect after submission all live in HighLevel. The booking calendar works the same way.', 'the-ebook-edit' ); ?>
 		</p>
 
 		<p>
-			<?php esc_html_e( 'Google Analytics 4 and Microsoft Clarity are built into the theme and load on every public page. This site is UK-facing: install a consent-management plugin that implements the WordPress Consent API and categorise both as statistics, and the theme will honour the visitor\'s choice automatically. Until one is installed, both tags load on every visit. See DEPLOYMENT.md.', 'the-ebook-edit' ); ?>
+			<?php esc_html_e( 'Google Analytics 4, Microsoft Clarity and the Meta Pixel are built into the theme and load on every public page. This site is UK-facing: install a consent-management plugin that implements the WordPress Consent API, categorise Google Analytics and Clarity as statistics and the Meta Pixel as marketing, and the theme will honour the visitor\'s choice automatically. Until one is installed, all three load on every visit. See DEPLOYMENT.md.', 'the-ebook-edit' ); ?>
 		</p>
 
 		<?php if ( is_array( $report ) ) : ?>
@@ -475,9 +310,6 @@ function teebe_setup_render_page() {
 					<?php if ( ! empty( $report['homepage'] ) ) : ?>
 						<li><?php echo esc_html( $report['homepage'] ); ?></li>
 					<?php endif; ?>
-					<?php foreach ( $report['forms'] as $form_note ) : ?>
-						<li><?php echo esc_html( $form_note ); ?></li>
-					<?php endforeach; ?>
 					<?php if ( ! empty( $report['sample_page'] ) ) : ?>
 						<li><?php echo esc_html( $report['sample_page'] ); ?></li>
 					<?php endif; ?>

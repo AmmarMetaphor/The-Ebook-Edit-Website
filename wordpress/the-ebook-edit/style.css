@@ -3,8 +3,8 @@ Theme Name: The Ebook Edit
 Theme URI: https://theebookedit.com/
 Author: The Ebook Edit
 Author URI: https://theebookedit.com/
-Description: Custom classic theme for The Ebook Edit — an ebook writing, editing, formatting, and publishing-support brand. Reproduces the approved website exactly, together with the Meta Ads landing funnel, the Contact Form 7 lead forms and their campaign attribution, and the site's Google Analytics 4 and Microsoft Clarity measurement.
-Version: 1.1.9
+Description: Custom classic theme for The Ebook Edit — an ebook writing, editing, formatting, and publishing-support brand. Reproduces the approved website exactly, together with the Meta Ads landing funnel, the three HighLevel lead forms and the booking calendar, and the site's Google Analytics 4, Microsoft Clarity and Meta Pixel measurement.
+Version: 1.1.10
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -25,8 +25,6 @@ Tags: business, portfolio, one-column, accessibility-ready
     assets/css/landing.css  the Meta Ads landing page
     assets/css/styles.css   design tokens and prose, for the Insights library
     assets/css/book.css     the book presentation, for the Insights library
-    assets/css/wordpress.css  Contact Form 7 integration for the Insights
-                            library's forms
 
   site.css and landing.css are the approved stylesheets, each followed by a
   clearly marked WordPress-integration block. styles.css and book.css are

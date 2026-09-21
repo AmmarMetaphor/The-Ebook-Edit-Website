@@ -23,8 +23,8 @@
  * The markup below is the approved landing page, copied verbatim. The only
  * changes are the ones WordPress requires: image sources now resolve
  * through get_theme_file_uri(), and the prototype's <form> — which had no
- * backend — is rendered by Contact Form 7 so enquiries are really
- * delivered. Do not redesign it.
+ * backend — is the approved HighLevel lead form, which really captures
+ * enquiries. Do not redesign it.
  *
  * @package the-ebook-edit
  */
@@ -73,11 +73,11 @@ if ( ! defined( 'ABSPATH' ) ) {
       <p class="intro">Tell us about your project and we'll help identify the right next step.</p>
       <?php
       /*
-       * Contact Form 7 renders the six-field enquiry form here. Its body is
-       * bundled with the theme at cf7/landing-enquiry.txt and reproduces this
-       * page's approved form markup exactly — the same wrappers, labels,
-       * dropdown values and error slots — so the rendered page is identical to
-       * the approved design while the submission is delivered by WordPress.
+       * The approved HighLevel lead form, inside the approved card. The
+       * fields, the validation, the lead storage and the redirect after
+       * submission are all HighLevel's; the theme renders the supplied
+       * embed and nothing else. See teebe_render_ghl_form() in
+       * inc/site.php.
        */
       teebe_render_landing_form();
       ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * The Ebook Edit — theme setup, assets, book boot, and contact-form hooks.
+ * The Ebook Edit — theme setup, assets and the book boot script.
  *
  * The theme carries three presentations, each with its own stylesheet and
  * script, and no page ever loads another's:
@@ -12,10 +12,14 @@
  *                      presentation so its published URLs and content are
  *                      unchanged.
  *
- * Analytics and marketing attribution are shared by all three:
+ * Measurement is shared by all three:
  *
- *   inc/analytics.php    Google Analytics 4, Microsoft Clarity, the events;
- *   inc/attribution.php  campaign attribution on every lead.
+ *   inc/analytics.php    Google Analytics 4, Microsoft Clarity, the Meta
+ *                        Pixel and the funnel events.
+ *
+ * The three lead forms and the booking calendar are HighLevel's. The theme
+ * renders the approved embeds and nothing more — see teebe_render_ghl_form()
+ * and teebe_render_booking_calendar() in inc/site.php.
  *
  * @package the-ebook-edit
  */
@@ -30,7 +34,6 @@ require_once get_theme_file_path( 'inc/setup.php' );
 require_once get_theme_file_path( 'inc/landing.php' );
 require_once get_theme_file_path( 'inc/site.php' );
 require_once get_theme_file_path( 'inc/analytics.php' );
-require_once get_theme_file_path( 'inc/attribution.php' );
 
 /**
  * Theme supports.
@@ -54,10 +57,11 @@ add_action( 'after_setup_theme', 'teebe_setup' );
  * static site used. No page loads another presentation's stylesheet.
  */
 function teebe_assets() {
-	// Measurement and attribution are the same everywhere, and load first
-	// so window.teebeTrack exists before any presentation's own script.
+	// Measurement is the same everywhere, and loads first so window.teebeTrack
+	// exists before any presentation's own script. The HighLevel embed library
+	// loads only on the three pages that carry a form.
 	teebe_analytics_assets();
-	teebe_attribution_assets();
+	teebe_ghl_form_assets();
 
 	// The Meta Ads landing page carries its own complete design system and
 	// must not load the website's or the book's, which would fight it. See
@@ -94,15 +98,6 @@ function teebe_assets() {
 		get_theme_file_uri( 'assets/css/book.css' ),
 		array( 'the-ebook-edit-base' ),
 		(string) filemtime( get_theme_file_path( 'assets/css/book.css' ) )
-	);
-
-	// Hand-maintained integration layer: makes Contact Form 7's markup match
-	// the design. Loaded last so it wins over the plugin's own stylesheet.
-	wp_enqueue_style(
-		'the-ebook-edit-wordpress',
-		get_theme_file_uri( 'assets/css/wordpress.css' ),
-		array( 'the-ebook-edit-book' ),
-		(string) filemtime( get_theme_file_path( 'assets/css/wordpress.css' ) )
 	);
 
 	wp_enqueue_script(
@@ -201,43 +196,3 @@ function teebe_robots_txt( $output, $public ) {
 	return "User-agent: *\nAllow: /\n\nSitemap: " . esc_url_raw( home_url( '/wp-sitemap.xml' ) ) . "\n";
 }
 add_filter( 'robots_txt', 'teebe_robots_txt', 10, 2 );
-
-/**
- * Treats a filled honeypot field as spam. Contact Form 7 has no built-in
- * honeypot, so the hidden hp-field in the form is checked here.
- *
- * @param bool                  $spam       Current spam verdict.
- * @param WPCF7_Submission|null $submission Current submission.
- * @return bool
- */
-function teebe_cf7_honeypot_spam( $spam, $submission = null ) {
-	if ( $spam ) {
-		return $spam;
-	}
-
-	if ( ! $submission || ! method_exists( $submission, 'get_posted_data' ) ) {
-		return $spam;
-	}
-
-	$posted = $submission->get_posted_data();
-
-	return ! empty( $posted['hp-field'] );
-}
-add_filter( 'wpcf7_spam', 'teebe_cf7_honeypot_spam', 10, 2 );
-
-// The enquiry forms supply their own grid markup, which auto-paragraphing breaks.
-add_filter( 'wpcf7_autop_or_not', '__return_false' );
-
-/**
- * Reminds an administrator to install the plugin the enquiry forms depend on.
- */
-function teebe_cf7_admin_notice() {
-	if ( class_exists( 'WPCF7' ) || ! current_user_can( 'activate_plugins' ) ) {
-		return;
-	}
-
-	echo '<div class="notice notice-warning is-dismissible"><p>';
-	echo esc_html__( 'The Ebook Edit: install and activate Contact Form 7, then run Appearance → The Ebook Edit Setup to create the enquiry forms. See DEPLOYMENT.md in the theme folder.', 'the-ebook-edit' );
-	echo '</p></div>';
-}
-add_action( 'admin_notices', 'teebe_cf7_admin_notice' );

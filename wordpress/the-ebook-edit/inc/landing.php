@@ -8,7 +8,7 @@
  *   * its own stylesheet and script in place of the website's book assets,
  *     on this template only;
  *   * the head metadata the approved page carried;
- *   * the Contact Form 7 form that replaces the approved prototype form.
+ *   * the approved HighLevel lead form that replaces the prototype form.
  *
  * This file is hand-maintained. wordpress/sync-from-static.py regenerates
  * the rest of the website from the published static pages and never touches
@@ -43,14 +43,13 @@ function teebe_is_landing() {
 /**
  * The funnel's own stylesheet and scripts, in place of the website's.
  *
- * Called from teebe_assets() instead of the book assets, so neither funnel
- * page loads styles.css, book.css, wordpress.css or book.js. Those carry the
- * book presentation and would fight this design system. Contact Form 7's
- * assets are untouched and still load normally.
+ * Called from teebe_assets() instead of the book assets, so this page does
+ * not load site.css, styles.css, book.css or their scripts. Those carry the
+ * other two presentations and would fight this design system.
  *
- * Both pages share one stylesheet. Only the landing page loads any script:
- * landing.js is the carousel and the lead form, and the thank-you page has
- * neither. Its WhatsApp button is a plain link, so it needs nothing.
+ * The HighLevel embed library that renders the lead form is enqueued
+ * separately, by teebe_ghl_form_assets() in inc/site.php, which is what keeps
+ * it to one copy per page across the whole theme.
  */
 function teebe_landing_assets() {
 	wp_enqueue_style(
@@ -72,14 +71,6 @@ function teebe_landing_assets() {
 		(string) filemtime( get_theme_file_path( 'assets/js/landing.js' ) ),
 		$deferred
 	);
-
-	wp_add_inline_script(
-		'the-ebook-edit-landing',
-		'window.teebeLanding = ' . wp_json_encode(
-			array( 'thankYouUrl' => teebe_landing_thank_you_url() )
-		) . ';',
-		'before'
-	);
 }
 
 /**
@@ -92,8 +83,8 @@ function teebe_landing_assets() {
  *
  *     add_filter( 'teebe_landing_thank_you_url', fn() => home_url( '/book-a-call/' ) );
  *
- * Returning an empty string disables the redirect: the visitor then stays on
- * the landing page and sees Contact Form 7's own confirmation.
+ * HighLevel performs the redirect itself, from the form's own settings; this
+ * is the address the page's calls to action use.
  *
  * @return string
  */
@@ -107,7 +98,7 @@ function teebe_landing_thank_you_url() {
  * The landing page has two deliberate routes to the same place: a visitor who
  * is ready books straight away through any call to action, and a visitor who
  * would rather tell us about the book first fills in the form and is taken to
- * the same page once Contact Form 7 confirms the enquiry was delivered.
+ * the same page by HighLevel once the enquiry is captured.
  *
  * If the thank-you destination has been turned off, calls to action fall back
  * to the enquiry form rather than becoming dead links.
@@ -247,79 +238,12 @@ function teebe_landing_head_meta() {
 add_action( 'wp_head', 'teebe_landing_head_meta', 3 );
 
 /**
- * The landing page's enquiry form, as the setup routine creates it.
+ * Renders the landing page's approved HighLevel lead form.
  *
- * The form body in cf7/landing-enquiry.txt reproduces the approved form
- * markup exactly — the same wrappers, labels, required markers, dropdown
- * values and error slots — so Contact Form 7 renders the approved design
- * rather than its own.
- *
- * Unlike the website's two other forms, this one is addressed to the
- * published support mailbox rather than the WordPress administrator email.
- * No mail server settings are written here or anywhere else in the theme:
- * Contact Form 7 sends through whatever WordPress is already configured to
- * use, and no credentials belong in this repository.
- *
- * @return array<string, string|array>
- */
-function teebe_landing_form_definition() {
-	return array(
-		'title'      => 'Start Your Book',
-		'html_class' => 'lead-form',
-		'html_id'    => 'leadForm',
-		'page'       => 'the landing page',
-		'body'       => 'cf7/landing-enquiry.txt',
-		'subject'    => 'New book enquiry from the landing page',
-		'recipient'  => 'support@theebookedit.com',
-		'fields'     => array(
-			'Full Name'         => 'full_name',
-			'Email'             => 'email',
-			'Mobile / WhatsApp' => 'mobile_whatsapp',
-			'Book Type'         => 'book_type',
-			'Book Stage'        => 'book_stage',
-			'Expected Budget'   => 'expected_budget',
-		),
-	);
-}
-
-/**
- * Renders the landing page's enquiry form.
- *
- * The website's other two forms find their shortcode in the page's own
- * content, which ties each to one fixed slug. This template can be assigned
- * to a page with any slug, so the form is looked up by its title instead and
- * no shortcode has to be pasted anywhere.
- *
- * When the form has not been created yet, an on-page notice explains what to
- * do rather than showing a form that cannot deliver anything.
+ * The same embed architecture as the website's two — see
+ * teebe_render_ghl_form() in inc/site.php. The landing page keeps a form of
+ * its own so a lead can be attributed to the page it came from.
  */
 function teebe_render_landing_form() {
-	$form = teebe_landing_form_definition();
-
-	if ( class_exists( 'WPCF7_ContactForm' ) && function_exists( 'teebe_setup_find_cf7_form' ) ) {
-		$form_post = teebe_setup_find_cf7_form( $form['title'] );
-
-		if ( $form_post ) {
-			echo do_shortcode( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contact Form 7 escapes its own output.
-				sprintf(
-					'[contact-form-7 id="%d" title="%s" html_class="%s" html_id="%s"]',
-					(int) $form_post->ID,
-					esc_attr( $form_post->post_title ),
-					esc_attr( $form['html_class'] ),
-					esc_attr( $form['html_id'] )
-				)
-			);
-			return;
-		}
-	}
-
-	echo '<div class="form-status show"><p class="form-status-title">';
-	esc_html_e( 'Enquiry form not configured yet.', 'the-ebook-edit' );
-	echo '</p><p class="form-note">';
-	printf(
-		/* translators: %s: Contact Form 7 form title. */
-		esc_html__( 'Install Contact Form 7, then run Appearance → The Ebook Edit Setup to create the "%s" form. Until then, enquiries can be sent by email.', 'the-ebook-edit' ),
-		esc_html( $form['title'] )
-	);
-	echo '</p><p class="form-note"><a href="mailto:support@theebookedit.com">support@theebookedit.com</a></p></div>';
+	teebe_render_ghl_form( 'landing' );
 }

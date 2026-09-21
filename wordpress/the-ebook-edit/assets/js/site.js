@@ -13,21 +13,17 @@
      2. the Base64 asset registry is gone. Images are theme files with
         real sources, so nothing has to be copied between elements;
 
-     3. the lead forms no longer fake their own success. Contact Form 7
-        performs the submission, and only when the plugin confirms the
-        mail was actually sent is the lead recorded and the visitor
-        moved on to the thank-you page. The approved field-by-field
-        validation is unchanged and still runs in the browser first, so
-        the visitor sees the same messages in the same places.
+     3. the lead form is gone from this file entirely. HighLevel renders
+        it, validates it, stores the lead and performs the redirect, all
+        inside its own cross-origin frame. Nothing here reads into that
+        frame or tries to guess when a submission succeeded: the site
+        learns of a lead only when HighLevel returns the visitor to
+        /thank-you/?conversion=lead. See assets/js/ghl-forms.js, which
+        only sizes the card around it.
 
    The WhatsApp links are real wa.me links rendered by PHP, so the
    prototype's placeholder toast is gone with the placeholder number.
-
-   inc/site.php supplies window.teebeSite.
    ------------------------------------------------------------------ */
-
-/* ========= configuration supplied by the theme ========= */
-var TEEBE_SITE = window.teebeSite || {};
 
 /* ========= mobile menu ========= */
 (() => {
@@ -123,121 +119,6 @@ var TEEBE_SITE = window.teebeSite || {};
   // Decode every cover before its first transition to avoid an image-loading hitch.
   root.querySelectorAll('.featured-book').forEach(img => {if (img.decode) img.decode().catch(() => {});});
   syncPause();
-})();
-
-/* ========= lead forms: six required fields, readable validation =========
-   Contact Form 7 delivers the submission. This keeps the approved in-page
-   validation, records the lead only once the plugin reports that the mail
-   was really sent, and only then moves the visitor on to the thank-you
-   page. An invalid, spam, aborted or failed submission never gets past
-   this point. */
-(() => {
-  const FIELDS = [
-    {name:"full_name", label:"Name", message:"Please enter your full name.",
-     valid: v => v.trim().length >= 2},
-    {name:"email", label:"Email", message:"Please enter a valid email address.",
-     valid: (v, el) => v.trim() !== "" && el.checkValidity()},
-    {name:"mobile_whatsapp", label:"Mobile / WhatsApp", message:"Please enter your Mobile / WhatsApp number.",
-     // International-friendly: allows + spaces ( ) - . and requires 7-15 digits.
-     valid: v => /^[+()\s.\-\d]+$/.test(v.trim()) && (v.match(/\d/g) || []).length >= 7 && (v.match(/\d/g) || []).length <= 15},
-    {name:"book_type", label:"Book Type", message:"Please select the type of book you want to create.",
-     valid: v => v !== ""},
-    {name:"book_stage", label:"Book Stage", message:"Please select how far along you are with your book.",
-     valid: v => v !== ""},
-    {name:"expected_budget", label:"Expected Budget", message:"Please select your expected budget.",
-     valid: v => v !== ""}
-  ];
-
-  const track = (name, params, done) => {
-    if (typeof window.teebeTrack === "function") window.teebeTrack(name, params, done);
-    else if (typeof done === "function") done();
-  };
-
-  // Contact Form 7 may not be configured yet, in which case the template
-  // renders a notice instead of a form and there is nothing to wire up.
-  document.querySelectorAll("form.lead-form").forEach(form => {
-    const present = FIELDS.filter(def => form.elements[def.name]);
-    if (!present.length) return;
-
-    const wrap = el => el.closest(".field");
-    const setError = (el, msg) => {
-      const f = wrap(el);
-      if (!f) return;
-      const out = f.querySelector(".field-error");
-      f.classList.toggle("is-invalid", !!msg);
-      el.setAttribute("aria-invalid", msg ? "true" : "false");
-      if (out) out.textContent = msg || "";
-    };
-    const clearErrors = () => present.forEach(def => setError(form.elements[def.name], ""));
-
-    /* Contact Form 7 builds the controls from the form body bundled with
-       the theme, which cannot carry arbitrary attributes. These are the
-       attributes the approved markup had; restoring them here keeps both
-       the behaviour and the approved styling (the greyed placeholder
-       comes from a :required:invalid rule) exactly as approved.
-
-       noValidate is set for the same reason the approved form carried it:
-       the browser's own bubbles would otherwise pre-empt the page's own
-       validation messages. */
-    form.noValidate = true;
-    const errorId = def => (form.elements[def.name].id ? "err-" + form.elements[def.name].id : "err-" + def.name);
-    present.forEach(def => {
-      const el = form.elements[def.name];
-      el.required = true;
-      el.setAttribute("aria-describedby", errorId(def));
-      if (el.tagName === "SELECT") {
-        const placeholder = el.querySelector('option[value=""]');
-        if (placeholder) placeholder.disabled = true;
-      }
-      if (def.name === "mobile_whatsapp") el.setAttribute("inputmode", "tel");
-      el.addEventListener("input", () => { if (wrap(el) && wrap(el).classList.contains("is-invalid") && def.valid(el.value, el)) setError(el, ""); });
-      el.addEventListener("change", () => { if (def.valid(el.value, el)) setError(el, ""); });
-    });
-
-    /* Capture phase, so this runs before Contact Form 7's own submit
-       handler on the same element regardless of which was registered
-       first. An invalid form is stopped here and never reaches the
-       plugin. */
-    form.addEventListener("submit", e => {
-      let firstInvalid = null;
-      present.forEach(def => {
-        const el = form.elements[def.name];
-        const ok = def.valid(el.value, el);
-        setError(el, ok ? "" : def.message);
-        if (!ok && !firstInvalid) firstInvalid = el;
-      });
-      if (firstInvalid) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        firstInvalid.focus();
-      }
-    }, true);
-
-    /* The server rejected something the browser accepted. Its messages are
-       printed by the plugin next to each control, so the page's own copies
-       are cleared to avoid showing two messages for one field. None of
-       these outcomes records a lead and none of them leaves the page. */
-    ["wpcf7invalid", "wpcf7spam", "wpcf7mailfailed"].forEach(type => {
-      form.addEventListener(type, clearErrors);
-    });
-
-    /* Delivered — and only delivered. wpcf7mailsent fires once Contact
-       Form 7 has actually sent the mail, so this is the one place a lead
-       is recorded. The event carries nothing personal: only which form it
-       was and which page it was on.
-
-       The redirect waits for the event to be acknowledged, so the
-       conversion is never lost to the navigation, and never waits longer
-       than a second for it. */
-    form.addEventListener("wpcf7mailsent", () => {
-      const next = TEEBE_SITE.thankYouUrl;
-      const go = () => { if (next) window.location.assign(next); };
-      track("generate_lead", {
-        form_name: (window.teebeAnalytics && window.teebeAnalytics.forms && window.teebeAnalytics.forms[form.id]) || form.id || "lead_form",
-        lead_origin: (window.teebeAnalytics && window.teebeAnalytics.leadOrigin) || "website"
-      }, go);
-    });
-  });
 })();
 
 /* ========= reveals, portfolio filters, process illumination and the

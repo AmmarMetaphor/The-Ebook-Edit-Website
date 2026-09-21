@@ -24,10 +24,9 @@ Everything else in the theme is hand-maintained and is not touched here: the
 website (page-*.php, front-page.php, 404.php, header.php, footer.php,
 inc/site.php, assets/css/site.css, assets/js/site.js), the Meta Ads landing
 page (template-landing-meta-ads.php, inc/landing.php, assets/css/landing.css,
-assets/js/landing.js, assets/images/landing/, cf7/landing-enquiry.txt),
-analytics and attribution (inc/analytics.php, inc/attribution.php,
-assets/js/analytics.js, assets/js/attribution.js), the Contact Form 7 bodies
-in cf7/, and the setup utility.
+assets/js/landing.js, assets/images/landing/), analytics (inc/analytics.php,
+assets/js/analytics.js), the HighLevel forms (assets/js/ghl-forms.js and
+their definitions in inc/site.php), and the setup utility.
 
 Note that the asset step replaces assets/images/brand wholesale, which is why
 the approved artwork shared by the website and the landing page lives in
