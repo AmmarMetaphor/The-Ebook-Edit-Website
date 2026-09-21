@@ -5,7 +5,7 @@
  * @package the-ebook-edit
  */
 
-get_header();
+get_header( 'book' );
 ?>
 
 <div class="book-experience book-static">
@@ -90,4 +90,4 @@ get_header();
 </div>
 
 <?php
-get_footer();
+get_footer( 'book' );

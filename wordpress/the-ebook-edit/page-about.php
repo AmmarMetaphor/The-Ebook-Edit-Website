@@ -1,163 +1,41 @@
 <?php
 /**
- * about — generated from the static site by wordpress/sync-from-static.py.
- * Edit the static page and re-run the script; do not hand-edit this file.
+ * About — /about/.
+ *
+ * Ported from the approved design; hand-maintained from here.
+ * wordpress/sync-from-static.py does not generate this file.
  *
  * @package the-ebook-edit
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header();
 ?>
 
-<div class="book-experience book-open-start">
-  <div class="book-stage">
-    <div class="book-scene">
-      <div class="book">
-        <div class="book-shadow" aria-hidden="true"></div>
-
-        <nav class="book-tabs" aria-label="Primary navigation">
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>" aria-current="page">About</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
-          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
-        </nav>
-
-        <div class="book-board-open" aria-hidden="true"></div>
-
-        <div class="book-block">
-          <div class="paper-left" aria-hidden="true"></div>
-          <div class="paper-right" aria-hidden="true"></div>
-
-          <section class="spread" id="chapter-1" aria-labelledby="about-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="bookplate-row"><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
-                <p class="eyebrow">About The Ebook Edit</p>
-                <h1 id="about-title">A boutique editorial brand for ideas worth developing carefully.</h1>
-                <p class="page-lead">The Ebook Edit brings writing, editing, formatting, and publishing support into one coherent process—so authors can focus on the substance of the book without losing control of their voice.</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">2</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <div class="page-ornament" aria-hidden="true"></div>
-                <p class="about-motto">Ideas shaped with clarity.<br>Books finished with care.</p>
-                <div class="page-ornament" aria-hidden="true"></div>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">3</span>
-            </div>
-          </section>
-
-          <section class="spread" id="chapter-2" aria-labelledby="pov-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">Our point of view</p>
-                <h2 id="pov-title">Good editorial work is both creative and disciplined.</h2>
-                <p>It asks the big questions—why this book, for whom, and in what order—then pays equal attention to the small ones: wording, punctuation, headings, links, metadata, and file quality.</p>
-                <p>The goal is not to make every manuscript sound the same. The goal is to help each one become more intentional, readable, and ready for its audience.</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">4</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <p class="eyebrow">Editorial values</p>
-                <h2>How the work is approached</h2>
-                <ul class="stage-list">
-                  <li><span class="stage-no" aria-hidden="true">C</span><div class="stage-body"><h3>Clarity</h3><p>Readers should understand the promise, structure, and next step without unnecessary friction.</p></div></li>
-                  <li><span class="stage-no" aria-hidden="true">V</span><div class="stage-body"><h3>Voice</h3><p>Editing should strengthen expression while preserving the author’s personality and intent.</p></div></li>
-                  <li><span class="stage-no" aria-hidden="true">R</span><div class="stage-body"><h3>Rigor</h3><p>Claims, consistency, source handling, details, and final files deserve careful attention.</p></div></li>
-                  <li><span class="stage-no" aria-hidden="true">T</span><div class="stage-body"><h3>Transparency</h3><p>Scope, milestones, questions, trade-offs, and responsibilities should be understandable.</p></div></li>
-                </ul>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">5</span>
-            </div>
-          </section>
-
-          <section class="spread" id="chapter-3" aria-labelledby="support-who-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">Who we support</p>
-                <h2 id="support-who-title">Creators with something meaningful to communicate.</h2>
-                <div class="pill-row"><span class="pill">Authors</span><span class="pill">Founders</span><span class="pill">Coaches</span><span class="pill">Consultants</span><span class="pill">Educators</span><span class="pill">Subject experts</span><span class="pill">Organisations</span></div>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">6</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <p class="eyebrow">What we do not promise</p>
-                <h2>Credibility matters.</h2>
-                <p>We do not invent testimonials, guarantee sales, promise bestseller status, or publish unverified claims. Marketing and editorial decisions should remain accurate, ethical, and supportable.</p>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">7</span>
-            </div>
-          </section>
-
-          <section class="spread" id="chapter-4" aria-labelledby="how-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">How we work</p>
-                <h2 id="how-title">One managed process, however much of it you need.</h2>
-                <p>Projects run through a <a href="<?php echo esc_url( home_url( '/process/' ) ); ?>">six-stage process</a> with written scope, milestones and approval points. You can enter at any stage — strategy, writing, editing, formatting or publishing preparation — and leave with organised, usable files.</p>
-                <p class="eyebrow">Where we work</p>
-                <p>The Ebook Edit is operated by Inovantage Ltd and works remotely with authors and organisations across the UK and US. Email <a href="mailto:support@theebookedit.com">support@theebookedit.com</a>.</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">8</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <p class="eyebrow">How quality is managed</p>
-                <h2>Quality is a system, not a mood.</h2>
-                <ul class="diamond-list">
-                  <li>A project style sheet records every editorial decision</li>
-                  <li>Separate editing passes for structure, sentences and correctness</li>
-                  <li>Checklists before formatting, and again before publication</li>
-                  <li>Documented queries, so nothing is changed silently</li>
-                  <li>Organised source files delivered for future editions</li>
-                </ul>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">9</span>
-            </div>
-          </section>
-
-
-          <section class="spread" id="chapter-5" aria-labelledby="about-cta-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">Work with us</p>
-                <h2 id="about-cta-title">Build the ebook with a partner who respects the idea and the reader.</h2>
-                <p class="page-lead">Tell us what you are creating and where you need the most support.</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">10</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <div class="page-ornament" aria-hidden="true"></div>
-                <div class="page-actions">
-                  <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Discuss your ebook</a>
-                </div>
-                <p class="page-more"><a href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Read the insights →</a></p>
-                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">11</span>
-            </div>
-          </section>
-
-          <div class="book-spine-shade" aria-hidden="true"></div>
-          <div class="turn-shade" aria-hidden="true"></div>
-          <div class="book-leaf" aria-hidden="true">
-            <div class="leaf-front"></div>
-            <div class="leaf-back"></div>
-          </div>
-        </div>
-
-        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
-      </div>
-    </div>
-  </div>
-  <div class="book-endcap" aria-hidden="true"></div>
+<section class="site-view" id="about-view">
+<section class="page-hero "><div class="flow-wrap" aria-hidden="true"><div class="flow-line one"></div><div class="flow-line two"></div></div><div class="container" style="position:relative;z-index:1"><div class="page-hero-grid"><div class="v-reveal"><div class="eyebrow">About The Ebook Edit</div><h1 class="v-h1 about-h1" tabindex="-1">Helping Ideas Become<br>Books Worth Publishing</h1><div class="about-intro"><p class="v-lead">The Ebook Edit helps authors, professionals/experts, coaches/consultants, and entrepreneurs turn their ideas, existing material and manuscripts into a professionally written and published book.</p><p class="v-lead">From writing and editing to formatting, illustration, cover design, publishing and marketing, we can support one stage of a project or guide the journey from concept to publication.</p></div></div><div class="v-reveal" data-delay="1"><div class="about-visual" aria-hidden="true"><img src="<?php echo esc_url( teebe_site_image( 'logo' ) ); ?>" class="av-logo" data-asset="logo" alt=""><div class="av-book av-1"><img src="<?php echo esc_url( teebe_site_image( 'cover-6' ) ); ?>" data-asset="cover-6" alt="The Other Side of Maybe book cover" decoding="async" ></div><div class="av-book av-2"><img src="<?php echo esc_url( teebe_site_image( 'cover-4' ) ); ?>" data-asset="cover-4" alt="The Inner Compass book cover" decoding="async" ></div><div class="av-book av-3"><img src="<?php echo esc_url( teebe_site_image( 'cover-3' ) ); ?>" data-asset="cover-3" alt="The Ghost of Blackthorn Palace book cover" decoding="async" ></div><div class="av-book av-4"><img src="<?php echo esc_url( teebe_site_image( 'cover-5' ) ); ?>" data-asset="cover-5" alt="Rising Through the Storm book cover" decoding="async" ></div></div></div></div></div></section><section class="v-section"><div class="container"><div class="v-head v-reveal"><div><div class="eyebrow">Our approach</div><h2 class="one-line">Three Things We Hold To</h2></div></div><div class="values"><div class="value v-reveal" data-delay="0"><div class="glyph" aria-hidden="true">✦</div><h3>Craft</h3><p>Manuscripts, artwork and files handled with the attention a finished book deserves.</p></div><div class="value v-reveal" data-delay="1"><div class="glyph" aria-hidden="true">❝</div><h3>Clarity</h3><p>Every decision, from a sentence to a cover, should make the book easier to understand and enjoy.</p></div><div class="value v-reveal" data-delay="2"><div class="glyph" aria-hidden="true">❧</div><h3>Collaboration</h3><p>You review and approve at each stage. The book stays yours.</p></div></div></div></section><section class="v-section tight kinds-section"><div class="container"><div class="v-head center v-reveal"><div class="eyebrow">What we help create</div><h2>Books of Every Kind</h2></div>
+<div class="kinds-grid">
+<a class="kind-card v-reveal" data-delay="0" href="<?php echo esc_url( home_url( '/portfolio/' ) . '#pf-ghost-of-blackthorn-palace' ); ?>"><span class="kind-cover"><img src="<?php echo esc_url( teebe_site_image( 'cover-3' ) ); ?>" data-asset="cover-3" alt="The Ghost of Blackthorn Palace book cover" decoding="async"></span><span class="kind-text"><span class="kind-label">Fiction</span><span class="kind-sub">From our portfolio: The Ghost of Blackthorn Palace</span></span></a>
+<a class="kind-card v-reveal" data-delay="1" href="<?php echo esc_url( home_url( '/portfolio/' ) . '#pf-from-the-white-house-to-the-outhouse' ); ?>"><span class="kind-cover"><img src="<?php echo esc_url( teebe_site_image( 'cover-1' ) ); ?>" data-asset="cover-1" alt="From the White House to the Outhouse book cover" decoding="async"></span><span class="kind-text"><span class="kind-label">Non-fiction</span><span class="kind-sub">From our portfolio: From the White House to the Outhouse</span></span></a>
+<a class="kind-card v-reveal" data-delay="2" href="<?php echo esc_url( home_url( '/portfolio/' ) . '#pf-rising-through-the-storm' ); ?>"><span class="kind-cover"><img src="<?php echo esc_url( teebe_site_image( 'cover-5' ) ); ?>" data-asset="cover-5" alt="Rising Through the Storm book cover" decoding="async"></span><span class="kind-text"><span class="kind-label">Memoirs</span><span class="kind-sub">From our portfolio: Rising Through the Storm</span></span></a>
+<a class="kind-card v-reveal" data-delay="0" href="<?php echo esc_url( home_url( '/portfolio/' ) . '#pf-the-inner-compass' ); ?>"><span class="kind-cover"><img src="<?php echo esc_url( teebe_site_image( 'cover-4' ) ); ?>" data-asset="cover-4" alt="The Inner Compass book cover" decoding="async"></span><span class="kind-text"><span class="kind-label">Business Books</span><span class="kind-sub">From our portfolio: The Inner Compass</span></span></a>
+<a class="kind-card v-reveal" data-delay="1" href="<?php echo esc_url( home_url( '/portfolio/' ) . '#pf-the-inner-compass' ); ?>"><span class="kind-cover"><img src="<?php echo esc_url( teebe_site_image( 'cover-4' ) ); ?>" data-asset="cover-4" alt="The Inner Compass book cover" decoding="async"></span><span class="kind-text"><span class="kind-label">Personal Development</span><span class="kind-sub">From our portfolio: The Inner Compass</span></span></a>
+<a class="kind-card v-reveal" data-delay="2" href="<?php echo esc_url( home_url( '/portfolio/' ) . '#pf-mila-and-the-gentle-dino' ); ?>"><span class="kind-cover"><img src="<?php echo esc_url( teebe_site_image( 'cover-2' ) ); ?>" data-asset="cover-2" alt="Mila and the Gentle Dino book cover" decoding="async"></span><span class="kind-text"><span class="kind-label">Children's Books</span><span class="kind-sub">From our portfolio: Mila and the Gentle Dino</span></span></a>
 </div>
+<div class="philosophy-band v-reveal">
+  <div class="philosophy"><div class="eyebrow">Our philosophy</div><blockquote>Every book should still feel unmistakably like the person behind it.</blockquote></div>
+  <div class="phil-collage" aria-hidden="true">
+    <span class="pc pc-1"><img src="<?php echo esc_url( teebe_site_image( 'cover-6' ) ); ?>" data-asset="cover-6" alt="" decoding="async"></span>
+    <span class="pc pc-2"><img src="<?php echo esc_url( teebe_site_image( 'cover-1' ) ); ?>" data-asset="cover-1" alt="" decoding="async"></span>
+    <span class="pc pc-3"><img src="<?php echo esc_url( teebe_site_image( 'cover-2' ) ); ?>" data-asset="cover-2" alt="" decoding="async"></span>
+    <span class="pc pc-4"><img src="<?php echo esc_url( teebe_site_image( 'cover-5' ) ); ?>" data-asset="cover-5" alt="" decoding="async"></span>
+    <span class="pc-logo"><img src="<?php echo esc_url( teebe_site_image( 'logo' ) ); ?>" data-asset="logo" alt=""></span>
+  </div>
+</div></div></section><section class="v-section tight"><div class="container"><div class="t-grid"><article class="t-card v-reveal"><div class="t-mark" aria-hidden="true">“</div><blockquote class="t-quote">The proofreading gave my manuscript the polish it needed, and the publishing support made the final stage feel clear and manageable. I was genuinely pleased with how everything came together.</blockquote><div class="t-client"><strong>Steve Elliott</strong><span>Author • Proofreading &amp; Publishing</span></div></article><article class="t-card v-reveal" data-delay="1"><div class="t-mark" aria-hidden="true">“</div><blockquote class="t-quote">I felt supported throughout the process. The manuscript was handled with care, the communication was clear, and the finished book felt far more polished and ready for publication.</blockquote><div class="t-client"><strong>Linda</strong><span>Author • Editorial &amp; Publishing Support</span></div></article><article class="t-card v-reveal" data-delay="2"><div class="t-mark" aria-hidden="true">“</div><blockquote class="t-quote">The team helped turn my children's book idea into a finished book I was genuinely proud to publish. The support throughout development was excellent, and seeing the book perform so well on Amazon made the experience even more rewarding.</blockquote><div class="t-client"><strong>Ashley</strong><span>Children's Book Author • Book Development &amp; Publishing</span></div></article><article class="t-card v-reveal" data-delay="3"><div class="t-mark" aria-hidden="true">“</div><blockquote class="t-quote">The illustrations brought the book to life in a way that matched the vision I had from the beginning. Having the same team support the publication process made the whole journey feel much easier and more cohesive.</blockquote><div class="t-client"><strong>Olivia</strong><span>Author • Illustration &amp; Publishing Support</span></div></article></div></div></section><section class="cta-band"><div class="container v-reveal"><h2>Ready to Begin?<span>Tell us about your book</span></h2><p>Where it stands today is the only thing we need to know to start the conversation.</p><div class="actions"><a class="btn btn-gold" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Book Your Free Consultation</a></div></div></section>
+</section>
 
 <?php
 get_footer();

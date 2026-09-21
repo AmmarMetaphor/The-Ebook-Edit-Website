@@ -2,6 +2,21 @@
 /**
  * The Ebook Edit — theme setup, assets, book boot, and contact-form hooks.
  *
+ * The theme carries three presentations, each with its own stylesheet and
+ * script, and no page ever loads another's:
+ *
+ *   inc/site.php       the approved website — every public page except the
+ *                      two below;
+ *   inc/landing.php    the Meta Ads landing page;
+ *   header-book.php    the Insights library, which keeps the earlier book
+ *                      presentation so its published URLs and content are
+ *                      unchanged.
+ *
+ * Analytics and marketing attribution are shared by all three:
+ *
+ *   inc/analytics.php    Google Analytics 4, Microsoft Clarity, the events;
+ *   inc/attribution.php  campaign attribution on every lead.
+ *
  * @package the-ebook-edit
  */
 
@@ -13,13 +28,15 @@ require_once get_theme_file_path( 'inc/seo-data.php' );
 require_once get_theme_file_path( 'inc/seo-meta.php' );
 require_once get_theme_file_path( 'inc/setup.php' );
 require_once get_theme_file_path( 'inc/landing.php' );
+require_once get_theme_file_path( 'inc/site.php' );
+require_once get_theme_file_path( 'inc/analytics.php' );
+require_once get_theme_file_path( 'inc/attribution.php' );
 
 /**
  * Theme supports.
  *
- * No menu location is registered: the book's chapter tabs are the site
- * navigation and they are part of the page templates, exactly as on the
- * published static site.
+ * No menu location is registered: the navigation is part of the approved
+ * design and is rendered by teebe_site_nav() in inc/site.php.
  */
 function teebe_setup() {
 	add_theme_support( 'title-tag' );
@@ -32,17 +49,27 @@ function teebe_setup() {
 add_action( 'after_setup_theme', 'teebe_setup' );
 
 /**
- * The two stylesheets and the book engine, versioned by file modification time
- * so browsers pick up changes without the manual cache-busting query string
- * the static site used.
+ * Each presentation's own assets, versioned by file modification time so
+ * browsers pick up changes without the manual cache-busting query string the
+ * static site used. No page loads another presentation's stylesheet.
  */
 function teebe_assets() {
-	// The Meta Ads landing page and its consultation thank-you page carry
-	// their own complete design system and must not load the book
-	// stylesheets or the book engine, which would fight it. See
+	// Measurement and attribution are the same everywhere, and load first
+	// so window.teebeTrack exists before any presentation's own script.
+	teebe_analytics_assets();
+	teebe_attribution_assets();
+
+	// The Meta Ads landing page carries its own complete design system and
+	// must not load the website's or the book's, which would fight it. See
 	// inc/landing.php.
-	if ( teebe_is_funnel() ) {
+	if ( teebe_is_landing() ) {
 		teebe_landing_assets();
+		return;
+	}
+
+	// Everything except the Insights library is the approved website.
+	if ( ! teebe_is_book_page() ) {
+		teebe_site_assets();
 		return;
 	}
 
@@ -92,8 +119,8 @@ function teebe_assets() {
 add_action( 'wp_enqueue_scripts', 'teebe_assets' );
 
 /**
- * Adds the body classes the book stylesheets key off, so the WordPress page
- * carries the same classes as its static counterpart.
+ * Adds the body classes the book stylesheets key off, for the Insights pages
+ * whose generated metadata still declares them.
  *
  * @param string[] $classes Body classes.
  * @return string[]
@@ -119,7 +146,7 @@ add_filter( 'body_class', 'teebe_body_class' );
  * Prints the pre-paint mode check so the correct book state renders on the
  * first frame with no layout flash.
  *
- * This is the same script the static site inlines in <head>. It must run
+ * Called from header-book.php, the Insights library's shell. It must run
  * before paint, which rules out an external file, so it is printed inline and
  * kept byte-for-byte in step with the static pages.
  */
@@ -157,117 +184,6 @@ function teebe_boot_script() {
   })();
 </script>
 	<?php
-}
-
-/**
- * Renders the book's chapter tabs.
- *
- * The designed pages carry their own copy of this markup, generated from the
- * static site. This helper exists for index.php and page.php, the fallback
- * templates WordPress uses for anything an administrator adds later.
- */
-function teebe_book_tabs() {
-	$tabs = array(
-		'/services/'  => 'Services',
-		'/process/'   => 'Process',
-		'/portfolio/' => 'Portfolio',
-		'/about/'     => 'About',
-		'/insights/'  => 'Insights',
-	);
-
-	echo '<nav class="book-tabs" aria-label="' . esc_attr__( 'Primary navigation', 'the-ebook-edit' ) . '">';
-
-	foreach ( $tabs as $path => $label ) {
-		printf(
-			'<a class="book-tab" href="%s">%s</a>',
-			esc_url( home_url( $path ) ),
-			esc_html( $label )
-		);
-	}
-
-	printf(
-		'<a class="book-tab book-tab-cta" href="%s">%s</a>',
-		esc_url( home_url( '/contact/' ) ),
-		esc_html__( 'Start a project', 'the-ebook-edit' )
-	);
-
-	echo '</nav>';
-}
-
-/**
- * Renders one of the site's two enquiry forms.
- *
- * The static site posts to Netlify Forms. WordPress has no equivalent, so the
- * form body is supplied by a Contact Form 7 form whose markup — including the
- * book page's own classes — is given in DEPLOYMENT.md. The shortcode lives in
- * the page's post_content, which is the only thing this theme stores there;
- * all design and copy stay in the templates.
- *
- * When the form has not been configured yet, an on-page notice explains what
- * to do rather than showing a form that cannot deliver anything.
- *
- * @param string $key Form key: 'project-inquiry' or 'publishing-journey'.
- */
-function teebe_render_enquiry_form( $key = 'project-inquiry' ) {
-	$shortcode = teebe_enquiry_shortcode( $key );
-
-	if ( '' !== $shortcode ) {
-		echo do_shortcode( $shortcode ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contact Form 7 escapes its own output.
-		return;
-	}
-
-	$titles = array(
-		'project-inquiry'    => 'Project Inquiry',
-		'publishing-journey' => 'Publishing Journey',
-	);
-	$title  = isset( $titles[ $key ] ) ? $titles[ $key ] : $titles['project-inquiry'];
-
-	echo '<div class="m-pg"><div class="notice"><p><strong>';
-	esc_html_e( 'Enquiry form not configured yet.', 'the-ebook-edit' );
-	echo '</strong> ';
-	printf(
-		/* translators: %s: Contact Form 7 form title. */
-		esc_html__( 'Install Contact Form 7, create the form named "%s" using the markup in the theme\'s DEPLOYMENT.md, then add its shortcode to this page.', 'the-ebook-edit' ),
-		esc_html( $title )
-	);
-	echo '</p><p>';
-	printf(
-		/* translators: %s: mailto link. */
-		esc_html__( 'In the meantime, enquiries can be sent by email to %s.', 'the-ebook-edit' ),
-		'<a href="mailto:support@theebookedit.com">support@theebookedit.com</a>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static markup.
-	);
-	echo '</p></div></div>';
-}
-
-/**
- * The Contact Form 7 shortcode stored on the page that renders a given form.
- *
- * @param string $key Form key.
- * @return string Shortcode, or '' when none is configured.
- */
-function teebe_enquiry_shortcode( $key ) {
-	$slugs = array(
-		'project-inquiry'    => 'contact',
-		'publishing-journey' => 'home',
-	);
-
-	if ( ! isset( $slugs[ $key ] ) ) {
-		return '';
-	}
-
-	$page = get_page_by_path( $slugs[ $key ], OBJECT, 'page' );
-
-	if ( ! $page ) {
-		return '';
-	}
-
-	$content = trim( (string) $page->post_content );
-
-	if ( false === strpos( $content, '[contact-form-7' ) ) {
-		return '';
-	}
-
-	return $content;
 }
 
 /**
@@ -321,7 +237,7 @@ function teebe_cf7_admin_notice() {
 	}
 
 	echo '<div class="notice notice-warning is-dismissible"><p>';
-	echo esc_html__( 'The Ebook Edit: install and activate Contact Form 7 to enable the enquiry forms. See DEPLOYMENT.md in the theme folder for the form markup and settings.', 'the-ebook-edit' );
+	echo esc_html__( 'The Ebook Edit: install and activate Contact Form 7, then run Appearance → The Ebook Edit Setup to create the enquiry forms. See DEPLOYMENT.md in the theme folder.', 'the-ebook-edit' );
 	echo '</p></div>';
 }
 add_action( 'admin_notices', 'teebe_cf7_admin_notice' );

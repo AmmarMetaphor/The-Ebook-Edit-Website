@@ -1,0 +1,4 @@
+
+# Python bytecode from wordpress/sync-from-static.py
+__pycache__/
+*.pyc

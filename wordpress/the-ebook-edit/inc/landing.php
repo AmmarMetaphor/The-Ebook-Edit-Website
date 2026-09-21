@@ -22,11 +22,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The page template files this integration applies to: the Meta Ads landing
- * page, and the thank-you page a delivered enquiry leads to.
+ * The page template this integration applies to.
+ *
+ * The funnel's thank-you step is no longer a template of its own: the
+ * approved design has one Thank You experience at /thank-you/, shared by the
+ * website and by this landing page, and the website's page-thank-you.php
+ * renders it. See inc/site.php.
  */
-const TEEBE_LANDING_TEMPLATE    = 'template-landing-meta-ads.php';
-const TEEBE_THANK_YOU_TEMPLATE  = 'template-landing-thank-you.php';
+const TEEBE_LANDING_TEMPLATE = 'template-landing-meta-ads.php';
 
 /**
  * Whether the request being rendered is the landing page.
@@ -35,25 +38,6 @@ const TEEBE_THANK_YOU_TEMPLATE  = 'template-landing-thank-you.php';
  */
 function teebe_is_landing() {
 	return is_page() && is_page_template( TEEBE_LANDING_TEMPLATE );
-}
-
-/**
- * Whether the request being rendered is the consultation thank-you page.
- *
- * @return bool
- */
-function teebe_is_thank_you() {
-	return is_page() && is_page_template( TEEBE_THANK_YOU_TEMPLATE );
-}
-
-/**
- * Whether either funnel template is being rendered. Both replace the
- * website's assets with the landing design; neither uses the book.
- *
- * @return bool
- */
-function teebe_is_funnel() {
-	return teebe_is_landing() || teebe_is_thank_you();
 }
 
 /**
@@ -80,12 +64,6 @@ function teebe_landing_assets() {
 		'in_footer' => true,
 		'strategy'  => 'defer',
 	);
-
-	// The thank-you page needs no JavaScript of its own: its WhatsApp button
-	// is a plain link and the booking calendar brings its own script.
-	if ( ! teebe_is_landing() ) {
-		return;
-	}
 
 	wp_enqueue_script(
 		'the-ebook-edit-landing',
@@ -216,39 +194,9 @@ function teebe_landing_body_class( $classes ) {
 		$classes[] = 'teebe-landing';
 	}
 
-	if ( teebe_is_thank_you() && ! in_array( 'teebe-thank-you', $classes, true ) ) {
-		$classes[] = 'teebe-thank-you';
-	}
-
 	return $classes;
 }
 add_filter( 'body_class', 'teebe_landing_body_class' );
-
-/**
- * Keeps the consultation thank-you page out of search results.
- *
- * It is the end of an advertising funnel, reachable only by submitting the
- * landing page's form, and nothing on it is useful to someone arriving from
- * a search engine. Applied through WordPress's own robots filter rather than
- * a tag in the template, so it also governs the X-Robots-Tag header a host or
- * plugin may add.
- *
- * Only this template is affected: the website, the landing page and the legal
- * pages keep whatever directives they already had.
- *
- * @param array $robots Robots directives.
- * @return array
- */
-function teebe_thank_you_robots( $robots ) {
-	if ( teebe_is_thank_you() ) {
-		$robots['noindex']  = true;
-		$robots['nofollow'] = true;
-		unset( $robots['follow'] );
-	}
-
-	return $robots;
-}
-add_filter( 'wp_robots', 'teebe_thank_you_robots', 20 );
 
 /**
  * The landing page's own browser theme colour, which is darker than the rest
@@ -258,7 +206,7 @@ add_filter( 'wp_robots', 'teebe_thank_you_robots', 20 );
  * @return string
  */
 function teebe_landing_theme_color( $color ) {
-	return teebe_is_funnel() ? '#051a43' : $color;
+	return teebe_is_landing() ? '#051a43' : $color;
 }
 add_filter( 'teebe_theme_color', 'teebe_landing_theme_color' );
 
@@ -272,13 +220,11 @@ add_filter( 'teebe_theme_color', 'teebe_landing_theme_color' );
  * Open Graph tags for a page it has no entry for, so nothing is duplicated.
  */
 function teebe_landing_head_meta() {
-	if ( ! teebe_is_funnel() ) {
+	if ( ! teebe_is_landing() ) {
 		return;
 	}
 
-	$description = teebe_is_thank_you()
-		? __( 'Choose a time to speak with a consultant from The Ebook Edit about your book.', 'the-ebook-edit' )
-		: __( 'The Ebook Edit — professional ebook writing, editing, formatting and publishing support.', 'the-ebook-edit' );
+	$description = __( 'The Ebook Edit — professional ebook writing, editing, formatting and publishing support.', 'the-ebook-edit' );
 	$title       = wp_get_document_title();
 	$url         = get_permalink();
 	$image       = get_theme_file_uri( 'assets/images/brand/the-ebook-edit-og.jpg' );

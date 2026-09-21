@@ -38,6 +38,7 @@ $GLOBALS['teebe_preview'] = array(
 	'scripts'  => array(),
 	'actions'  => array(),
 	'filters'  => array(),
+	'cf7_tags' => array(),
 );
 
 /* ---------------------------------------------------------------- plumbing */
@@ -86,6 +87,8 @@ function esc_attr__( $text, $domain = '' ) {
 	return esc_attr( $text ); }
 function esc_html_e( $text, $domain = '' ) {
 	echo esc_html( $text ); }
+function esc_attr_e( $text, $domain = '' ) {
+	echo esc_attr( $text ); }
 function esc_html( $text ) {
 	return htmlspecialchars( (string) $text, ENT_QUOTES, 'UTF-8' ); }
 function esc_attr( $text ) {
@@ -151,48 +154,26 @@ function get_queried_object_id() {
 	return 1; }
 function get_post_field( $field, $id = 0 ) {
 	return $GLOBALS['teebe_preview']['slug']; }
-/**
- * Stands in for the Contact Form 7 plugin: the pages that carry an enquiry
- * form report a shortcode, and do_shortcode() expands it using the form body
- * bundled with the theme. That lets the comparison check the real form markup
- * rather than the "not configured yet" notice.
- */
 function get_page_by_path( $slug, $output = null, $type = 'page' ) {
-	$forms = array(
-		'contact' => array( 'project-inquiry', 'start-form', '' ),
-		'home'    => array( 'publishing-journey', 'page-form', 'enquiry' ),
-	);
-
-	if ( ! isset( $forms[ $slug ] ) ) {
-		return null;
-	}
-
-	list( $key, $class, $id ) = $forms[ $slug ];
-
-	return (object) array(
-		'ID'           => 1,
-		'post_content' => sprintf(
-			'[contact-form-7 id="1" title="%s" html_class="%s"%s]',
-			$key,
-			$class,
-			'' !== $id ? ' html_id="' . $id . '"' : ''
-		),
-	);
-}
+	return null; }
 
 function get_post( $id ) {
 	return null; }
 
 /**
  * The Contact Form 7 form bodies, keyed by the title the shortcode carries.
- * The website's two forms use their body's file name as the title; the
- * landing page's form is looked up by its real title, so it is mapped here.
+ * Every template finds its form by title, so the map is the same one the
+ * theme's setup routine uses.
  *
  * @param string $title Shortcode title attribute.
  * @return string Theme-relative path to the form body.
  */
 function teebe_preview_cf7_body( $title ) {
-	$named = array( 'Start Your Book' => 'cf7/landing-enquiry.txt' );
+	$named = array(
+		'Start Your Book'      => 'cf7/landing-enquiry.txt',
+		'Home Page Enquiry'    => 'cf7/site-home-enquiry.txt',
+		'Contact Page Enquiry' => 'cf7/site-contact-enquiry.txt',
+	);
 
 	return isset( $named[ $title ] ) ? $named[ $title ] : 'cf7/' . $title . '.txt';
 }
@@ -234,16 +215,37 @@ function do_shortcode( $content ) {
 			return sprintf(
 				"<div class=\"wpcf7\"><form class=\"%s wpcf7-form init\"%s>\n"
 					. "<div class=\"screen-reader-response\"><p role=\"status\" aria-live=\"polite\" aria-atomic=\"true\"></p><ul></ul></div>\n"
-					. "%s"
+					. "%s%s"
 					. "<div class=\"wpcf7-response-output\" aria-hidden=\"true\"></div>\n"
 					. "</form></div>",
 				$m[2],
 				isset( $m[3] ) && '' !== $m[3] ? ' id="' . $m[3] . '"' : '',
+				teebe_preview_cf7_hidden_fields(),
 				teebe_preview_cf7_controls( $body )
 			);
 		},
 		$content
 	);
+}
+
+/**
+ * The hidden fields Contact Form 7 renders from wpcf7_form_hidden_fields,
+ * which is how the theme adds its attribution fields.
+ *
+ * @return string
+ */
+function teebe_preview_cf7_hidden_fields() {
+	$out = '';
+
+	foreach ( (array) apply_filters( 'wpcf7_form_hidden_fields', array() ) as $name => $value ) {
+		$out .= sprintf(
+			'<input type="hidden" name="%s" value="%s">',
+			esc_attr( $name ),
+			esc_attr( $value )
+		);
+	}
+
+	return '' !== $out ? '<div style="display:none">' . $out . "</div>\n" : '';
 }
 
 /**
@@ -254,6 +256,10 @@ function do_shortcode( $content ) {
  * @return string
  */
 function teebe_preview_cf7_controls( $body ) {
+	foreach ( $GLOBALS['teebe_preview']['cf7_tags'] ?? array() as $tag => $callback ) {
+		$body = str_replace( '[' . $tag . ']', (string) call_user_func( $callback ), $body );
+	}
+
 	return preg_replace_callback(
 		'/\[(textarea|text|email|tel|select|submit)(\*?)([^\]]*)\]/',
 		function ( $m ) {
@@ -356,6 +362,26 @@ function teebe_preview_cf7_controls( $body ) {
 }
 function is_page_template( $template = '' ) {
 	return $GLOBALS['teebe_preview']['template'] === $template; }
+function get_page_template_slug( $id = 0 ) {
+	return $GLOBALS['teebe_preview']['template']; }
+function is_singular( $types = '' ) {
+	return ! is_404(); }
+function wp_doing_ajax() {
+	return false; }
+function wp_parse_url( $url, $component = -1 ) {
+	return parse_url( $url, $component ); }
+function sanitize_key( $key ) {
+	return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) ); }
+function sanitize_text_field( $text ) {
+	return trim( preg_replace( '/[\r\n\t ]+/', ' ', wp_strip_all_tags( (string) $text ) ) ); }
+function wp_strip_all_tags( $text ) {
+	return strip_tags( (string) $text ); }
+function wp_unslash( $value ) {
+	return is_string( $value ) ? stripslashes( $value ) : $value; }
+function esc_js( $text ) {
+	return addslashes( (string) $text ); }
+function wpcf7_add_form_tag( $tag, $callback, $features = array() ) {
+	$GLOBALS['teebe_preview']['cf7_tags'][ $tag ] = $callback; }
 function wp_add_inline_script( $handle, $data, $position = 'after' ) {
 	$GLOBALS['teebe_preview']['inline'][ $handle ][] = $data; }
 function _e( $text, $domain = '' ) {
@@ -368,8 +394,9 @@ function wp_get_canonical_url() {
 	return home_url( '/' ); }
 function wp_get_document_title() {
 	return apply_filters( 'pre_get_document_title', 'The Ebook Edit' ); }
-function get_permalink() {
-	return home_url( '/' ); }
+function get_permalink( $post = 0 ) {
+	$slug = $GLOBALS['teebe_preview']['slug'];
+	return ( '' === $slug || 'front' === $slug ) ? home_url( '/' ) : home_url( '/' . $slug . '/' ); }
 function get_the_title() {
 	return ''; }
 function the_title() {}
@@ -465,47 +492,51 @@ function wp_footer() {
 	}
 }
 
-function get_header() {
+function get_header( $name = '' ) {
 	global $theme_dir;
-	require $theme_dir . '/header.php';
+	require $theme_dir . ( '' !== $name ? "/header-{$name}.php" : '/header.php' );
 }
 
-function get_footer() {
+function get_footer( $name = '' ) {
 	global $theme_dir;
-	require $theme_dir . '/footer.php';
+	require $theme_dir . ( '' !== $name ? "/footer-{$name}.php" : '/footer.php' );
 }
 
 /* --------------------------------------------------------------- rendering */
 
 require $theme_dir . '/functions.php';
 do_action( 'after_setup_theme' );
+do_action( 'wpcf7_init' );
 do_action( 'wp_enqueue_scripts' );
 
 $pages = array(
-	'front'                           => array( 'index.html', 'front-page.php' ),
-	'services'                        => array( 'services.html', 'page-services.php' ),
-	'writing'                         => array( 'writing.html', 'page-writing.php' ),
-	'editing'                         => array( 'editing.html', 'page-editing.php' ),
-	'publishing'                      => array( 'publishing.html', 'page-publishing.php' ),
-	'process'                         => array( 'process.html', 'page-process.php' ),
-	'portfolio'                       => array( 'portfolio.html', 'page-portfolio.php' ),
-	'about'                           => array( 'about.html', 'page-about.php' ),
+	// The approved website, ported from the final approved design. There is
+	// no static counterpart to compare these against: the static site in the
+	// repository root is the earlier book presentation, which this release
+	// replaces everywhere except the Insights library.
+	'front'                           => array( '', 'front-page.php' ),
+	'services'                        => array( '', 'page-services.php' ),
+	'writing'                         => array( '', 'page-writing.php' ),
+	'editing'                         => array( '', 'page-editing.php' ),
+	'publishing'                      => array( '', 'page-publishing.php' ),
+	'process'                         => array( '', 'page-process.php' ),
+	'portfolio'                       => array( '', 'page-portfolio.php' ),
+	'about'                           => array( '', 'page-about.php' ),
+	'contact'                         => array( '', 'page-contact.php' ),
+	'book-consultation'               => array( '', 'page-book-consultation.php' ),
+	'thank-you'                       => array( '', 'page-thank-you.php' ),
+	'privacy-policy'                  => array( '', 'page-privacy-policy.php' ),
+	'terms-and-conditions'            => array( '', 'page-terms-and-conditions.php' ),
+	'404'                             => array( '', '404.php' ),
+	// The Insights library, unchanged by this release and still comparable
+	// with the static pages it was generated from.
 	'insights'                        => array( 'insights.html', 'page-insights.php' ),
-	'contact'                         => array( 'contact.html', 'page-contact.php' ),
-	'thank-you'                       => array( 'thank-you.html', 'page-thank-you.php' ),
-	'privacy'                         => array( 'privacy.html', 'page-privacy.php' ),
-	'terms'                           => array( 'terms.html', 'page-terms.php' ),
-	'404'                             => array( '404.html', '404.php' ),
 	'turn-expertise-into-an-ebook'    => array( 'insights/turn-expertise-into-an-ebook.html', 'template-insight-turn-expertise.php' ),
 	'editing-levels-explained'        => array( 'insights/editing-levels-explained.html', 'template-insight-editing-levels.php' ),
 	'pre-publishing-checklist'        => array( 'insights/pre-publishing-checklist.html', 'template-insight-pre-publishing.php' ),
 	'kindle-and-ebook-platform-guide' => array( 'insights/kindle-and-ebook-platform-guide.html', 'template-insight-kindle-platforms.php' ),
-	// The Meta Ads landing page has no static counterpart to compare against:
-	// it is rendered so the template, its assets and its enquiry form can be
-	// checked, and so the output can be inspected in a browser.
+	// The Meta Ads landing page, likewise with no static counterpart.
 	'start-your-book'                 => array( '', 'template-landing-meta-ads.php' ),
-	// The consultation thank-you page, likewise with no static counterpart.
-	'consultation-thank-you'          => array( '', 'template-landing-thank-you.php' ),
 );
 
 if ( ! is_dir( $out_dir ) ) {
@@ -524,6 +555,8 @@ foreach ( $pages as $key => $page ) {
 	$GLOBALS['teebe_preview']['styles']   = array();
 	$GLOBALS['teebe_preview']['scripts']  = array();
 	$GLOBALS['teebe_preview']['inline']   = array();
+	// wp_head runs once per document; each rendered page is a new document.
+	$GLOBALS['teebe_analytics_printed']   = false;
 	do_action( 'wp_enqueue_scripts' );
 
 	ob_start();

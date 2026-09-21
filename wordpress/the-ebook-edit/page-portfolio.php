@@ -1,301 +1,35 @@
 <?php
 /**
- * portfolio — generated from the static site by wordpress/sync-from-static.py.
- * Edit the static page and re-run the script; do not hand-edit this file.
+ * Portfolio — /portfolio/.
+ *
+ * Ported from the approved design; hand-maintained from here.
+ * wordpress/sync-from-static.py does not generate this file.
  *
  * @package the-ebook-edit
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header();
 ?>
 
-<div class="book-experience book-open-start">
-  <div class="book-stage">
-    <div class="book-scene">
-      <div class="book">
-        <div class="book-shadow" aria-hidden="true"></div>
-
-        <nav class="book-tabs" aria-label="Primary navigation">
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>" aria-current="page">Portfolio</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
-          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
-        </nav>
-
-        <div class="book-board-open" aria-hidden="true"></div>
-
-        <div class="book-block">
-          <div class="paper-left" aria-hidden="true"></div>
-          <div class="paper-right" aria-hidden="true"></div>
-
-          <section class="spread" id="chapter-1" aria-labelledby="portfolio-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="bookplate-row"><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
-                <p class="eyebrow">Portfolio</p>
-                <h1 id="portfolio-title">Editorial possibilities across different kinds of ebooks.</h1>
-                <p class="page-lead">A closer look at the books we help shape, and at every stage of support available behind them.</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">2</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <p class="eyebrow">Featured work</p>
-                <nav aria-label="Featured books">
-                  <ul class="contents-list">
-                    <li><a href="#chapter-3"><span class="contents-no" aria-hidden="true">01</span><span class="contents-title">From the White House to the Outhouse</span></a></li>
-                    <li><a href="#chapter-4"><span class="contents-no" aria-hidden="true">02</span><span class="contents-title">Mila and the Gentle Dino</span></a></li>
-                    <li><a href="#chapter-5"><span class="contents-no" aria-hidden="true">03</span><span class="contents-title">The Ghost of Blackthorn Palace</span></a></li>
-                  </ul>
-                </nav>
-                <div class="page-ornament" aria-hidden="true"></div>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">3</span>
-            </div>
-          </section>
-
-          <section class="spread" id="chapter-2" aria-labelledby="services-showcase-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <div class="m-pg">
-                <p class="eyebrow">What we can do for your book</p>
-                <h2 id="services-showcase-title">One Book.<br>Every Stage It Needs.</h2>
-                <p class="page-lead">From the first idea to the final publication, choose the support your book needs or combine services into one complete publishing journey.</p>
-                </div>
-                <div class="m-pg">
-                <div class="svc-list">
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/writing/' ) ); ?>">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M10 14v3h4v-3"/><path d="M10 20h4"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Writing</strong>
-                    <span class="svc-text">Turn ideas into structured manuscripts.</span>
-                  </span>
-                </a>
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/editing/' ) ); ?>">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="m10.5 15.5 5-5a1.2 1.2 0 0 1 1.7 1.7l-5 5-2.2.5z"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Editing</strong>
-                    <span class="svc-text">Strengthen clarity, structure and voice.</span>
-                  </span>
-                </a>
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>?service=Book%20Cover%20Design">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v18"/><circle cx="14.5" cy="9" r="1.6"/><path d="m11 17 3-3 4 3"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Cover Design</strong>
-                    <span class="svc-text">Give the book a distinctive visual identity.</span>
-                  </span>
-                </a>
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/editing/' ) ); ?>#chapter-5">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="m8.5 12.5 2.2 2.2 4.8-5"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Proofreading</strong>
-                    <span class="svc-text">Polish the final manuscript before release.</span>
-                  </span>
-                </a>
-                </div>
-                </div>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">4</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <div class="m-pg">
-                <div class="svc-list">
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>?service=Book%20Illustrations">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m14.5 5.5 4 4L9 19H5v-4z"/><path d="m13 7 4 4"/><path d="M4 4.6 5 3l1 1.6L7.6 5 6 6l-1 1.6L4 6 2.4 5z"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Illustrations</strong>
-                    <span class="svc-text">Bring scenes, characters and ideas to life.</span>
-                  </span>
-                </a>
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>?service=Children%20Books">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-1.4-4.3-2-7.5-2v13c3.2 0 5.5.6 7.5 2 2-1.4 4.3-2 7.5-2V5c-3.2 0-5.5.6-7.5 2z"/><path d="M12 7v13"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Children Books</strong>
-                    <span class="svc-text">Develop stories and visuals for younger readers.</span>
-                  </span>
-                </a>
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>#formatting">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Formatting</strong>
-                    <span class="svc-text">Prepare clean professional files.</span>
-                  </span>
-                </a>
-                </div>
-                </div>
-                <div class="m-pg">
-                <div class="svc-list">
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/publishing/' ) ); ?>">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.2 2.4 3.4 5.4 3.4 8.5S14.2 18.1 12 20.5c-2.2-2.4-3.4-5.4-3.4-8.5S9.8 5.9 12 3.5z"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Publishing</strong>
-                    <span class="svc-text">Move confidently toward publication.</span>
-                  </span>
-                </a>
-                <a class="svc-item" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>?service=Book%20Marketing">
-                  <span class="svc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h3l6 4V6l-6 4z"/><path d="M17 9.2a4 4 0 0 1 0 5.6"/><path d="M19.5 6.8a7.5 7.5 0 0 1 0 10.4"/></svg></span>
-                  <span class="svc-body">
-                    <strong class="svc-name">Book Marketing</strong>
-                    <span class="svc-text">Help the finished book reach more readers.</span>
-                  </span>
-                </a>
-                </div>
-                <p class="page-more"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">See every service in detail →</a></p>
-                </div>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">5</span>
-            </div>
-          </section>
-
-          <section class="spread spread-featured" id="chapter-3" aria-labelledby="featured-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">Featured book</p>
-                <h2 id="featured-title">From the White House to the Outhouse</h2>
-                <div class="page-ornament" aria-hidden="true"></div>
-                <p>A bold, visually distinctive title presented through a striking dual-tone cover treatment. The project reflects the kind of considered presentation where storytelling, editorial structure and visual identity come together to give a book a memorable presence.</p>
-                <p class="feature-note">Every book has its own voice. The role of thoughtful editorial and publishing support is to make sure that voice carries clearly from manuscript to reader.</p>
-                <p class="project-count" aria-hidden="true">01 / 03</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">6</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <figure class="featured-book">
-                  <img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/portfolio/from-the-white-house-to-the-outhouse-approved.jpeg' ) ); ?>" alt="Cover of From the White House to the Outhouse" width="1200" height="1800" loading="lazy" decoding="async">
-                  <figcaption class="entry-label">Featured title</figcaption>
-                </figure>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">7</span>
-            </div>
-          </section>
-
-          <section class="spread spread-featured" id="chapter-4" aria-labelledby="mila-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <div class="m-pg">
-                <p class="eyebrow">Featured book</p>
-                <h2 id="mila-title">Mila and the Gentle Dino</h2>
-                <p class="entry-label">Children&#8217;s fiction</p>
-                <div class="page-ornament" aria-hidden="true"></div>
-                <p>Mila and the Gentle Dino is a heartwarming story about an unexpected friendship between a curious young girl and a kind-hearted dinosaur who others are afraid to understand. As Mila spends time with her new friend, she discovers that being different does not mean being frightening, and that kindness begins with listening, understanding, and seeing the world through someone else’s eyes.</p>
-                </div>
-                <div class="m-pg">
-                <p>Their friendship introduces children to empathy in a simple way: listening to others, noticing how they feel, including those who seem different, and choosing kindness before making assumptions.</p>
-                <p class="feature-note">A gentle story about friendship, empathy and seeing beyond first impressions.</p>
-                <p class="project-count" aria-hidden="true">02 / 03</p>
-                </div>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">8</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <figure class="featured-book">
-                  <img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/portfolio/mila-and-the-gentle-dino.webp' ) ); ?>" alt="Mila and the Gentle Dino book cover" width="1024" height="1536" loading="lazy" decoding="async">
-                  <figcaption class="entry-label">Children&#8217;s fiction</figcaption>
-                </figure>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">9</span>
-            </div>
-          </section>
-
-          <section class="spread spread-featured" id="chapter-5" aria-labelledby="ghost-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <div class="m-pg">
-                <p class="eyebrow">Featured book</p>
-                <h2 id="ghost-title">The Ghost of Blackthorn Palace</h2>
-                <p class="entry-label">Gothic fiction</p>
-                <div class="page-ornament" aria-hidden="true"></div>
-                <p>The Ghost of Blackthorn Palace follows a young woman drawn to an abandoned estate where locals refuse to set foot after dark. Inside, she begins seeing the ghost of a girl who died in the palace decades ago, but the spirit is not simply haunting the halls. She is trying to reveal what happened to her.</p>
-                </div>
-                <div class="m-pg">
-                <p>As buried family secrets surface and the palace grows increasingly hostile, one question becomes impossible to ignore: is the ghost asking for help, or waiting for someone to take her place?</p>
-                <p class="feature-note">Some stories are haunted by ghosts. Others by the truth they refuse to bury.</p>
-                <p class="project-count" aria-hidden="true">03 / 03</p>
-                </div>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">10</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <figure class="featured-book">
-                  <img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/portfolio/the-ghost-of-blackthorn-palace.webp' ) ); ?>" alt="The Ghost of Blackthorn Palace book cover" width="1024" height="1536" loading="lazy" decoding="async">
-                  <figcaption class="entry-label">Gothic fiction</figcaption>
-                </figure>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">11</span>
-            </div>
-          </section>
-
-          <!-- FUTURE SELECTED WORK — reusable template. Only publish with
-               verified client work and written permission. Copy this block into
-               a new spread, remove the comment markers, and fill every field
-               from confirmed project information. Cover art: 1200×1800 (2:3).
-
-          <section class="spread spread-featured" id="chapter-N" aria-labelledby="project-N-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">Featured book</p>
-                <h2 id="project-N-title">[Project title]</h2>
-                <p class="entry-label">[genre]</p>
-                <div class="page-ornament" aria-hidden="true"></div>
-                <p>[project description]</p>
-                <p class="feature-note">[optional editorial line]</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">N</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <figure class="featured-book">
-                  <img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/portfolio/[cover-file]' ) ); ?>" alt="[title] book cover" width="1200" height="1800" loading="lazy" decoding="async">
-                  <figcaption class="entry-label">[caption]</figcaption>
-                </figure>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">N</span>
-            </div>
-          </section>
-          -->
-
-          <section class="spread" id="chapter-6" aria-labelledby="portfolio-cta-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <p class="eyebrow">Your book belongs here</p>
-                <h2 id="portfolio-cta-title">Tell us about the book you want to shape.</h2>
-                <p class="page-lead">Share the current stage, intended reader and publishing goal, and we will suggest a sensible starting point.</p>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">12</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <div class="page-ornament" aria-hidden="true"></div>
-                <div class="page-actions">
-                  <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Discuss your manuscript</a>
-                </div>
-                <p class="page-more"><a href="<?php echo esc_url( home_url( '/process/' ) ); ?>">See our process →</a></p>
-                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">13</span>
-            </div>
-          </section>
-
-          <div class="book-spine-shade" aria-hidden="true"></div>
-          <div class="turn-shade" aria-hidden="true"></div>
-          <div class="book-leaf" aria-hidden="true">
-            <div class="leaf-front"></div>
-            <div class="leaf-back"></div>
-          </div>
-        </div>
-
-        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
-      </div>
-    </div>
-  </div>
-  <div class="book-endcap" aria-hidden="true"></div>
-</div>
+<section class="site-view" id="portfolio-view">
+<section class="page-hero center "><div class="flow-wrap" aria-hidden="true"><div class="flow-line one"></div><div class="flow-line two"></div></div><div class="container" style="position:relative;z-index:1"><div class="v-reveal"><div class="eyebrow">Portfolio</div><h1 class="v-h1" tabindex="-1">Books We're Proud<br>to Have Shaped</h1><p class="v-lead">A selection of books shaped with thoughtful editorial, design and publishing support, each developed around its story, audience and purpose.</p></div></div></section><section class="v-section tight"><div class="container"><div class="pf-open v-reveal" aria-hidden="true"><div class="pf-floor"></div><div class="pf pf-l2"><img src="<?php echo esc_url( teebe_site_image( 'cover-2' ) ); ?>" data-asset="cover-2" alt="Mila and the Gentle Dino book cover" decoding="async" ></div><div class="pf pf-l1"><img src="<?php echo esc_url( teebe_site_image( 'cover-3' ) ); ?>" data-asset="cover-3" alt="The Ghost of Blackthorn Palace book cover" decoding="async" ></div><div class="pf pf-c"><img src="<?php echo esc_url( teebe_site_image( 'cover-4' ) ); ?>" data-asset="cover-4" alt="The Inner Compass book cover" decoding="async" ></div><div class="pf pf-r1"><img src="<?php echo esc_url( teebe_site_image( 'cover-5' ) ); ?>" data-asset="cover-5" alt="Rising Through the Storm book cover" decoding="async" ></div><div class="pf pf-r2"><img src="<?php echo esc_url( teebe_site_image( 'cover-6' ) ); ?>" data-asset="cover-6" alt="The Other Side of Maybe book cover" decoding="async" ></div></div></div></section><section class="v-section tight"><div class="container"><div class="filters" role="group" aria-label="Filter books"><button type="button" data-filter="all" aria-pressed="true">All</button><button type="button" data-filter="childrens" aria-pressed="false">Children's</button><button type="button" data-filter="fiction" aria-pressed="false">Fiction</button><button type="button" data-filter="memoir" aria-pressed="false">Memoir</button><button type="button" data-filter="personal-development" aria-pressed="false">Personal Development</button><button type="button" data-filter="publishing" aria-pressed="false">Publishing</button></div><p id="filterStatus" class="sr-only" aria-live="polite"></p><article class="project" id="pf-from-the-white-house-to-the-outhouse" data-tags="memoir publishing">
+      <div class="project-visual v-reveal-cover"><div class="v-stage"><img src="<?php echo esc_url( teebe_site_image( 'cover-1' ) ); ?>" class="v-cover v-cover-tilt" data-asset="cover-1" alt="From the White House to the Outhouse book cover" width="320" decoding="async" ></div></div>
+      <div class="project-copy v-reveal"><div class="eyebrow">Editorial &amp; publishing project</div><h2>From the White House<br>to the Outhouse</h2><p class="short">A bold and deeply personal title brought to life with careful editorial attention and a distinctive visual identity. This project reflects our approach to shaping an author's voice into a polished book designed to connect with readers and leave a lasting impression.</p><div class="stat"><div><strong>Editorial</strong>Structure, clarity &amp; polish</div><div><strong>Presentation</strong>Reader ready finish</div><div><strong>Publishing</strong>Platform preparation</div></div><div class="actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Start Your Book →</a></div></div></article><article class="project flip" id="pf-mila-and-the-gentle-dino" data-tags="childrens publishing">
+      <div class="project-visual v-reveal-cover"><div class="v-stage"><img src="<?php echo esc_url( teebe_site_image( 'cover-2' ) ); ?>" class="v-cover v-cover-tilt" data-asset="cover-2" alt="Mila and the Gentle Dino book cover" width="320" decoding="async" ></div></div>
+      <div class="project-copy v-reveal"><div class="eyebrow">Children’s fiction</div><h2>Mila and the Gentle Dino</h2><p class="short">Mila and the Gentle Dino is a heartwarming story about an unexpected friendship between a curious young girl and a kind-hearted dinosaur who others are afraid to understand. As Mila spends time with her new friend, she discovers that being different does not mean being frightening, and that kindness begins with listening, understanding, and seeing the world through someone else’s eyes.</p><p class="short">Their friendship introduces children to empathy in a simple way: listening to others, noticing how they feel, including those who seem different, and choosing kindness before making assumptions.</p><p class="book-tagline"><em>A gentle story about friendship, empathy and seeing beyond first impressions.</em></p><div class="stat"><div><strong>Development</strong>Story &amp; presentation</div><div><strong>Illustration</strong>Character-led artwork</div><div><strong>Publishing</strong>Reader ready files</div></div><div class="actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Start Your Book →</a></div></div></article><article class="project" id="pf-ghost-of-blackthorn-palace" data-tags="fiction publishing">
+      <div class="project-visual v-reveal-cover"><div class="v-stage"><img src="<?php echo esc_url( teebe_site_image( 'cover-3' ) ); ?>" class="v-cover v-cover-tilt" data-asset="cover-3" alt="The Ghost of Blackthorn Palace book cover" width="320" decoding="async" ></div></div>
+      <div class="project-copy v-reveal"><div class="eyebrow">Gothic fiction</div><h2>The Ghost of Blackthorn Palace</h2><p class="short">The Ghost of Blackthorn Palace follows a young woman drawn to an abandoned estate where locals refuse to set foot after dark. Inside, she begins seeing the ghost of a girl who died in the palace decades ago, but the spirit is not simply haunting the halls. She is trying to reveal what happened to her.</p><p class="short">As buried family secrets surface and the palace grows increasingly hostile, one question becomes impossible to ignore: is the ghost asking for help, or waiting for someone to take her place?</p><p class="book-tagline"><em>Some stories are haunted by ghosts. Others by the truth they refuse to bury.</em></p><div class="stat"><div><strong>Editorial</strong>Pace, tension &amp; voice</div><div><strong>Cover</strong>Atmospheric genre design</div><div><strong>Publishing</strong>Digital &amp; print ready</div></div><div class="actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Start Your Book →</a></div></div></article><article class="project flip" id="pf-the-inner-compass" data-tags="personal-development publishing">
+      <div class="project-visual v-reveal-cover"><div class="v-stage"><img src="<?php echo esc_url( teebe_site_image( 'cover-4' ) ); ?>" class="v-cover v-cover-tilt" data-asset="cover-4" alt="The Inner Compass book cover" width="320" decoding="async" ></div></div>
+      <div class="project-copy v-reveal"><div class="eyebrow">Personal development</div><h2>The Inner Compass</h2><p class="short">The Inner Compass is a practical guide for anyone who feels successful on the outside but uncertain about what comes next. Through reflection, mindset shifts, and purposeful action, life coach Sophia Bennett helps readers cut through distraction, rebuild confidence, and make decisions that align with the life they genuinely want to create.</p><p class="book-tagline"><em>Find clarity when success no longer tells you what comes next.</em></p><div class="stat"><div><strong>Writing</strong>Structured non-fiction</div><div><strong>Cover</strong>Calm, confident identity</div><div><strong>Publishing</strong>Platform preparation</div></div><div class="actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Start Your Book →</a></div></div></article><article class="project" id="pf-rising-through-the-storm" data-tags="memoir publishing">
+      <div class="project-visual v-reveal-cover"><div class="v-stage"><img src="<?php echo esc_url( teebe_site_image( 'cover-5' ) ); ?>" class="v-cover v-cover-tilt" data-asset="cover-5" alt="Rising Through the Storm book cover" width="320" decoding="async" ></div></div>
+      <div class="project-copy v-reveal"><div class="eyebrow">Memoir / Autobiography</div><h2>Rising Through the Storm</h2><p class="short">Rising Through the Storm is the story of Daniel Mercer, a man shaped by failure, loss, responsibility, and the relentless pressure to keep moving forward. Looking back on the choices that tested him most, he reflects on the moments that changed his direction, the people who influenced his journey, and the lessons that only hardship could teach. It is an honest account of resilience, reinvention, and the belief that even after the hardest seasons, a better chapter can still be written.</p><p class="book-tagline"><em>A story of resilience, reinvention and finding the strength to begin again.</em></p><div class="stat"><div><strong>Editorial</strong>Memoir structure &amp; voice</div><div><strong>Cover</strong>Cinematic portrait design</div><div><strong>Publishing</strong>Digital &amp; print ready</div></div><div class="actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Start Your Book →</a></div></div></article><article class="project flip" id="pf-the-other-side-of-maybe" data-tags="fiction publishing">
+      <div class="project-visual v-reveal-cover"><div class="v-stage"><img src="<?php echo esc_url( teebe_site_image( 'cover-6' ) ); ?>" class="v-cover v-cover-tilt" data-asset="cover-6" alt="The Other Side of Maybe book cover" width="320" decoding="async" ></div></div>
+      <div class="project-copy v-reveal"><div class="eyebrow">Contemporary fiction</div><h2>The Other Side of Maybe</h2><p class="short">When a young woman leaves behind the life she knows for a fresh start in an unfamiliar city, she expects distance to make everything simpler. Instead, she finds new friendships, difficult choices, and truths that force her to question the future she thought she wanted. The Other Side of Maybe is a story about courage, belonging, and what can happen when starting over changes more than just your surroundings.</p><p class="book-tagline"><em>Sometimes starting over changes more than where you live.</em></p><div class="stat"><div><strong>Editorial</strong>Character &amp; pacing</div><div><strong>Cover</strong>Warm contemporary design</div><div><strong>Publishing</strong>Reader ready files</div></div><div class="actions"><a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Start Your Book →</a></div></div></article></div></section><section class="cta-band"><div class="container v-reveal"><h2>Your Book Could Be Next<span>Tell us about it</span></h2><p>Whether you have an idea, a draft or a finished manuscript, we can help shape what comes next.</p><div class="actions"><a class="btn btn-gold" href="<?php echo esc_url( home_url( '/book-consultation/' ) ); ?>">Book Your Free Consultation</a></div></div></section>
+</section>
 
 <?php
 get_footer();

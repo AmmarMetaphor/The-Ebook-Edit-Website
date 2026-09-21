@@ -3,8 +3,8 @@ Theme Name: The Ebook Edit
 Theme URI: https://theebookedit.com/
 Author: The Ebook Edit
 Author URI: https://theebookedit.com/
-Description: Custom classic theme for The Ebook Edit — an ebook writing, editing, formatting, and publishing-support brand. Reproduces the published website exactly: the interactive book experience, the brand palette derived from the approved logo, the responsive desktop/mobile/flow presentations, and the same accessibility behaviour.
-Version: 1.1.8
+Description: Custom classic theme for The Ebook Edit — an ebook writing, editing, formatting, and publishing-support brand. Reproduces the approved website exactly, together with the Meta Ads landing funnel, the Contact Form 7 lead forms and their campaign attribution, and the site's Google Analytics 4 and Microsoft Clarity measurement.
+Version: 1.1.9
 Requires at least: 6.3
 Tested up to: 6.8
 Requires PHP: 7.4
@@ -16,14 +16,22 @@ Tags: business, portfolio, one-column, accessibility-ready
 
 /*
   This file exists because WordPress requires a style.css carrying the theme
-  header above. The website's actual styles live in the two stylesheets shared
-  with the published site, and are enqueued by functions.php:
+  header above. The website's actual styles live in the stylesheets
+  functions.php enqueues, one presentation at a time — no page ever loads
+  another presentation's:
 
-    assets/css/styles.css   design tokens, typography, buttons, forms, prose
-    assets/css/book.css     the book presentation (desktop, mobile, flow)
+    assets/css/site.css     the approved website: every public page except
+                            the two below
+    assets/css/landing.css  the Meta Ads landing page
+    assets/css/styles.css   design tokens and prose, for the Insights library
+    assets/css/book.css     the book presentation, for the Insights library
+    assets/css/wordpress.css  Contact Form 7 integration for the Insights
+                            library's forms
 
-  Both are copied verbatim from the source website by
+  site.css and landing.css are the approved stylesheets, each followed by a
+  clearly marked WordPress-integration block. styles.css and book.css are
+  copied verbatim from the static Insights pages by
   wordpress/sync-from-static.py. Add custom CSS in a child theme or under
-  Appearance → Customize → Additional CSS rather than here, so a re-sync never
+  Appearance → Customize → Additional CSS rather than here, so an update never
   overwrites it.
 */
