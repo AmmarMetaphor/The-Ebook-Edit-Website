@@ -1,17 +1,29 @@
 /*
   The Ebook Edit — funnel measurement.
 
-  One helper, teebeTrack(), and the events every presentation shares. Raw
-  gtag calls appear nowhere else in the theme.
+  Three helpers — teebeTrack() for Google Analytics, teebeMetaTrack() and
+  teebeMetaTrackCustom() for the Meta Pixel — and the events every
+  presentation shares. Raw gtag() and fbq() calls appear nowhere else in the
+  theme.
 
-  Nothing personal reaches Google Analytics or Microsoft Clarity from here.
-  Every parameter below is a page path, a route name, a form name, a
+  Nothing personal reaches Google Analytics, Microsoft Clarity or Meta from
+  here. Every parameter below is a page path, a route name, a form name, a
   call-to-action label, or a place in the layout. The fields a visitor fills
-  in are read by nothing in this file.
+  in are read by nothing in this file, and no Advanced Matching is
+  configured.
 
-  If analytics fails to load, is blocked, or is switched off, teebeTrack()
-  is a no-op that still runs its callback, so a form submission or a link
-  behaves exactly as it would without it.
+  If a tag fails to load, is blocked, or is refused by a consent manager,
+  every helper is a no-op that still runs its callback, so a form
+  submission or a link behaves exactly as it would without it.
+
+  The Meta Pixel's base code already sends one PageView per page load, and
+  every page here is a real WordPress URL, so nothing in this file sends a
+  second one. The landing page's internal #about-us, #privacy-policy and
+  #terms-and-conditions views are deliberately not counted as page views
+  either: they are legal and company reading inside one advertising landing,
+  not funnel steps, and counting them would inflate the landing page's own
+  PageView count against which its ad spend is measured. Google Analytics
+  treats them the same way.
 
   inc/analytics.php supplies window.teebeAnalytics.
 */
@@ -75,6 +87,41 @@
   };
 
   window.teebeTrack = track;
+
+  /*
+    Send one Meta Pixel event. `standard` picks fbq('track', …) for Meta's
+    own standard events and fbq('trackCustom', …) for ours.
+
+    fbq() queues synchronously — the base snippet defines it before
+    fbevents.js arrives — so there is nothing to wait for and no callback to
+    take. It no-ops when the Pixel was never printed, which is what happens
+    when a visitor refuses marketing cookies.
+  */
+  const meta = (standard, name, params) => {
+    if (typeof window.fbq !== "function") return false;
+    try {
+      window.fbq(standard ? "track" : "trackCustom", name, Object.assign(base(), params || {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
+
+  window.teebeMetaTrack = (name, params) => meta(true, name, params);
+  window.teebeMetaTrackCustom = (name, params) => meta(false, name, params);
+
+  /*
+    A delivered enquiry, recorded for both services and then handed on.
+
+    The order is the one the brief specifies: Google Analytics first, the
+    Meta Pixel second, the redirect last. Both calls queue synchronously;
+    `done` waits only for Google's acknowledgement, and no longer than the
+    timeout in track(), so the visitor is never held up by measurement.
+  */
+  window.teebeTrackLead = (params, done) => {
+    track("generate_lead", params, done);
+    meta(true, "Lead", {});
+  };
 
   const ready = fn => {
     if (document.readyState === "loading") {
@@ -177,32 +224,42 @@
       const href = link.getAttribute("href") || "";
 
       if (href.indexOf("mailto:") === 0) {
-        track("email_click", { cta_location: locationOf(link) });
+        const where = locationOf(link);
+        track("email_click", { cta_location: where });
+        meta(false, "EmailClick", { cta_location: where });
         return;
       }
 
       if (link.id === "whatsapp" || link.hasAttribute("data-whatsapp") || href.indexOf("https://wa.me/") === 0) {
-        track("whatsapp_click", { cta_location: locationOf(link) });
+        const where = locationOf(link);
+        track("whatsapp_click", { cta_location: where });
+        meta(false, "WhatsAppClick", { cta_location: where });
+        // Nothing is prevented or delayed: the link opens the chat as it
+        // would with no measurement at all.
         return;
       }
 
       if (leadsToBooking(link)) {
-        track("consultation_cta_click", {
-          cta_text: label(link),
-          cta_location: locationOf(link)
-        });
+        const params = { cta_text: label(link), cta_location: locationOf(link) };
+        track("consultation_cta_click", params);
+        // A click is interest, not an appointment. Meta's Schedule event is
+        // reserved for a booking HighLevel has actually confirmed, below.
+        meta(false, "ConsultationCTAClick", params);
       }
     },
     true
   );
 
-  /* ---- D. consultation_booking_view ---- */
+  /* ---- D. consultation_booking_view ----
+     Google Analytics only. For Meta the base code's PageView already
+     records that this page was seen, and viewing a calendar is not a
+     booking, so nothing standard applies here. ---- */
 
   if (CFG.isBookingPage) {
     ready(() => track("consultation_booking_view", { route: CFG.route }));
   }
 
-  /* ---- G. appointment_booked ----
+  /* ---- G. appointment_booked, and Meta's Schedule ----
 
      A booking exists only when HighLevel says so. The calendar is a
      cross-origin frame and is never inspected; the single signal is
@@ -244,6 +301,7 @@
           /* Storage unavailable; the parameter is still cleared below. */
         }
         track("appointment_booked", { route: CFG.route });
+        meta(true, "Schedule", { route: CFG.route });
       }
 
       try {

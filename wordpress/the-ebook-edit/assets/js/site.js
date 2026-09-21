@@ -148,8 +148,11 @@ var TEEBE_SITE = window.teebeSite || {};
      valid: v => v !== ""}
   ];
 
-  const track = (name, params, done) => {
-    if (typeof window.teebeTrack === "function") window.teebeTrack(name, params, done);
+  // assets/js/analytics.js owns every measurement call. If it is missing,
+  // blocked, or refused by a consent manager, the form still submits and
+  // the visitor still moves on.
+  const trackLead = (params, done) => {
+    if (typeof window.teebeTrackLead === "function") window.teebeTrackLead(params, done);
     else if (typeof done === "function") done();
   };
 
@@ -223,16 +226,17 @@ var TEEBE_SITE = window.teebeSite || {};
 
     /* Delivered — and only delivered. wpcf7mailsent fires once Contact
        Form 7 has actually sent the mail, so this is the one place a lead
-       is recorded. The event carries nothing personal: only which form it
-       was and which page it was on.
+       is recorded: Google Analytics generate_lead, then the Meta Pixel's
+       Lead, then the redirect. Both events carry nothing personal — only
+       which form it was and which page it was on.
 
-       The redirect waits for the event to be acknowledged, so the
-       conversion is never lost to the navigation, and never waits longer
-       than a second for it. */
+       The redirect waits for the events to be queued, so the conversion is
+       never lost to the navigation, and never waits longer than the
+       timeout in analytics.js for it. */
     form.addEventListener("wpcf7mailsent", () => {
       const next = TEEBE_SITE.thankYouUrl;
       const go = () => { if (next) window.location.assign(next); };
-      track("generate_lead", {
+      trackLead({
         form_name: (window.teebeAnalytics && window.teebeAnalytics.forms && window.teebeAnalytics.forms[form.id]) || form.id || "lead_form",
         lead_origin: (window.teebeAnalytics && window.teebeAnalytics.leadOrigin) || "website"
       }, go);

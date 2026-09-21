@@ -555,8 +555,10 @@ foreach ( $pages as $key => $page ) {
 	$GLOBALS['teebe_preview']['styles']   = array();
 	$GLOBALS['teebe_preview']['scripts']  = array();
 	$GLOBALS['teebe_preview']['inline']   = array();
-	// wp_head runs once per document; each rendered page is a new document.
-	$GLOBALS['teebe_analytics_printed']   = false;
+	// wp_head and wp_body_open each run once per document; every rendered
+	// page here is a new document.
+	$GLOBALS['teebe_analytics_printed']          = false;
+	$GLOBALS['teebe_analytics_noscript_printed'] = false;
 	do_action( 'wp_enqueue_scripts' );
 
 	ob_start();

@@ -180,10 +180,13 @@ Five of these are outside WordPress and none of them is done by installing the
 theme. `DEPLOYMENT.md` §13 has the same list with the exact steps.
 
 * **Cookie consent.** This is a UK-facing site and no consent plugin is
-  installed. Install one that supports the WordPress Consent API and
-  categorise Google Analytics 4 and Microsoft Clarity as *statistics*; the
-  theme then honours the visitor's choice automatically. Until then both tags
-  load on every visit. (`DEPLOYMENT.md` §5.)
+  installed. Install one that supports the WordPress Consent API, then
+  categorise Google Analytics 4 (`G-EQFMTN2WJF`) and Microsoft Clarity
+  (`yl7loe6vel`) as **Statistics**, and the Meta Pixel (`1492057326110606`)
+  as **Marketing** — it is advertising technology, not measurement, and the
+  theme asks for the two consents separately. The theme then honours the
+  visitor's choice automatically. Until then all three load on every visit.
+  (`DEPLOYMENT.md` §5.)
 * **HighLevel post-booking redirect.** In the calendar settings, set the
   redirect after a confirmed booking to
   `https://theebookedit.com/thank-you/?conversion=appointment_booked`.
@@ -253,9 +256,9 @@ diff against the previous release to see exactly what a change did.
 * Carry the approved Meta Ads landing page as a page template you can assign
   to a page of your choosing, with its own design and its own enquiry form,
   without touching any existing page.
-* Measure the funnel with Google Analytics 4 and Microsoft Clarity, and record
-  which campaign produced each enquiry — without sending anything personal to
-  either service.
+* Measure the funnel with Google Analytics 4, Microsoft Clarity and the Meta
+  Pixel, and record which campaign produced each enquiry — without sending
+  anything personal to any of them.
 * Derive every address from your WordPress site address, so it works on a
   staging domain and on the live domain with no edits.
 * Bundle all of its own images, fonts-free CSS and JavaScript, so it needs no

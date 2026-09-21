@@ -129,10 +129,11 @@ var TEEBE_LANDING = window.teebeLanding || {};
      The listener is bound to this form element, so no other Contact
      Form 7 form on the website can trigger the redirect.
 
-     generate_lead is sent first and carries nothing personal: only which
-     form it was and which page it was on. The redirect waits for the
-     event to be acknowledged so the conversion is not lost to the
-     navigation, and never waits longer than a second for it.
+     Google Analytics generate_lead and the Meta Pixel's Lead are sent
+     first, in that order, and carry nothing personal: only which form it
+     was and which page it was on. The redirect waits for them to be
+     queued so the conversion is not lost to the navigation, and never
+     waits longer than the timeout in analytics.js for it.
 
      The URL comes from the theme (home_url('/thank-you/') by default);
      if it is ever missing, the visitor stays here and Contact Form 7's
@@ -140,8 +141,8 @@ var TEEBE_LANDING = window.teebeLanding || {};
   form.addEventListener("wpcf7mailsent", () => {
     const next = TEEBE_LANDING.thankYouUrl;
     const go = () => { if (next) window.location.assign(next); };
-    if (typeof window.teebeTrack === "function") {
-      window.teebeTrack("generate_lead", {
+    if (typeof window.teebeTrackLead === "function") {
+      window.teebeTrackLead({
         form_name: (window.teebeAnalytics && window.teebeAnalytics.forms && window.teebeAnalytics.forms[form.id]) || "landing_page_form",
         lead_origin: (window.teebeAnalytics && window.teebeAnalytics.leadOrigin) || "landing-page"
       }, go);

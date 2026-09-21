@@ -26,7 +26,8 @@ the-ebook-edit/
   inc/site.php              the website: routing, assets, metadata, forms,
                             booking calendar, WhatsApp
   inc/landing.php           the Meta Ads landing page's equivalent
-  inc/analytics.php         Google Analytics 4, Microsoft Clarity, the events
+  inc/analytics.php         Google Analytics 4, Microsoft Clarity, the Meta
+                            Pixel and the funnel events
   inc/attribution.php       campaign attribution on every lead
   inc/seo-data.php          Insights page metadata, generated
   inc/seo-meta.php          prints title, description, canonical, social, JSON-LD
@@ -39,7 +40,7 @@ the-ebook-edit/
   assets/css/wordpress.css  Contact Form 7 integration, Insights
   assets/js/site.js         the website's carousel, reveals, filters, forms
   assets/js/landing.js      the landing page's carousel, router and form
-  assets/js/analytics.js    teebeTrack() and the funnel events
+  assets/js/analytics.js    teebeTrack(), teebeMetaTrack() and the events
   assets/js/attribution.js  campaign capture for the lead forms
   assets/js/book.js         the book engine, Insights              (generated)
   assets/images/landing/    the approved artwork, shared by the website and
@@ -172,30 +173,47 @@ add_filter( 'teebe_site_thank_you_url', fn() => home_url( '/booked/' ) );
 add_filter( 'teebe_landing_thank_you_url', fn() => home_url( '/booked/' ) );
 ```
 
-## 5. Analytics
+## 5. Analytics and advertising measurement
 
 One authoritative implementation, in `inc/analytics.php`, printed through
 `wp_head` at priority 1 — which every presentation calls, including the
 landing page that renders its own document. No template carries a copy, and no
 page can end up with two.
 
-| | |
-|---|---|
-| Google Analytics 4 | `G-EQFMTN2WJF` |
-| Microsoft Clarity | `yl7loe6vel` |
-| Meta Pixel | **not installed** — no Pixel ID was supplied |
+| | | Consent category |
+|---|---|---|
+| Google Analytics 4 | `G-EQFMTN2WJF` | statistics |
+| Microsoft Clarity | `yl7loe6vel` | statistics |
+| Meta Pixel | `1492057326110606` | **marketing** |
 
-Both tags are the exact snippets supplied, and both IDs are filterable:
+All three are the exact snippets supplied, and every ID is filterable:
 
 ```php
-add_filter( 'teebe_analytics_ga4_id',     fn() => 'G-XXXXXXX' );
-add_filter( 'teebe_analytics_clarity_id', fn() => '' );   // '' turns it off
-add_filter( 'teebe_analytics_enabled',    '__return_false' );  // e.g. on staging
+add_filter( 'teebe_analytics_ga4_id',       fn() => 'G-XXXXXXX' );
+add_filter( 'teebe_analytics_clarity_id',   fn() => '' );   // '' turns it off
+add_filter( 'teebe_analytics_meta_pixel_id', fn() => '' );
+add_filter( 'teebe_analytics_enabled',           '__return_false' );  // GA4 + Clarity
+add_filter( 'teebe_analytics_marketing_enabled', '__return_false' );  // Meta Pixel
 ```
 
-Pages are real WordPress URLs, so GA4's own page-load tracking handles page
-views. The theme sends no manual `page_view` events and there are no virtual
-ones to invent.
+Pages are real WordPress URLs, so GA4's own page-load tracking and the Meta
+Pixel's own `fbq('track', 'PageView')` each fire once per page load. The theme
+sends no manual `page_view` or second `PageView` and there are no virtual ones
+to invent.
+
+**Where each part is printed.** `teebe_analytics_head()` on `wp_head` priority
+1 prints all three script tags; `teebe_analytics_body_open()` on
+`wp_body_open` priority 1 prints the Meta Pixel's `<noscript>` image, because
+an image is body markup. Both are guarded, so a document can only ever get
+one of each. Every template — including the landing page, which renders its
+own document — calls both hooks, which is how one implementation covers
+every surface.
+
+**The landing page's internal views** (`#about-us`, `#privacy-policy`,
+`#terms-and-conditions`) are deliberately **not** counted as page views by
+either service. They are legal and company reading inside one advertising
+landing, not funnel steps, and counting them would inflate the PageView
+number the landing page's ad spend is measured against.
 
 ### Events
 
@@ -204,24 +222,36 @@ the only place the theme talks to gtag. It no-ops safely when analytics is
 unavailable, blocked or switched off, and still runs its callback, so a form
 submission or a link behaves exactly as it would without it.
 
-| Event | When |
-|---|---|
-| `form_start` | the first keystroke or selection in a lead form, once per form |
-| `generate_lead` | a genuine `wpcf7mailsent`, before the redirect |
-| `consultation_cta_click` | a link into the booking funnel is clicked |
-| `consultation_booking_view` | `/book-consultation/` is viewed |
-| `whatsapp_click` | the floating button or a WhatsApp text link |
-| `email_click` | a `mailto:` link |
-| `appointment_booked` | HighLevel returns a confirmed booking (see §6) |
+`window.teebeMetaTrack()` and `window.teebeMetaTrackCustom()` do the same for
+the Meta Pixel, and `window.teebeTrackLead()` sends both sides of a delivered
+enquiry in the required order. All of them no-op safely.
+
+| When | Google Analytics 4 | Meta Pixel |
+|---|---|---|
+| page load | automatic `page_view` | `PageView` (base code) |
+| first keystroke in a lead form | `form_start` | — |
+| a genuine `wpcf7mailsent` | `generate_lead` | `Lead` |
+| a link into the booking funnel | `consultation_cta_click` | `ConsultationCTAClick` *(custom)* |
+| `/book-consultation/` viewed | `consultation_booking_view` | — (the base `PageView` already covers it) |
+| HighLevel confirms a booking | `appointment_booked` | `Schedule` |
+| WhatsApp button or text link | `whatsapp_click` | `WhatsAppClick` *(custom)* |
+| a `mailto:` link | `email_click` | `EmailClick` *(custom)* |
+
+On a delivered enquiry the order is fixed: `generate_lead`, then `Lead`, then
+the redirect. Both calls queue synchronously and the redirect waits only for
+Google's acknowledgement, and no longer than 700ms for that.
 
 Parameters are limited to `page_path`, `form_name`, `lead_origin`, `cta_text`,
 `cta_location` and `route`. **No name, email address, telephone or WhatsApp
-number, manuscript text or free-text description is sent to Google Analytics or
-Microsoft Clarity, or put in a URL.** Lead details stay in the Contact Form 7
-submission and its notification email.
+number, manuscript text or free-text description is sent to Google Analytics,
+Microsoft Clarity or Meta, or put in a URL.** No Meta Advanced Matching is
+configured. Lead details stay in the Contact Form 7 submission and its
+notification email.
 
-Ordinary navigation is not a conversion: `consultation_cta_click` fires only
-for links whose destination is the booking page or the shared Thank You page.
+Ordinary navigation is not a conversion: `consultation_cta_click` and
+`ConsultationCTAClick` fire only for links whose destination is the booking
+page or the shared Thank You page. **A call-to-action click is never
+`Schedule`** — that is reserved for a booking HighLevel has confirmed.
 
 ### Consent — action required before production
 
@@ -230,16 +260,35 @@ The theme does not add a cookie banner of its own, because a second banner on
 a site that already has one is worse than none. Instead:
 
 * if a plugin implementing the **WordPress Consent API** is active, the
-  visitor's *statistics* consent decides whether either tag loads — this is
-  what CookieYes, Complianz and Real Cookie Banner all expose;
-* if none is active, **both tags load on every visit**;
-* `teebe_analytics_enabled` has the final say either way.
+  visitor's own choice decides — *statistics* for Google Analytics and
+  Clarity, *marketing* for the Meta Pixel. This is what CookieYes, Complianz
+  and Real Cookie Banner all expose;
+* the two decisions are separate, so a visitor who accepts measurement but
+  refuses advertising gets Google and Clarity and no Pixel;
+* if no such plugin is active, **all three load on every visit**;
+* `teebe_analytics_enabled` and `teebe_analytics_marketing_enabled` have the
+  final say either way.
+
+The Meta Pixel's `<noscript>` image is behind exactly the same marketing
+decision as its script, so the fallback cannot become a quiet way round the
+consent manager. When marketing consent is refused, neither is printed at all.
 
 **To complete consent configuration:** install a consent-management plugin
 that supports the WordPress Consent API, enable its Consent API integration,
-and categorise Google Analytics 4 and Microsoft Clarity as *statistics*. The
-theme then honours the visitor's choice with no further change. Until that is
-done, consent is **not** configured, whatever this theme does.
+and categorise:
+
+| Tool | Category |
+|---|---|
+| Google Analytics 4 — `G-EQFMTN2WJF` | Statistics / Analytics |
+| Microsoft Clarity — `yl7loe6vel` | Statistics / Analytics |
+| **Meta Pixel — `1492057326110606`** | **Marketing / Advertising** |
+
+The theme then honours the visitor's choice with no further change. Until that
+is done, consent is **not** configured, whatever this theme does. If your
+plugin blocks tags by script URL rather than through the Consent API, block
+`connect.facebook.net/en_US/fbevents.js` under Marketing and
+`googletagmanager.com` and `clarity.ms` under Statistics — but prefer the
+Consent API, which the theme reads directly.
 
 ## 6. The booking calendar and the appointment conversion
 
@@ -450,6 +499,6 @@ produces exactly the same site as running it once.
    cookies actually in use. Section 1 still lists only name, email and project
    information: the forms also collect a mobile or WhatsApp number and a budget
    range, which is worth adding at legal review.
-6. **Meta Pixel** — not installed, because no Pixel ID was supplied. The event
-   layer is ready for one to be added in `inc/analytics.php` and
-   `assets/js/analytics.js`.
+6. **Meta Pixel consent category** — part of item 1, and worth stating
+   separately: the Pixel is advertising, not measurement, and must be
+   categorised as *Marketing* rather than *Statistics*.
