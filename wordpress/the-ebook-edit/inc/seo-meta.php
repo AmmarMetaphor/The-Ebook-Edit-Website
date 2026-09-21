@@ -24,7 +24,12 @@ function teebe_seo_map() {
 	static $map = null;
 
 	if ( null === $map ) {
-		$map = teebe_seo_data();
+		/*
+		 * inc/site.php replaces the entries for every slug the approved
+		 * website design now serves; the Insights entries pass through
+		 * unchanged. See teebe_site_seo_map().
+		 */
+		$map = (array) apply_filters( 'teebe_seo_map', teebe_seo_data() );
 	}
 
 	return $map;

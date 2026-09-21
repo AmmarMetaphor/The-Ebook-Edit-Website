@@ -1,90 +1,44 @@
 <?php
 /**
- * contact — generated from the static site by wordpress/sync-from-static.py.
- * Edit the static page and re-run the script; do not hand-edit this file.
+ * Contact — /contact/.
+ *
+ * The enquiry form is Contact Form 7. A service-specific call to action
+ * may arrive here as ?service=Book+Editing; inc/site.php sanitises that
+ * and passes it to the form as its service context.
+ *
+ * Ported from the approved design; hand-maintained from here.
+ * wordpress/sync-from-static.py does not generate this file.
  *
  * @package the-ebook-edit
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header();
 ?>
 
-<div class="book-experience book-open-start">
-  <div class="book-stage">
-    <div class="book-scene">
-      <div class="book">
-        <div class="book-shadow" aria-hidden="true"></div>
-
-        <nav class="book-tabs" aria-label="Primary navigation">
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
-          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" aria-current="page">Start a project</a>
-        </nav>
-
-        <div class="book-board-open" aria-hidden="true"></div>
-
-        <div class="book-block">
-          <div class="paper-left" aria-hidden="true"></div>
-          <div class="paper-right" aria-hidden="true"></div>
-
-          <section class="spread" id="chapter-1" aria-labelledby="start-title">
-            <div class="page page-left">
-              <div class="page-inner">
-                <div class="m-pg">
-                <p class="bookplate-row"><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
-                <p class="eyebrow">Start a project</p>
-                <h1 id="start-title">Tell Us About the Book You Want to Create or Improve.</h1>
-                <p class="page-lead">Whether you have an early idea, notes, a manuscript in progress or a book ready for publication, tell us where you are and we will help identify the most suitable next step.</p>
-                <p class="feature-note">You do not need to know exactly which service you need before getting in touch.</p>
-                </div>
-                <div class="m-pg">
-                <p class="eyebrow">What happens next</p>
-                <ol class="stage-list start-steps">
-                  <li><span class="stage-no" aria-hidden="true">1</span><div class="stage-body"><p>We review your enquiry.</p></div></li>
-                  <li><span class="stage-no" aria-hidden="true">2</span><div class="stage-body"><p>We identify the most suitable next step.</p></div></li>
-                  <li><span class="stage-no" aria-hidden="true">3</span><div class="stage-body"><p>We contact you using your preferred method.</p></div></li>
-                </ol>
-                <p class="start-hint">Helpful details include your topic, current manuscript stage and the kind of support you think you may need.</p>
-                </div>
-              </div>
-              <span class="folio folio-left" aria-hidden="true">2</span>
-            </div>
-            <div class="page page-right">
-              <div class="page-inner">
-                <?php
-                  /*
-                   * Contact Form 7 renders the enquiry form here. The static
-                   * site posts to Netlify Forms, which WordPress has no
-                   * equivalent of, so the form body — including its book page
-                   * classes — is supplied by a CF7 form. Paste the markup from
-                   * DEPLOYMENT.md into a form named "project-inquiry" and the page renders
-                   * exactly as the static site does.
-                   */
-                  teebe_render_enquiry_form( 'project-inquiry' );
-                  ?>
-                <p class="micro-colophon">Prefer email? <a href="mailto:support@theebookedit.com">support@theebookedit.com</a> · © <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
-              </div>
-              <span class="folio folio-right" aria-hidden="true">3</span>
-            </div>
-          </section>
-
-          <div class="book-spine-shade" aria-hidden="true"></div>
-          <div class="turn-shade" aria-hidden="true"></div>
-          <div class="book-leaf" aria-hidden="true">
-            <div class="leaf-front"></div>
-            <div class="leaf-back"></div>
-          </div>
-        </div>
-
-        <div class="book-ribbon" aria-hidden="true"><span class="ribbon-fill"></span></div>
+<section class="site-view" id="contact-view">
+<section class="page-hero contact-hero"><div class="flow-wrap" aria-hidden="true"><div class="flow-line one"></div><div class="flow-line two"></div></div><div class="container" style="position:relative;z-index:1"><div class="start-grid">
+  <div class="start-aside v-reveal"><div class="eyebrow">Start your project</div><h1 class="v-h1" tabindex="-1">Tell Us Where Your Book<br>Is Today.</h1><p class="v-lead">Whether you have an idea, an outline, a manuscript or a published book that needs more support, start here.</p>
+    <ul class="start-points"><li><span class="n">1</span><span>Share your details and where the book stands.</span></li><li><span class="n">2</span><span>We reply with the right next step, not a package.</span></li><li><span class="n">3</span><span>Scope, schedule and reviews are agreed before work begins.</span></li></ul>
+    <div class="contact-ways"><a href="mailto:support@theebookedit.com"><span class="ico">✉</span>support@theebookedit.com</a><a href="<?php echo esc_url( teebe_site_whatsapp_url() ); ?>" target="_blank" rel="noopener noreferrer" data-whatsapp><span class="ico">☏</span>Chat on WhatsApp</a></div>
+    <aside class="company-panel v-reveal" aria-labelledby="company-office-title">
+      <div class="company-block">
+        <h3 class="company-title" id="company-office-title">UK Company Office Address</h3>
+        <address class="company-address">9 Cheriton Road<br>Leicester, England<br>LE2 8DE</address>
       </div>
-    </div>
-  </div>
-  <div class="book-endcap" aria-hidden="true"></div>
-</div>
+      <div class="company-block">
+        <h3 class="company-title">Company Information</h3>
+        <p class="company-legal">The Ebook Edit is a trading name of <strong>Inovantage Limited</strong>. Registered in United Kingdom <strong>Company No. 14524243</strong>. <strong>Registered Office</strong>: 9 Cheriton Road, Leicester, England, LE2 8DE</p>
+      </div>
+    </aside>
+    <div class="start-covers" aria-hidden="true"><img src="<?php echo esc_url( teebe_site_image( 'cover-4' ) ); ?>" data-asset="cover-4" alt="The Inner Compass book cover" decoding="async" ><img src="<?php echo esc_url( teebe_site_image( 'cover-2' ) ); ?>" data-asset="cover-2" alt="Mila and the Gentle Dino book cover" decoding="async" ><img src="<?php echo esc_url( teebe_site_image( 'cover-3' ) ); ?>" data-asset="cover-3" alt="The Ghost of Blackthorn Palace book cover" decoding="async" ></div></div>
+  <div class="v-reveal" data-delay="1"><div class="lead-card lead-card-wide"><div class="form-icon" aria-hidden="true">✒</div><h2 class="lc-title">Let's Bring Your Book to Its Best</h2><p class="intro">Tell us about your project and we'll help identify the right next step.</p>
+  <?php teebe_render_site_form( 'contact' ); ?></div></div>
+</div></div></section><section class="v-section tight"><div class="container"><div class="t-single v-reveal"><div class="t-mark" aria-hidden="true">“</div><blockquote class="t-quote">The proofreading gave my manuscript the polish it needed, and the publishing support made the final stage feel clear and manageable. I was genuinely pleased with how everything came together.</blockquote><div class="t-client"><strong>Steve Elliott</strong><span>Author • Proofreading &amp; Publishing</span></div></div></div></section>
+</section>
 
 <?php
 get_footer();

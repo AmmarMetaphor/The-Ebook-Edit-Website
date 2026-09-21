@@ -37,25 +37,29 @@ add_action( 'admin_menu', 'teebe_setup_admin_menu' );
 /**
  * Page records the setup routine creates or finds, keyed by slug.
  *
- * Content is intentionally left empty for every entry except the legal pages
- * and Contact, whose post_content is handled separately — the design and copy
- * come from the matching page-{slug}.php template via the template hierarchy.
+ * post_content is left empty for every one of them: the design and copy come
+ * from the matching page-{slug}.php template through the template hierarchy,
+ * and the enquiry forms are found by title, so nothing has to be pasted into
+ * a page and an administrator cannot break the design by editing one.
  *
  * @return array<string, array<string, mixed>>
  */
 function teebe_setup_page_definitions() {
 	return array(
-		'home'       => array( 'title' => 'Home' ),
-		'services'   => array( 'title' => 'Services' ),
-		'writing'    => array( 'title' => 'Ebook Writing' ),
-		'editing'    => array( 'title' => 'Editing' ),
-		'publishing' => array( 'title' => 'Publishing' ),
-		'process'    => array( 'title' => 'Process' ),
-		'portfolio'  => array( 'title' => 'Portfolio' ),
-		'about'      => array( 'title' => 'About' ),
-		'insights'   => array( 'title' => 'Insights' ),
-		'contact'    => array( 'title' => 'Contact' ),
-		'thank-you'  => array( 'title' => 'Thank You' ),
+		'home'                 => array( 'title' => 'Home' ),
+		'services'             => array( 'title' => 'Services' ),
+		'writing'              => array( 'title' => 'Book Writing' ),
+		'editing'              => array( 'title' => 'Book Editing' ),
+		'publishing'           => array( 'title' => 'Book Publishing' ),
+		'process'              => array( 'title' => 'Process' ),
+		'portfolio'            => array( 'title' => 'Portfolio' ),
+		'about'                => array( 'title' => 'About' ),
+		'insights'             => array( 'title' => 'Insights' ),
+		'contact'              => array( 'title' => 'Contact' ),
+		'book-consultation'    => array( 'title' => 'Book a Free Consultation' ),
+		'thank-you'            => array( 'title' => 'Thank You' ),
+		'privacy-policy'       => array( 'title' => 'Privacy Policy' ),
+		'terms-and-conditions' => array( 'title' => 'Terms & Conditions' ),
 	);
 }
 
@@ -133,83 +137,31 @@ function teebe_setup_get_or_create_page( $slug, $args, &$report ) {
 		update_post_meta( $id, '_wp_page_template', $args['template'] );
 	}
 
-	if ( 'draft' === $status ) {
-		$report['drafted'][] = $args['title'];
-	} else {
-		$report['created'][] = $args['title'];
-	}
+	$report['created'][] = $args['title'];
 
 	return (int) $id;
 }
 
 /**
- * Whether a legal template still carries its "needs review" marker.
+ * Every Contact Form 7 form the setup routine creates.
  *
- * page-privacy.php and page-terms.php both note that the final wording
- * "requires professional legal review before public launch". Once that note is
- * removed and the copy has been reviewed, setup publishes the page normally
- * instead of leaving it as a draft.
+ * Three: the website's homepage and contact forms, from inc/site.php, and
+ * the Meta Ads landing page's, from inc/landing.php. Each template finds its
+ * own by title, so no shortcode is written into any page and a form can be
+ * moved or restyled without editing page content.
  *
- * @param string $template_file Theme-relative template file name.
- * @return bool
- */
-function teebe_setup_is_unreviewed_legal_template( $template_file ) {
-	$path = get_theme_file_path( $template_file );
-
-	if ( ! file_exists( $path ) ) {
-		return true;
-	}
-
-	$contents = (string) file_get_contents( $path );
-
-	return false !== stripos( $contents, 'legal review before public launch' )
-		|| false !== stripos( $contents, 'has not yet been professionally reviewed' );
-}
-
-/**
- * The two enquiry forms the website renders, as page slug => configuration.
- *
- * 'title' is the Contact Form 7 form title to look for, and 'html_class' is
- * the class the form element must carry so the book page styles it exactly as
- * the published site does. The markup for each form is in DEPLOYMENT.md.
- *
- * @return array<string, array<string, string>>
- */
-function teebe_setup_form_definitions() {
-	return array(
-		'contact' => array(
-			'title'      => 'Project Inquiry',
-			'html_class' => 'start-form',
-			'html_id'    => '',
-			'page'       => 'Contact',
-			'body'       => 'cf7/project-inquiry.txt',
-			'subject'    => 'New project enquiry from the website',
-			'fields'     => array( 'name', 'email', 'service', 'stage', 'word-count', 'referral', 'contact-method', 'timeline', 'message' ),
-		),
-		'home'    => array(
-			'title'      => 'Publishing Journey',
-			'html_class' => 'page-form',
-			'html_id'    => 'enquiry',
-			'page'       => 'Home',
-			'body'       => 'cf7/publishing-journey.txt',
-			'subject'    => 'New publishing journey enquiry from the website',
-			'fields'     => array( 'name', 'email', 'journey', 'support', 'message' ),
-		),
-	);
-}
-
-/**
- * Every form the setup routine creates.
- *
- * The two in teebe_setup_form_definitions() belong to a fixed page and have
- * their shortcode written into it. The Meta Ads landing page's form is found
- * by title by the template itself, because that template can be assigned to a
- * page with any slug, so it is created here but never connected to a page.
+ * Keeping the landing page's form separate from the website's is deliberate:
+ * it is what lets a lead be attributed to the page it came from without
+ * reading anything a visitor typed.
  *
  * @return array<int, array<string, mixed>>
  */
 function teebe_setup_all_form_definitions() {
-	$forms = array_values( teebe_setup_form_definitions() );
+	$forms = array();
+
+	if ( function_exists( 'teebe_site_form_definitions' ) ) {
+		$forms = array_values( teebe_site_form_definitions() );
+	}
 
 	if ( function_exists( 'teebe_landing_form_definition' ) ) {
 		$forms[] = teebe_landing_form_definition();
@@ -324,77 +276,6 @@ function teebe_setup_cf7_mail( $form ) {
 }
 
 /**
- * Writes a Contact Form 7 shortcode into a page's post_content, which is the
- * only thing this theme stores there — the design and copy stay in the
- * templates. Existing content is never overwritten.
- *
- * @param int    $page_id Target page ID.
- * @param string $slug    Target page slug, matching teebe_setup_form_definitions().
- * @param array  $report  Report array, passed by reference.
- */
-function teebe_setup_connect_form( $page_id, $slug, &$report ) {
-	$forms = teebe_setup_form_definitions();
-
-	if ( empty( $page_id ) || ! isset( $forms[ $slug ] ) ) {
-		return;
-	}
-
-	$form = $forms[ $slug ];
-
-	if ( ! class_exists( 'WPCF7_ContactForm' ) ) {
-		/* translators: %s: Contact Form 7 form title. */
-		$report['warnings'][] = sprintf( __( 'Contact Form 7 is not active, so the "%s" form was not connected. Install and activate it, create the form using the markup in DEPLOYMENT.md, then run setup again.', 'the-ebook-edit' ), $form['title'] );
-		return;
-	}
-
-	$page = get_post( $page_id );
-
-	if ( ! $page ) {
-		return;
-	}
-
-	$current_content = trim( (string) $page->post_content );
-
-	if ( false !== strpos( $current_content, '[contact-form-7' ) ) {
-		/* translators: 1: page title, 2: Contact Form 7 form title. */
-		$report['forms'][] = sprintf( __( 'The %1$s page already carries a Contact Form 7 shortcode; it was left as-is.', 'the-ebook-edit' ), $form['page'], $form['title'] );
-		return;
-	}
-
-	if ( '' !== $current_content ) {
-		/* translators: %s: page title. */
-		$report['warnings'][] = sprintf( __( 'The %s page already has content of its own, so no shortcode was added automatically. Paste the [contact-form-7 ...] shortcode into it by hand if the form is needed there.', 'the-ebook-edit' ), $form['page'] );
-		return;
-	}
-
-	$form_post = teebe_setup_find_cf7_form( $form['title'] );
-
-	if ( ! $form_post ) {
-		/* translators: %s: Contact Form 7 form title. */
-		$report['warnings'][] = sprintf( __( 'Create the Contact Form 7 form "%s" using the markup in DEPLOYMENT.md, then run setup again.', 'the-ebook-edit' ), $form['title'] );
-		return;
-	}
-
-	$shortcode = sprintf(
-		'[contact-form-7 id="%d" title="%s" html_class="%s"%s]',
-		$form_post->ID,
-		esc_attr( $form_post->post_title ),
-		esc_attr( $form['html_class'] ),
-		'' !== $form['html_id'] ? sprintf( ' html_id="%s"', esc_attr( $form['html_id'] ) ) : ''
-	);
-
-	wp_update_post(
-		array(
-			'ID'           => $page_id,
-			'post_content' => $shortcode,
-		)
-	);
-
-	/* translators: 1: Contact Form 7 form title, 2: page title. */
-	$report['forms'][] = sprintf( __( 'Connected the "%1$s" form to the %2$s page.', 'the-ebook-edit' ), $form['title'], $form['page'] );
-}
-
-/**
  * Finds a Contact Form 7 form by its exact title.
  *
  * @param string $title Form title.
@@ -461,7 +342,6 @@ function teebe_run_setup( $trash_sample_page = false ) {
 	$report = array(
 		'created'     => array(),
 		'existing'    => array(),
-		'drafted'     => array(),
 		'warnings'    => array(),
 		'forms'       => array(),
 		'homepage'    => '',
@@ -472,35 +352,6 @@ function teebe_run_setup( $trash_sample_page = false ) {
 
 	foreach ( teebe_setup_page_definitions() as $slug => $args ) {
 		$ids[ $slug ] = teebe_setup_get_or_create_page( $slug, $args, $report );
-	}
-
-	$legal_pages = array(
-		'privacy' => array(
-			'title'    => 'Privacy Policy',
-			'template' => 'page-privacy.php',
-		),
-		'terms'   => array(
-			'title'    => 'Website Terms',
-			'template' => 'page-terms.php',
-		),
-	);
-
-	foreach ( $legal_pages as $slug => $legal ) {
-		$unreviewed = teebe_setup_is_unreviewed_legal_template( $legal['template'] );
-
-		$ids[ $slug ] = teebe_setup_get_or_create_page(
-			$slug,
-			array(
-				'title'  => $legal['title'],
-				'status' => $unreviewed ? 'draft' : 'publish',
-			),
-			$report
-		);
-
-		if ( $unreviewed && ! empty( $ids[ $slug ] ) && 'publish' !== get_post_status( $ids[ $slug ] ) ) {
-			/* translators: %s: page title. */
-			$report['warnings'][] = sprintf( __( '"%s" still contains unreviewed placeholder legal text and is not published. Have it reviewed, then publish it from Pages when it is ready.', 'the-ebook-edit' ), $legal['title'] );
-		}
 	}
 
 	foreach ( teebe_setup_article_definitions() as $article ) {
@@ -523,10 +374,6 @@ function teebe_run_setup( $trash_sample_page = false ) {
 	}
 
 	teebe_setup_create_cf7_forms( $report );
-
-	foreach ( array_keys( teebe_setup_form_definitions() ) as $form_slug ) {
-		teebe_setup_connect_form( isset( $ids[ $form_slug ] ) ? $ids[ $form_slug ] : 0, $form_slug, $report );
-	}
 
 	if ( $trash_sample_page ) {
 		teebe_setup_trash_sample_page( $report );
@@ -579,7 +426,7 @@ function teebe_setup_render_page() {
 	<div class="wrap">
 		<h1><?php esc_html_e( 'The Ebook Edit Setup', 'the-ebook-edit' ); ?></h1>
 		<p>
-			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates, generated from the published website. This setup only creates the WordPress page records and homepage setting those templates need in order to be served at the right addresses. It never writes, edits or deletes page content.', 'the-ebook-edit' ); ?>
+			<?php esc_html_e( 'The Ebook Edit website content is supplied by the installed theme templates. This setup only creates the WordPress page records, the homepage setting and the Contact Form 7 enquiry forms those templates need in order to work. It never writes, edits or deletes page content.', 'the-ebook-edit' ); ?>
 		</p>
 
 		<p>
@@ -591,6 +438,14 @@ function teebe_setup_render_page() {
 				'Start Your Book'
 			);
 			?>
+		</p>
+
+		<p>
+			<?php esc_html_e( 'All three enquiry forms are found by title, so no shortcode is stored in any page. Mail delivery is a WordPress setting, not a theme setting: install and configure an SMTP plugin such as WP Mail SMTP so Contact Form 7 can actually send. No mail server credentials are stored in this theme.', 'the-ebook-edit' ); ?>
+		</p>
+
+		<p>
+			<?php esc_html_e( 'Google Analytics 4 and Microsoft Clarity are built into the theme and load on every public page. This site is UK-facing: install a consent-management plugin that implements the WordPress Consent API and categorise both as statistics, and the theme will honour the visitor\'s choice automatically. Until one is installed, both tags load on every visit. See DEPLOYMENT.md.', 'the-ebook-edit' ); ?>
 		</p>
 
 		<?php if ( is_array( $report ) ) : ?>
@@ -606,16 +461,7 @@ function teebe_setup_render_page() {
 					</ul>
 				<?php endif; ?>
 
-				<?php if ( ! empty( $report['drafted'] ) ) : ?>
-					<p><strong><?php esc_html_e( 'Created as drafts (needs legal review before publishing):', 'the-ebook-edit' ); ?></strong></p>
-					<ul style="list-style: disc; margin-left: 1.5em;">
-						<?php foreach ( $report['drafted'] as $title ) : ?>
-							<li><?php echo esc_html( $title ); ?></li>
-						<?php endforeach; ?>
-					</ul>
-				<?php endif; ?>
-
-				<?php if ( ! empty( $report['existing'] ) ) : ?>
+	<?php if ( ! empty( $report['existing'] ) ) : ?>
 					<p><strong><?php esc_html_e( 'Already existed and left untouched:', 'the-ebook-edit' ); ?></strong></p>
 					<ul style="list-style: disc; margin-left: 1.5em;">
 						<?php foreach ( $report['existing'] as $title ) : ?>

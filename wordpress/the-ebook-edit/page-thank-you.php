@@ -1,44 +1,57 @@
 <?php
 /**
- * thank-you — generated from the static site by wordpress/sync-from-static.py.
- * Edit the static page and re-run the script; do not hand-edit this file.
+ * Thank You — /thank-you/.
+ *
+ * The shared conversion endpoint for every flow: a delivered enquiry from
+ * either website form, a delivered enquiry from the Meta Ads landing page,
+ * and a confirmed booking returning from HighLevel. It therefore claims
+ * nothing about what the visitor has already done, and the calendar is
+ * offered rather than assumed.
+ *
+ * inc/site.php marks it noindex, follow. inc/analytics.php fires
+ * appointment_booked here, once, only when HighLevel returns a confirmed
+ * booking as ?conversion=appointment_booked — never on a plain visit.
+ *
+ * Ported from the approved design; hand-maintained from here.
+ * wordpress/sync-from-static.py does not generate this file.
  *
  * @package the-ebook-edit
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header();
 ?>
 
-<div class="book-experience book-static">
-  <div class="book-stage">
-    <nav class="book-tabs" aria-label="Primary navigation">
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
-          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
-        </nav>
-    <div class="book-block">
-      <div class="closing-page">
-        <div class="note-ribbon" aria-hidden="true"></div>
-        <p class="eyebrow">Project enquiry received</p>
-        <h1>Thank You. We Have Your Project Details.</h1>
-        <p class="lead">We will review the information you provided and contact you using your preferred method if anything further is needed. To reach us directly, email <a href="mailto:support@theebookedit.com">support@theebookedit.com</a>.</p>
-        <!-- Conversion tracking integration point: when an analytics tool is
-             approved (and the privacy policy updated accordingly), fire the
-             form-submission conversion event here. -->
-        <div class="page-actions">
-          <a class="button button-primary" href="<?php echo esc_url( home_url( '/' ) ); ?>">Return to the Book</a>
-          <a class="button button-outline" href="https://wa.me/447348954631?text=Hello%20The%20Ebook%20Edit%2C%20I%20would%20like%20to%20discuss%20an%20ebook%20project." target="_blank" rel="noopener noreferrer">Chat With Us on WhatsApp</a>
-        </div>
-        <div class="page-ornament" aria-hidden="true"></div>
-        <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+<section class="site-view" id="thank-you-view">
+  <section class="page-hero center thanks-hero">
+    <div class="flow-wrap" aria-hidden="true"><div class="flow-line one"></div><div class="flow-line two"></div></div>
+    <div class="container" style="position:relative;z-index:1">
+      <div class="v-reveal">
+        <div class="thanks-mark" aria-hidden="true">✓</div>
+        <div class="eyebrow">Thank You</div>
+        <h1 class="v-h1" tabindex="-1">You’re One Step Closer to Your Book</h1>
+        <p class="v-lead">Thanks for taking the next step with The Ebook Edit. Whether you’ve shared your book details or booked a consultation directly, we look forward to learning more about your project and helping you identify the right next step.</p>
       </div>
     </div>
-  </div>
-  <div class="book-endcap" aria-hidden="true"></div>
-</div>
+  </section>
+  <section class="v-section tight consult-section">
+    <div class="container">
+      <div class="consult-card v-reveal">
+        <div class="consult-card-head">
+          <div class="consult-mark" aria-hidden="true">✒</div>
+          <h2>Haven’t booked your consultation yet?</h2>
+          <p>Choose a convenient time below to speak with our book consultant.</p>
+        </div>
+        <?php teebe_render_booking_calendar(); ?>
+        <p class="thanks-note thanks-reassure">If your consultation is already scheduled, you’re all set. We look forward to speaking with you.</p>
+      </div>
+      <div class="actions thanks-actions"><a class="btn btn-ghost" href="<?php echo esc_url( home_url( '/' ) ); ?>">Return to Home</a></div>
+    </div>
+  </section>
+</section>
 
 <?php
 get_footer();

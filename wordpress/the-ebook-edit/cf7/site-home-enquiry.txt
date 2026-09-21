@@ -1,0 +1,38 @@
+<p class="hidden"><label>Do not fill this out: [text hp-field autocomplete:off]</label></p>
+<div class="field-row">
+  <div class="field">
+    <label for="full_name">Full Name <span class="req" aria-hidden="true">*</span></label>
+    [text* full_name id:full_name autocomplete:name placeholder "Your full name"]
+    <p class="field-error" id="err-full_name" role="alert"></p>
+  </div>
+  <div class="field">
+    <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+    [email* email id:email autocomplete:email placeholder "you@example.com"]
+    <p class="field-error" id="err-email" role="alert"></p>
+  </div>
+</div>
+<div class="field">
+  <label for="mobile_whatsapp">Mobile / WhatsApp <span class="req" aria-hidden="true">*</span></label>
+  [tel* mobile_whatsapp id:mobile_whatsapp autocomplete:tel placeholder "Your mobile or WhatsApp number"]
+  <p class="field-error" id="err-mobile_whatsapp" role="alert"></p>
+</div>
+<div class="field">
+  <label for="book_type">What type of book are you looking to create? <span class="req" aria-hidden="true">*</span></label>
+  [select* book_type id:book_type first_as_label "Select an option" "Fiction" "Non-fiction" "Memoir / Autobiography" "Business / Professional" "Self-help / Personal Development" "Children's Book" "Other"]
+  <p class="field-error" id="err-book_type" role="alert"></p>
+</div>
+<div class="field">
+  <label for="book_stage">How far along are you with your book? <span class="req" aria-hidden="true">*</span></label>
+  [select* book_stage id:book_stage first_as_label "Select an option" "I only have an idea" "I have an outline" "I have some content written" "I have a complete manuscript" "I'm already published and need additional help"]
+  <p class="field-error" id="err-book_stage" role="alert"></p>
+</div>
+<div class="field">
+  <label for="expected_budget">What is your expected budget for your book? <span class="req" aria-hidden="true">*</span></label>
+  [select* expected_budget id:expected_budget first_as_label "Select an option" "Under $500" "$500–$1,000" "$1,000–$2,500" "$2,500–$5,000" "$5,000+"]
+  <p class="field-error" id="err-expected_budget" role="alert"></p>
+</div>
+<!-- A real button, as the approved design has: Contact Form 7's [submit] tag
+     renders an <input>, whose label cannot wrap, and this one wraps onto two
+     lines on a phone. Contact Form 7 binds to the form's submit event, not to
+     a particular control, so this submits exactly as [submit] does. -->
+<button class="btn btn-gold wpcf7-form-control wpcf7-submit" type="submit">Get Your Free Book Consultation</button>

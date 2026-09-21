@@ -123,17 +123,31 @@ var TEEBE_LANDING = window.teebeLanding || {};
   /* Delivered — and only delivered. wpcf7mailsent fires once Contact
      Form 7 has actually sent the mail; wpcf7submit, wpcf7invalid,
      wpcf7spam and wpcf7mailfailed do not reach this handler, so a
-     rejected, failed or abandoned submission never leaves the page.
+     rejected, failed or abandoned submission is never recorded as a
+     lead and never leaves the page.
 
      The listener is bound to this form element, so no other Contact
      Form 7 form on the website can trigger the redirect.
+
+     generate_lead is sent first and carries nothing personal: only which
+     form it was and which page it was on. The redirect waits for the
+     event to be acknowledged so the conversion is not lost to the
+     navigation, and never waits longer than a second for it.
 
      The URL comes from the theme (home_url('/thank-you/') by default);
      if it is ever missing, the visitor stays here and Contact Form 7's
      own confirmation is shown rather than being sent nowhere. */
   form.addEventListener("wpcf7mailsent", () => {
     const next = TEEBE_LANDING.thankYouUrl;
-    if (next) window.location.assign(next);
+    const go = () => { if (next) window.location.assign(next); };
+    if (typeof window.teebeTrack === "function") {
+      window.teebeTrack("generate_lead", {
+        form_name: (window.teebeAnalytics && window.teebeAnalytics.forms && window.teebeAnalytics.forms[form.id]) || "landing_page_form",
+        lead_origin: (window.teebeAnalytics && window.teebeAnalytics.leadOrigin) || "landing-page"
+      }, go);
+    } else {
+      go();
+    }
   });
 })();
 

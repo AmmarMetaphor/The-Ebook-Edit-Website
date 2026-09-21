@@ -1,47 +1,50 @@
 <?php
 /**
- * 404 — generated from the static site by wordpress/sync-from-static.py.
- * Edit the static page and re-run the script; do not hand-edit this file.
+ * Not found.
+ *
+ * Rendered in the website's shell with the approved design's own page-hero
+ * and button classes, so a broken link still lands somewhere that looks
+ * like the website and offers a way onward. Nothing new is designed here.
  *
  * @package the-ebook-edit
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header();
 ?>
 
-<div class="book-experience book-static">
-  <div class="book-stage">
-    <nav class="book-tabs" aria-label="Primary navigation">
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Services</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/process/' ) ); ?>">Process</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>">Portfolio</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/about/' ) ); ?>">About</a>
-          <a class="book-tab" href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Insights</a>
-          <a class="book-tab book-tab-cta" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a project</a>
-        </nav>
-    <div class="book-block">
-      <div class="title-page">
-        <p><a class="bookplate" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="The Ebook Edit home"><img src="<?php echo esc_url( get_theme_file_uri( 'assets/images/brand/the-ebook-edit-logo.webp' ) ); ?>" alt="The Ebook Edit" width="760" height="615"></a></p>
-        <p class="eyebrow">404</p>
-        <h1>This page could not be found.</h1>
-        <p class="lead">The link may be outdated, or the page may have moved.</p>
-      </div>
-      <div class="closing-page">
-        <div class="missing-slot">
-          <span class="ghost-no" aria-hidden="true">404</span>
-          <p class="entry-label">Missing chapter</p>
+<section class="site-view" id="not-found-view">
+  <section class="page-hero center">
+    <div class="flow-wrap" aria-hidden="true"><div class="flow-line one"></div><div class="flow-line two"></div></div>
+    <div class="container" style="position:relative;z-index:1">
+      <div class="v-reveal">
+        <div class="eyebrow">404</div>
+        <h1 class="v-h1" tabindex="-1"><?php esc_html_e( 'This page could not be found.', 'the-ebook-edit' ); ?></h1>
+        <p class="v-lead"><?php esc_html_e( 'The link may be outdated, or the page may have moved.', 'the-ebook-edit' ); ?></p>
+        <div class="actions">
+          <a class="btn btn-gold" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Go to homepage', 'the-ebook-edit' ); ?></a>
+          <a class="btn btn-ghost" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Contact us', 'the-ebook-edit' ); ?></a>
         </div>
-        <div class="page-actions">
-          <a class="button button-primary" href="<?php echo esc_url( home_url( '/' ) ); ?>">Go to homepage</a>
-          <a class="button button-outline" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Contact us</a>
-        </div>
-        <p class="page-more"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Explore the services →</a> · <a href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">Read the insights →</a></p>
-        <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
       </div>
     </div>
-  </div>
-  <div class="book-endcap" aria-hidden="true"></div>
-</div>
+  </section>
+  <section class="v-section tight">
+    <div class="container">
+      <div class="v-head center v-reveal">
+        <h2><?php esc_html_e( 'Try one of these instead', 'the-ebook-edit' ); ?></h2>
+      </div>
+      <div class="actions v-reveal">
+        <a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/services/' ) ); ?>"><?php esc_html_e( 'Services', 'the-ebook-edit' ); ?></a>
+        <a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/portfolio/' ) ); ?>"><?php esc_html_e( 'Portfolio', 'the-ebook-edit' ); ?></a>
+        <a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/process/' ) ); ?>"><?php esc_html_e( 'Process', 'the-ebook-edit' ); ?></a>
+        <a class="btn btn-ghost btn-sm" href="<?php echo esc_url( home_url( '/about/' ) ); ?>"><?php esc_html_e( 'About', 'the-ebook-edit' ); ?></a>
+      </div>
+    </div>
+  </section>
+</section>
 
 <?php
 get_footer();

@@ -1,16 +1,15 @@
 # The Ebook Edit — WordPress deployment guide
 
-This folder holds the WordPress version of the website. It is the **same
-website** as the one in this repository, not a rebuild: the theme's templates
-are generated from the very same HTML files that Netlify publishes, so the two
-stay in step.
+This folder holds the WordPress version of the website: the approved design,
+the Meta Ads landing funnel, the enquiry forms, campaign attribution and the
+site's analytics, all in one installable theme.
 
-**You never have to re-type the website into WordPress.** Every page — the
-homepage book, Services, Ebook Writing, Editing, Publishing, Process,
-Portfolio, About, Insights and its four articles, Start a Project, Privacy,
-Terms and Thank You — already lives inside the theme. The setup screen only
-creates the WordPress page *records* so those pages answer at the right web
-addresses.
+**You never have to re-type the website into WordPress.** Every page — Home,
+Services, Book Writing, Book Editing, Book Publishing, Process, Portfolio,
+About, Contact, Book a Free Consultation, Thank You, Privacy Policy, Terms &
+Conditions, and the Insights library with its four articles — already lives
+inside the theme. The setup screen only creates the WordPress page *records*
+so those pages answer at the right web addresses.
 
 | What | Where |
 |---|---|
@@ -18,7 +17,8 @@ addresses.
 | Checksum for that file | `wordpress/the-ebook-edit-wordpress-theme.zip.sha256` |
 | Theme source | `wordpress/the-ebook-edit/` |
 | Detailed reference (form fields, mail, security headers) | `wordpress/the-ebook-edit/DEPLOYMENT.md` |
-| Script that regenerates the theme from the website | `wordpress/sync-from-static.py` |
+| Script that regenerates the Insights templates | `wordpress/sync-from-static.py` |
+| Offline renderer for checking the theme | `wordpress/verify-theme.php` |
 
 ---
 
@@ -99,38 +99,47 @@ Visit each address and confirm it looks like the published site:
 |---|---|
 | Home | `/` |
 | Services | `/services/` |
-| Ebook Writing | `/writing/` |
-| Editing | `/editing/` |
-| Publishing | `/publishing/` |
+| Book Writing | `/writing/` |
+| Book Editing | `/editing/` |
+| Book Publishing | `/publishing/` |
 | Process | `/process/` |
 | Portfolio | `/portfolio/` |
 | About | `/about/` |
+| Contact | `/contact/` |
+| Book a Free Consultation | `/book-consultation/` |
+| Thank You | `/thank-you/` |
+| Privacy Policy | `/privacy-policy/` |
+| Terms & Conditions | `/terms-and-conditions/` |
 | Insights | `/insights/` |
 | Insights articles | `/insights/turn-expertise-into-an-ebook/` and the three others |
-| Start a Project | `/contact/` |
-| Thank You | `/thank-you/` |
-| Privacy / Terms | `/privacy/` and `/terms/` (drafts — preview them while logged in) |
+
+The older `/privacy/` and `/terms/` addresses redirect to the new ones, so any
+link already out in the world still works.
 
 The Meta Ads landing page is not in this list: it is not part of the website
 and is published separately in step 6b below.
 
-Check one page on a phone as well as on a computer. On a wide screen the book
-opens as a two-page spread; on a phone it becomes a single portrait page you
-scroll through; if a visitor has "reduce motion" switched on, it becomes a
-plain readable column. All three are correct.
+Check one page on a phone as well as on a computer. The Insights library keeps
+the earlier book presentation: on a wide screen it opens as a two-page spread,
+on a phone it becomes a single portrait page, and with "reduce motion" switched
+on it becomes a plain readable column. All three are correct.
 
 ### 6. Test the enquiry forms
 
-Fill in the Start a Project form on `/contact/` and submit it. You should see
-Contact Form 7's confirmation, and an email should arrive.
+Fill in the form on `/contact/` and submit it, then do the same on the
+homepage. Each should take you to `/thank-you/` **only after** the enquiry is
+actually delivered, and an email should arrive at
+`support@theebookedit.com`.
+
+Try an incomplete form too: it should stay where it is and show the message
+under the field, and it must **not** reach the Thank You page.
 
 If no email arrives, that is a mail-delivery question, not a theme problem:
 most hosts need an SMTP plugin (WP Mail SMTP is free) pointed at a mailbox you
 control. **Enter those mailbox details in the plugin's own settings screen on
 the live site. Never write a password, app password or API key into this
 repository, into a theme file, or into any file you commit.** See
-`DEPLOYMENT.md` §5 for where to change the address the enquiries are sent to
-(it starts as your WordPress administrator email).
+`DEPLOYMENT.md` §9.
 
 ### 6b. Publish the Meta Ads landing page (optional)
 
@@ -147,13 +156,10 @@ publish it. When you want it live:
 5. **Publish.**
 6. Open `https://theebookedit.com/start-your-book/`.
 
-Then publish its thank-you page the same way: **Pages → Add New**, title it
-**Thank You (Consultation)**, choose the template **The Ebook Edit —
-Consultation Thank You**, and publish it at `/thank-you/`. That is where a
-delivered enquiry sends the visitor to book the call. **The website already has
-its own page at `/thank-you/`** — either assign this template to that page, or
-publish this one at a different address and tell the landing page about it (see
-`DEPLOYMENT.md` §5).
+It needs no thank-you page of its own: a delivered enquiry and every call to
+action on it both go to `/thank-you/`, the website's own Thank You page, which
+carries the booking calendar. That is deliberate — there is one Thank You
+experience for the whole site.
 
 Its enquiry form, **Start Your Book**, is created by the setup in step 4 and
 goes to `support@theebookedit.com`. The page finds it on its own — there is no
@@ -164,37 +170,50 @@ reload.
 ### 7. Point the domain at it
 
 Only once every page above passes, connect `theebookedit.com`. Then, in
-**Settings → Reading**, make sure **Discourage search engines** is *unticked*,
-and re-check that Privacy and Terms are still drafts if their wording has not
-been reviewed yet.
+**Settings → Reading**, make sure **Discourage search engines** is *unticked*.
 
 ---
 
 ## Before you go live
 
-* **Have the legal pages reviewed.** Privacy and Terms are starter wording, not
-  reviewed legal text, and the theme deliberately leaves them unpublished. The
-  privacy page also names **Netlify** as the host and form processor — true of
-  the current published site, and something to update as part of that review if
-  WordPress becomes the live site.
+Five of these are outside WordPress and none of them is done by installing the
+theme. `DEPLOYMENT.md` §13 has the same list with the exact steps.
+
+* **Cookie consent.** This is a UK-facing site and no consent plugin is
+  installed. Install one that supports the WordPress Consent API and
+  categorise Google Analytics 4 and Microsoft Clarity as *statistics*; the
+  theme then honours the visitor's choice automatically. Until then both tags
+  load on every visit. (`DEPLOYMENT.md` §5.)
+* **HighLevel post-booking redirect.** In the calendar settings, set the
+  redirect after a confirmed booking to
+  `https://theebookedit.com/thank-you/?conversion=appointment_booked`.
+  Without it, no booked consultation is ever recorded as a conversion.
+  (`DEPLOYMENT.md` §6.)
+* **HighLevel meeting location and reminders.** Set the Zoom meeting as the
+  calendar's meeting location and turn on the 24-hour and 1-hour reminders.
+  The meeting link is private and is deliberately not in this repository.
+  (`DEPLOYMENT.md` §6.)
+* **Mail delivery.** Configure SMTP and send a test through all three forms.
+* **Have the legal pages reviewed.** The Privacy Policy and Terms are the
+  approved copy from the design, and the Privacy Policy now names the
+  analytics actually in use. A solicitor should still read both before launch.
 * **Set the site icon** (Appearance → Customize → Site Identity → Site Icon).
   Until you do, the theme uses the brand favicon bundled with it.
-* **Check the notification address** on both forms under Contact → Contact
-  Forms → *(form)* → Mail.
 
 ---
 
-## Keeping WordPress and the published site in step
+## Keeping the theme in step
 
-The theme is generated, not hand-written. When the website in this repository
-changes, run:
+The website's templates were ported once from the approved design and are
+ordinary theme source: edit them directly. Only the Insights library is still
+generated. When `insights.html` or `insights/*.html` changes, run:
 
 ```
 python3 wordpress/sync-from-static.py
 ```
 
-That regenerates every `page-*.php` template, the page metadata, the two form
-bodies and the stylesheets from the current HTML, then rebuild the ZIP:
+That regenerates the Insights templates and their metadata, then rebuild the
+ZIP:
 
 ```
 cd wordpress && rm -f the-ebook-edit-wordpress-theme.zip \
@@ -202,18 +221,17 @@ cd wordpress && rm -f the-ebook-edit-wordpress-theme.zip \
   && sha256sum the-ebook-edit-wordpress-theme.zip > the-ebook-edit-wordpress-theme.zip.sha256
 ```
 
-These parts of the theme are hand-maintained and are **not** overwritten by the
-script:
+The script touches only the Insights templates, `inc/seo-data.php` and the
+book assets. Everything else is hand-maintained and is **not** overwritten:
 
-* `functions.php`, `header.php`, `footer.php`, `inc/setup.php` — the WordPress
-  plumbing;
-* `assets/css/wordpress.css` — makes Contact Form 7's markup match the design;
-* `template-landing-meta-ads.php`, `inc/landing.php`, `assets/css/landing.css`,
-  `assets/js/landing.js`, `assets/images/landing/`, `cf7/landing-enquiry.txt` —
-  the Meta Ads landing page, which has no counterpart in this repository's
-  static site and is therefore never regenerated from it.
-
-Everything else is regenerated.
+* the website — `front-page.php`, `page-*.php`, `404.php`, `header.php`,
+  `footer.php`, `inc/site.php`, `assets/css/site.css`, `assets/js/site.js`;
+* the Meta Ads landing page — `template-landing-meta-ads.php`,
+  `inc/landing.php`, `assets/css/landing.css`, `assets/js/landing.js`;
+* analytics and attribution — `inc/analytics.php`, `inc/attribution.php`,
+  `assets/js/analytics.js`, `assets/js/attribution.js`;
+* the WordPress plumbing — `functions.php`, `inc/setup.php`, `cf7/*.txt`;
+* the approved artwork in `assets/images/landing/`.
 
 To check the result without a WordPress install:
 
@@ -221,8 +239,8 @@ To check the result without a WordPress install:
 php wordpress/verify-theme.php /tmp/preview
 ```
 
-This renders every template to plain HTML files you can open or diff against
-the matching page in the repository root.
+This renders every template to plain HTML files you can open in a browser, or
+diff against the previous release to see exactly what a change did.
 
 ---
 
@@ -230,23 +248,26 @@ the matching page in the repository root.
 
 **It does:**
 
-* Reproduce the published website exactly — the same markup, the same
-  stylesheets, the same book engine, the same page metadata and structured
-  data.
+* Reproduce the approved design exactly — the same markup, the same
+  stylesheet, the same behaviour, on real WordPress pages at real URLs.
 * Carry the approved Meta Ads landing page as a page template you can assign
-  to a page of your choosing, with its own design, its own images and its own
-  enquiry form, without touching any existing page.
+  to a page of your choosing, with its own design and its own enquiry form,
+  without touching any existing page.
+* Measure the funnel with Google Analytics 4 and Microsoft Clarity, and record
+  which campaign produced each enquiry — without sending anything personal to
+  either service.
 * Derive every address from your WordPress site address, so it works on a
   staging domain and on the live domain with no edits.
 * Bundle all of its own images, fonts-free CSS and JavaScript, so it needs no
   external service at page-render time.
-* Work with Contact Form 7 for the two enquiry forms.
+* Work with Contact Form 7 for all three enquiry forms, and with Flamingo and
+  WP Mail SMTP when they are installed.
 
 **It does not:**
 
 * Store the website's design or words in the WordPress editor. Editing a page
-  in WordPress will not change what visitors see — change the HTML in this
-  repository and re-run the sync script instead.
+  in WordPress will not change what visitors see — edit the template instead.
 * Install or require any paid plugin, paid host feature, or page builder.
-* Send email itself, or store any mail credentials.
+* Send email itself, or store any mail credentials, API key or meeting link.
+* Add a cookie banner, or override one you already have.
 * Delete or rewrite content you have created.

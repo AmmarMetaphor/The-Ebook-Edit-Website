@@ -2,25 +2,31 @@
 /**
  * Required fallback template.
  *
- * The designed website is made entirely of pages, so this template is only
- * reached by archive and search requests. It renders as a static book page.
+ * The website is made entirely of pages, so this template is only reached
+ * by archive and search requests. It renders in the website's shell.
  *
  * @package the-ebook-edit
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 get_header();
 ?>
 
-<div class="book-experience book-static">
-  <div class="book-stage">
-	<?php teebe_book_tabs(); ?>
-    <div class="book-block">
-      <div class="title-page">
-        <h1><?php echo esc_html( wp_get_document_title() ); ?></h1>
-        <div class="page-ornament" aria-hidden="true"></div>
+<section class="site-view">
+  <section class="page-hero">
+    <div class="flow-wrap" aria-hidden="true"><div class="flow-line one"></div><div class="flow-line two"></div></div>
+    <div class="container" style="position:relative;z-index:1">
+      <div class="v-reveal">
+        <h1 class="v-h1" tabindex="-1"><?php echo esc_html( wp_get_document_title() ); ?></h1>
       </div>
-      <div class="prose-page">
-        <div class="prose">
+    </div>
+  </section>
+  <section class="v-section tight">
+    <div class="container">
+      <div class="legal v-reveal">
 		<?php
 		if ( have_posts() ) :
 			echo '<ul>';
@@ -37,20 +43,17 @@ get_header();
 			echo '</ul>';
 		else :
 			?>
-          <p class="lead"><?php esc_html_e( 'Nothing has been published here yet.', 'the-ebook-edit' ); ?></p>
+        <p><?php esc_html_e( 'Nothing has been published here yet.', 'the-ebook-edit' ); ?></p>
 			<?php
 		endif;
 		?>
-        </div>
-        <div class="page-actions">
-          <a class="button button-primary" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Return to the Book', 'the-ebook-edit' ); ?></a>
-        </div>
-        <p class="micro-colophon">&copy; <span data-year></span> The Ebook Edit &middot; <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> &middot; <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+      </div>
+      <div class="actions v-reveal">
+        <a class="btn btn-gold" href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Go to homepage', 'the-ebook-edit' ); ?></a>
       </div>
     </div>
-  </div>
-  <div class="book-endcap" aria-hidden="true"></div>
-</div>
+  </section>
+</section>
 
 <?php
 get_footer();
