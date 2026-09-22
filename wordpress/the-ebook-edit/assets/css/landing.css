@@ -684,6 +684,23 @@ footer{padding:26px 0 34px;color:#91a8c6;font-size:.78rem}
 .ip-panel p:last-child{margin-bottom:0}
 .ip-panel a{color:var(--gold-soft)}
 .ip-panel a:hover{color:#fff}
+/* The legal views (#privacy-policy-view, #terms-and-conditions-view) carry
+   .legal-view and are centred to match the real /privacy-policy/ and
+   /terms-and-conditions/ pages, so the legacy hash fallback and the
+   canonical page read as one legal-page design.
+
+   Scoped to .legal-view on purpose. .ip-hero, .ip-title and .ip-intro are
+   shared with the About view, which stays left aligned, and the Thank You
+   page centres the same parts through its own .teebe-thank-you rules.
+
+   Only the hero is centred. The card's long-form copy below stays left
+   aligned, and the card is widened with matching side padding so the text
+   measure inside it stays around 800px — see the note on .legal in
+   site.css, which carries the same pair. */
+.legal-view .ip-hero .container{text-align:center}
+.legal-view .ip-title,
+.legal-view .ip-intro{margin-inline:auto}
+.ip-legal{max-width:1040px;padding-inline:clamp(22px,8.5vw,120px)}
 .ip-legal .ip-block{padding:26px 0}
 .ip-legal .ip-block+.ip-block{border-top:1px solid rgba(255,255,255,.08)}
 .ip-legal .ip-block:first-child{padding-top:0}
@@ -797,7 +814,9 @@ footer{padding:26px 0 34px;color:#91a8c6;font-size:.78rem}
 /* The intro block is centred to match the booking heading and the calendar
    below it, so the page reads as one centred column. Scoped to this page on
    purpose: .ip-hero, .ip-title and .ip-intro are shared with the landing
-   page's About, Privacy and Terms views, which stay left aligned. */
+   page's About, Privacy and Terms views. The About view stays left aligned;
+   the two legal views centre themselves through .legal-view above, to match
+   the real /privacy-policy/ and /terms-and-conditions/ pages. */
 .teebe-thank-you .ip-hero .container {
   text-align: center;
 }

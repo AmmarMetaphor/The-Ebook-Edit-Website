@@ -384,7 +384,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </section>
 </div>
-<div id="privacy-policy-view" class="page-view internal-page" hidden>
+<div id="privacy-policy-view" class="page-view internal-page legal-view" hidden>
   <section class="ip-hero">
     <div class="container">
       <a class="ip-back" href="#home">← Back to The Ebook Edit</a>
@@ -443,7 +443,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     </div>
   </section>
 </div>
-<div id="terms-and-conditions-view" class="page-view internal-page" hidden>
+<div id="terms-and-conditions-view" class="page-view internal-page legal-view" hidden>
   <section class="ip-hero">
     <div class="container">
       <a class="ip-back" href="#home">← Back to The Ebook Edit</a>
