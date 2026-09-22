@@ -902,7 +902,13 @@ dialog.book-dialog::backdrop{background:rgba(2,12,32,.75);backdrop-filter:blur(4
 
 
 /* ---------- legal ---------- */
-.legal{max-width:860px;margin-inline:auto;position:relative;background:linear-gradient(160deg,rgba(7,34,78,.72),rgba(5,26,67,.55));border:1px solid rgba(243,179,34,.22);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(28px,4vw,52px) clamp(22px,4.5vw,60px)}
+/* The legal card. It sits in the centred .container and centres itself
+   inside it. The wider card below is paired with deeper side padding on
+   purpose: the card reads as a generous centred column while the text
+   measure inside it stays around 800px, which is what keeps long-form
+   legal copy readable. Widen one without the other and the lines get too
+   long. The landing page's .ip-legal panel carries the same pair. */
+.legal{max-width:1040px;margin-inline:auto;position:relative;background:linear-gradient(160deg,rgba(7,34,78,.72),rgba(5,26,67,.55));border:1px solid rgba(243,179,34,.22);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(28px,4vw,52px) clamp(22px,8.5vw,120px)}
 .legal section{padding:26px 0}
 .legal section+section{border-top:1px solid rgba(255,255,255,.08)}
 .legal section:first-child{padding-top:0}
