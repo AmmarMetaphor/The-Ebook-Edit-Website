@@ -39,7 +39,7 @@ get_header( 'book' );
       </div>
       <div class="closing-page">
         <p class="page-more"><a href="<?php echo esc_url( home_url( '/insights/' ) ); ?>">More insights →</a></p>
-        <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+        <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms-and-conditions/' ) ); ?>">Terms</a></p>
       </div>
     </div>
   </div>

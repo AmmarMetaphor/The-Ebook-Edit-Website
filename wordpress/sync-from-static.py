@@ -99,11 +99,21 @@ def rewrite_urls(html: str) -> str:
     html = html.replace('href="/"', 'href="%s"' % php_home("/"))
     # form endpoints
     html = html.replace('action="/thank-you"', 'action="%s"' % php_home("/thank-you/"))
+    # The static site published the legal pages at /privacy and /terms; the
+    # approved design and the WordPress setup screen name them
+    # /privacy-policy/ and /terms-and-conditions/. Only those two slugs are
+    # created as pages, so a ported /privacy/ link would 404 rather than
+    # redirect — the redirect in inc/site.php needs a real page to fire from.
+    # Map them here so a re-sync cannot reintroduce the broken links.
+    moved = {"privacy": "privacy-policy", "terms": "terms-and-conditions"}
+
     # internal routes, including query strings (/contact?service=…) and
     # in-page anchors (/publishing#formatting)
     def route(m: re.Match) -> str:
         path, query, frag = m.group(1), m.group(2) or "", m.group(3) or ""
-        return 'href="%s%s%s"' % (php_home("/%s/" % path.strip("/")), query, frag)
+        slug = path.strip("/")
+        slug = moved.get(slug, slug)
+        return 'href="%s%s%s"' % (php_home("/%s/" % slug), query, frag)
 
     html = re.sub(
         r'href="/([a-z0-9\-/]+?)(\?[^"#]*)?(#[a-z0-9\-]+)?"', route, html

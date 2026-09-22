@@ -521,8 +521,8 @@ if ( ! defined( 'ABSPATH' ) ) {
       Platform logos shown for publishing platform reference; trademarks belong to their respective owners.
       <nav class="footer-links" aria-label="Company and legal information">
         <a href="#about-us">About Us</a>
-        <a href="#privacy-policy">Privacy Policy</a>
-        <a href="#terms-and-conditions">Terms &amp; Conditions</a>
+        <a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy Policy</a>
+        <a href="<?php echo esc_url( home_url( '/terms-and-conditions/' ) ); ?>">Terms &amp; Conditions</a>
       </nav>
     </div>
   </div>

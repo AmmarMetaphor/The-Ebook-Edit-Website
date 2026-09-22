@@ -125,7 +125,7 @@ get_header( 'book' );
                   <a class="button button-gold" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Discuss your ebook</a>
                 </div>
                 <p class="page-more"><a href="<?php echo esc_url( home_url( '/services/' ) ); ?>">Explore the services →</a></p>
-                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms/' ) ); ?>">Terms</a></p>
+                <p class="micro-colophon">© <span data-year></span> The Ebook Edit · <a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Privacy</a> · <a href="<?php echo esc_url( home_url( '/terms-and-conditions/' ) ); ?>">Terms</a></p>
               </div>
               <span class="folio folio-right" aria-hidden="true">7</span>
             </div>
