@@ -8,7 +8,7 @@
  * landing page renders a complete document of its own, as it always has.
  *
  * The Thank You page is the one distraction-free page: it keeps the brand,
- * unlinked, and drops the menu button and the page navigation, so a visitor
+ * unlinked and centred, and drops the menu button and the page navigation, so a visitor
  * who has just enquired is offered the consultation rather than the rest of
  * the site. Its one way back is the Return to Home action below the
  * calendar. See teebe_site_is_distraction_free() in inc/site.php.
