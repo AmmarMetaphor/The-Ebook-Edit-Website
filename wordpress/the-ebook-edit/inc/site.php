@@ -113,6 +113,21 @@ function teebe_is_website() {
 }
 
 /**
+ * Whether the page being rendered is a distraction-free conversion page.
+ *
+ * Only /thank-you/ is. It is the shared endpoint every lead form and the
+ * booking calendar return to, so its one job is to acknowledge the enquiry
+ * and offer the consultation. header.php and footer.php therefore render
+ * their branding without the website's page navigation here, and nowhere
+ * else: every other page keeps the approved header and footer unchanged.
+ *
+ * @return bool
+ */
+function teebe_site_is_distraction_free() {
+	return teebe_is_website() && 'thank-you' === teebe_site_route();
+}
+
+/**
  * The approved artwork, as image key => theme-relative file.
  *
  * The covers, platform marks and logo are shared with the Meta Ads landing
@@ -445,6 +460,12 @@ function teebe_site_body_class( $classes ) {
 
 	if ( '' !== $route ) {
 		$classes[] = 'teebe-route-' . $route;
+	}
+
+	// The thank-you page's simplified header and footer — see
+	// teebe_site_is_distraction_free().
+	if ( teebe_site_is_distraction_free() ) {
+		$classes[] = 'teebe-distraction-free';
 	}
 
 	return $classes;
